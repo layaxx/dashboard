@@ -1,6 +1,7 @@
 import { BlitzConfig, sessionMiddleware, simpleRolesIsAuthorized } from "blitz"
 
 const config: BlitzConfig = {
+  reactStrictMode: true,
   middleware: [
     sessionMiddleware({
       cookiePrefix: "dashboard",

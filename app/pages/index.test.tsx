@@ -1,7 +1,6 @@
-import { render } from "test/utils"
-
-import Home from "./index"
+import Home from "."
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
+import { render } from "test/utils"
 
 jest.mock("app/core/hooks/useCurrentUser")
 const mockUseCurrentUser = useCurrentUser as jest.MockedFunction<typeof useCurrentUser>

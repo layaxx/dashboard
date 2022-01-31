@@ -1,8 +1,7 @@
 import { Suspense } from "react"
-import { Image, Link, BlitzPage, useMutation, Routes } from "blitz"
+import { Image, Link, BlitzPage } from "blitz"
+import UserInfo from "app/core/components/UserInfo"
 import Layout from "app/core/layouts/Layout"
-import { useCurrentUser } from "app/core/hooks/useCurrentUser"
-import logout from "app/auth/mutations/logout"
 import logo from "public/logo.png"
 
 /*
@@ -10,53 +9,16 @@ import logo from "public/logo.png"
  * You can delete everything in here and start from scratch if you like.
  */
 
-const UserInfo = () => {
-  const currentUser = useCurrentUser()
-  const [logoutMutation] = useMutation(logout)
-
-  if (currentUser) {
-    return (
-      <>
-        <button
-          className="button small"
-          onClick={async () => {
-            await logoutMutation()
-          }}
-        >
-          Logout
-        </button>
-        <div>
-          User id: <code>{currentUser.id}</code>
-          <br />
-          User role: <code>{currentUser.role}</code>
-        </div>
-      </>
-    )
-  } else {
-    return (
-      <>
-        <Link href={Routes.SignupPage()}>
-          <a className="button small">
-            <strong>Sign Up</strong>
-          </a>
-        </Link>
-        <Link href={Routes.LoginPage()}>
-          <a className="button small">
-            <strong>Login</strong>
-          </a>
-        </Link>
-      </>
-    )
-  }
-}
-
 const Home: BlitzPage = () => {
+  console.log(process.env.DATABASE_URL)
+
   return (
     <div className="container">
       <main>
         <div className="logo">
           <Image src={logo} alt="blitzjs" />
         </div>
+
         <p>
           <strong>Congrats!</strong> Your app is ready, including user sign-up and log-in.
         </p>
