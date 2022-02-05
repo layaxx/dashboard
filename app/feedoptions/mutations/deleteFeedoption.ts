@@ -2,18 +2,17 @@ import { resolver } from "blitz"
 import { z } from "zod"
 import db from "db"
 
-const UpdateFeed = z.object({
+const DeleteFeedoption = z.object({
   id: z.number(),
-  name: z.string(),
 })
 
 export default resolver.pipe(
-  resolver.zod(UpdateFeed),
+  resolver.zod(DeleteFeedoption),
   resolver.authorize(),
-  async ({ id, ...data }) => {
+  async ({ id }) => {
     // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-    const feed = await db.feed.update({ data, where: { id } })
+    const feedoption = await db.feedoption.deleteMany({ where: { id } })
 
-    return feed
+    return feedoption
   }
 )

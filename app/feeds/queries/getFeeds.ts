@@ -21,19 +21,19 @@ export default resolver.pipe(resolver.authorize(), async ({}: GetFeedsInput) => 
     })
  */
   return {
+    count: 0,
     feeds: await fetch(process.env["NEWS_BASE_URL"] + "/feeds", {
       headers: {
         Accept: "application/json",
         Authorization: `Basic ${process.env["NEWS_CREDENTIALS"]}`,
       },
     })
-      .then((res) => res.json())
+      .then((response) => response.json())
       .then((json) => json.feeds)
       .catch((...data) =>
         reportError("readItems", process.env["NEWS_BASE_URL"] + "/feeds", undefined, data)
       ),
-    nextPage: false,
     hasMore: false,
-    count: 0,
+    nextPage: false,
   }
 })

@@ -18,7 +18,7 @@ export const Feed = () => {
 
       <div>
         <h1>Feed {feed.id}</h1>
-        <pre>{JSON.stringify(feed, null, 2)}</pre>
+        <pre>{JSON.stringify(feed, undefined, 2)}</pre>
 
         <Link href={Routes.EditFeedPage({ feedId: feed.id })}>
           <a>Edit</a>

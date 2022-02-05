@@ -14,7 +14,7 @@ export interface LabeledTextFieldProps extends PropsWithoutRef<JSX.IntrinsicElem
 }
 
 export const LabeledTextField = forwardRef<HTMLInputElement, LabeledTextFieldProps>(
-  ({ name, label, outerProps, fieldProps, labelProps, ...props }, ref) => {
+  ({ name, label, outerProps, fieldProps, labelProps, ...props }, reference) => {
     const {
       input,
       meta: { touched, error, submitError, submitting },
@@ -23,6 +23,7 @@ export const LabeledTextField = forwardRef<HTMLInputElement, LabeledTextFieldPro
         props.type === "number"
           ? (Number as any)
           : // Converting `""` to `null` ensures empty values will be set to null in the DB
+            // eslint-disable-next-line unicorn/no-null
             (v) => (v === "" ? null : v),
       ...fieldProps,
     })
@@ -33,7 +34,7 @@ export const LabeledTextField = forwardRef<HTMLInputElement, LabeledTextFieldPro
       <div {...outerProps}>
         <label {...labelProps}>
           {label}
-          <input {...input} disabled={submitting} {...props} ref={ref} />
+          <input {...input} disabled={submitting} {...props} ref={reference} />
         </label>
 
         {touched && normalizedError && (

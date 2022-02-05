@@ -71,3 +71,11 @@ model Feed {
   number    Int
   name      String
 }
+
+model Feedoption {
+  id          Int      @id
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  expand      Boolean  @default(false)
+  oldestFirst Boolean  @default(true)
+}

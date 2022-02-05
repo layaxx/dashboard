@@ -18,7 +18,7 @@ export type FeedAPIResponse = {
   lastUpdateError: string
 }
 
-type Props = { feedState: [number | null, Dispatch<SetStateAction<number | null>>] }
+type Props = { feedState: [number | undefined, Dispatch<SetStateAction<number | undefined>>] }
 
 export const FeedsList = ({ feedState }: Props) => {
   const [{ feeds }] = useQuery(getFeeds, {})
@@ -35,13 +35,16 @@ export const FeedsList = ({ feedState }: Props) => {
           <li
             key={feed.id}
             className={clsx(
-              activeFeed === feed.id && "border-l-4 pl-2 border-primary",
-              "flex py-1 hover:bg-slate-200"
+              "hover:bg-slate-200",
+              "cursor-pointer",
+              "flex",
+              "py-1",
+              activeFeed === feed.id && ["pl-2", "border-l-4", "border-primary"]
             )}
             onClick={() => setActiveFeed(feed.id)}
           >
             <span className="grow">{feed.title}</span>{" "}
-            <span className="rounded-xl px-3 bg-primary font-bold text-white">
+            <span className={clsx("bg-primary", "font-bold", "px-3", "rounded-xl", "text-white")}>
               {feed.unreadCount}
             </span>
           </li>

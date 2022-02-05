@@ -1,15 +1,16 @@
 import { useState } from "react"
 import { useMutation } from "blitz"
+import { Feedoption } from "@prisma/client"
 import clsx from "clsx"
 import { ItemAPIResponse } from "../ItemsList"
 import ItemControls from "./ItemControls"
 import ItemInformation from "./ItemInformation"
 import readItem from "app/feeds/mutations/readItem"
 
-type ItemProps = { item: ItemAPIResponse }
+type ItemProps = { item: ItemAPIResponse; settings: Feedoption }
 
-const Item = ({ item }: ItemProps) => {
-  const defaultExpanded = false
+const Item = ({ item, settings }: ItemProps) => {
+  const defaultExpanded = settings.expand
 
   const [isExpanded, setIsExpanded] = useState(defaultExpanded)
   const [hasBeenRead, setHasBeenRead] = useState(false)
@@ -17,9 +18,9 @@ const Item = ({ item }: ItemProps) => {
   const [updateReadState] = useMutation(readItem)
 
   const toggleUnreadStatus = () => {
-    setHasBeenRead((prev) => !prev) // Optimistic UI
-    updateReadState({ read: !hasBeenRead, id: item.id }).catch(() =>
-      setHasBeenRead((prev) => !prev)
+    setHasBeenRead((previous) => !previous) // Optimistic UI
+    updateReadState({ id: item.id, read: !hasBeenRead }).catch(() =>
+      setHasBeenRead((previous) => !previous)
     )
   }
 
@@ -27,35 +28,51 @@ const Item = ({ item }: ItemProps) => {
     <div key={item.id}>
       <div
         className={clsx(
-          "px-2",
-          "font-medium",
-          "text-lg",
           "hover:bg-neutral-200",
-          "rounded-sm",
-          "flex",
           "cursor-pointer",
-          hasBeenRead && "font-normal"
+          "flex",
+          hasBeenRead ? "font-normal" : "font-medium",
+          "px-2",
+          "rounded-sm",
+          "text-lg"
         )}
       >
         <span
-          className="truncate grow py-4"
+          className={clsx("grow", "py-4", "truncate")}
           onClick={() => {
-            setIsExpanded((prev) => !prev)
+            setIsExpanded((previous) => !previous)
             if (!hasBeenRead) toggleUnreadStatus()
           }}
           title={item.title}
         >
           {item.title}
         </span>
-        <span className="text-gray-400 font-normal text-sm shrink-0 border-l-2 pt-2 px-2 flex flex-col">
+        <span
+          className={clsx(
+            "border-l-2",
+            "flex",
+            "flex-col",
+            "font-normal",
+            "pt-2",
+            "px-2",
+            "shrink-0",
+            "text-gray-400",
+            "text-sm"
+          )}
+        >
           <ItemInformation item={item} />
         </span>
-        <span className="flex text-gray-400 shrink-0 border-l-2 py-4">
+        <span className={clsx("border-l-2", "flex", "py-4", "shrink-0", "text-gray-400")}>
           <ItemControls item={item} toggle={toggleUnreadStatus} hasBeenRead={hasBeenRead} />
         </span>
       </div>
 
-      {isExpanded && <div dangerouslySetInnerHTML={{ __html: item.body }}></div>}
+      {isExpanded && (
+        <article
+          className={clsx("max-w-none", "pb-5", "prose")}
+          dangerouslySetInnerHTML={{ __html: item.body }}
+        />
+      )}
     </div>
   )
 }

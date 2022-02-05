@@ -31,16 +31,16 @@ describe("resetPassword mutation", () => {
           // Create old token to ensure it's deleted
           create: [
             {
-              type: "RESET_PASSWORD",
-              hashedToken: hash256(expiredToken),
               expiresAt: past,
+              hashedToken: hash256(expiredToken),
               sentTo: "user@example.com",
+              type: "RESET_PASSWORD",
             },
             {
-              type: "RESET_PASSWORD",
-              hashedToken: hash256(goodToken),
               expiresAt: future,
+              hashedToken: hash256(goodToken),
               sentTo: "user@example.com",
+              type: "RESET_PASSWORD",
             },
           ],
         },
@@ -52,20 +52,20 @@ describe("resetPassword mutation", () => {
 
     // Non-existent token
     await expect(
-      resetPassword({ token: "no-token", password: "", passwordConfirmation: "" }, mockCtx)
+      resetPassword({ password: "", passwordConfirmation: "", token: "no-token" }, mockCtx)
     ).rejects.toThrowError()
 
     // Expired token
     await expect(
       resetPassword(
-        { token: expiredToken, password: newPassword, passwordConfirmation: newPassword },
+        { password: newPassword, passwordConfirmation: newPassword, token: expiredToken },
         mockCtx
       )
     ).rejects.toThrowError()
 
     // Good token
     await resetPassword(
-      { token: goodToken, password: newPassword, passwordConfirmation: newPassword },
+      { password: newPassword, passwordConfirmation: newPassword, token: goodToken },
       mockCtx
     )
 

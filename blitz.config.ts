@@ -1,13 +1,13 @@
 import { BlitzConfig, sessionMiddleware, simpleRolesIsAuthorized } from "blitz"
 
 const config: BlitzConfig = {
-  reactStrictMode: true,
   middleware: [
     sessionMiddleware({
       cookiePrefix: "dashboard",
       isAuthorized: simpleRolesIsAuthorized,
     }),
   ],
+  reactStrictMode: true,
   /* Uncomment this to customize the webpack config
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Note: we provide webpack above so you should not `require` it

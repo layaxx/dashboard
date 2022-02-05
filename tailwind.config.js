@@ -10,6 +10,7 @@ function withOpacityValue(variable) {
 // tailwind.config.js
 module.exports = {
   content: ["{pages,app}/**/*.{js,ts,jsx,tsx}"],
+  plugins: [require("@tailwindcss/typography")],
   theme: {
     extend: {
       colors: {
@@ -19,5 +20,4 @@ module.exports = {
       },
     },
   },
-  plugins: [],
 }

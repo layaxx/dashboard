@@ -6,7 +6,7 @@ import { FeedAPIResponse, FeedsList } from "app/feeds/components/FeedsList"
 import { ItemsList } from "app/feeds/components/ItemsList"
 
 const FeedsPage: BlitzPage = () => {
-  const feedState = useState<FeedAPIResponse["id"] | null>(null)
+  const feedState = useState<FeedAPIResponse["id"] | undefined>()
 
   return (
     <>

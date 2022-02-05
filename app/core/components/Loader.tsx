@@ -1,6 +1,8 @@
+import clsx from "clsx"
+
 const Loader = () => (
   <svg
-    className="animate-spin h-5 w-5 text-primary mx-auto"
+    className={clsx("animate-spin", "h-5", "mx-auto", "text-primary", "w-5")}
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
     viewBox="0 0 24 24"

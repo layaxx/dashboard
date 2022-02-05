@@ -1,3 +1,4 @@
+/* eslint-disable sort-keys */
 import { RouterContext, BlitzRouter, BlitzProvider } from "blitz"
 import { render as defaultRender } from "@testing-library/react"
 import { renderHook as defaultRenderHook } from "@testing-library/react-hooks"
@@ -93,13 +94,16 @@ export const mockRouter: BlitzRouter = {
   isFallback: false,
 }
 
-type DefaultParams = Parameters<typeof defaultRender>
-type RenderUI = DefaultParams[0]
-type RenderOptions = DefaultParams[1] & { router?: Partial<BlitzRouter>; dehydratedState?: unknown }
+type DefaultParameters = Parameters<typeof defaultRender>
+type RenderUI = DefaultParameters[0]
+type RenderOptions = DefaultParameters[1] & {
+  router?: Partial<BlitzRouter>
+  dehydratedState?: unknown
+}
 
-type DefaultHookParams = Parameters<typeof defaultRenderHook>
-type RenderHook = DefaultHookParams[0]
-type RenderHookOptions = DefaultHookParams[1] & {
+type DefaultHookParameters = Parameters<typeof defaultRenderHook>
+type RenderHook = DefaultHookParameters[0]
+type RenderHookOptions = DefaultHookParameters[1] & {
   router?: Partial<BlitzRouter>
   dehydratedState?: unknown
 }

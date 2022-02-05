@@ -1,11 +1,12 @@
 import React from "react"
 import { useSession } from "blitz"
+import clsx from "clsx"
 
 const greeting = ((hour: number) => {
   let greetings: string[]
 
   const allGreetings = {
-    morning: ["Good morning", "Guten Morgen", "Rise and shine", "Morning", "Have a great day"],
+    morning: ["Good morning", "Guten Morgen", "Rise and shine", "Morning", "Have a great day"], // eslint-disable-next-line sort-keys
     day: ["Guten Tag", "Good afternoon", "Howdy", "Buenos dias", "G'day", "Hello there"],
     evening: ["Good evening", "Nice to see you", "Fancy seeing you here", "Hi there"],
   }
@@ -24,7 +25,7 @@ const DashboardGreeting = React.memo(() => {
   const session = useSession()
 
   return (
-    <h1 className="text-4xl font-bold text-primary pb-4 border-b-4 border-primary">
+    <h1 className={clsx("font-bold", "text-2xl", "text-primary")}>
       {greeting}, {session.userName}!
     </h1>
   )

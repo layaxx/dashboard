@@ -13,7 +13,7 @@ export const EditFeed = () => {
     { id: feedId },
     {
       // This ensures the query never refreshes and overwrites the form data while the user is editing.
-      staleTime: Infinity,
+      staleTime: Number.POSITIVE_INFINITY,
     }
   )
   const [updateFeedMutation] = useMutation(updateFeed)
@@ -26,7 +26,7 @@ export const EditFeed = () => {
 
       <div>
         <h1>Edit Feed {feed.id}</h1>
-        <pre>{JSON.stringify(feed, null, 2)}</pre>
+        <pre>{JSON.stringify(feed, undefined, 2)}</pre>
 
         <FeedForm
           submitText="Update Feed"

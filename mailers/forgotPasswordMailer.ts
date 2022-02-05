@@ -16,10 +16,8 @@ export function forgotPasswordMailer({ to, token }: ResetPasswordMailer) {
   const origin = process.env.APP_ORIGIN || process.env.BLITZ_DEV_SERVER_ORIGIN
   const resetUrl = `${origin}/reset-password?token=${token}`
 
-  const msg = {
+  const message = {
     from: "TODO@example.com",
-    to,
-    subject: "Your Password Reset Instructions",
     html: `
       <h1>Reset Your Password</h1>
       <h3>NOTE: You must set up a production email integration in mailers/forgotPasswordMailer.ts</h3>
@@ -28,6 +26,8 @@ export function forgotPasswordMailer({ to, token }: ResetPasswordMailer) {
         Click here to set a new password
       </a>
     `,
+    subject: "Your Password Reset Instructions",
+    to,
   }
 
   return {
@@ -38,7 +38,7 @@ export function forgotPasswordMailer({ to, token }: ResetPasswordMailer) {
         throw new Error("No production email implementation in mailers/forgotPasswordMailer")
       } else {
         // Preview email in the browser
-        await previewEmail(msg)
+        await previewEmail(message)
       }
     },
   }

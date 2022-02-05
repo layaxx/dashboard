@@ -22,11 +22,11 @@ export default resolver.pipe(resolver.zod(ForgotPassword), async ({ email }) => 
     // 5. Save this new token in the database.
     await db.token.create({
       data: {
-        user: { connect: { id: user.id } },
-        type: "RESET_PASSWORD",
         expiresAt,
         hashedToken,
         sentTo: user.email,
+        type: "RESET_PASSWORD",
+        user: { connect: { id: user.id } },
       },
     })
     // 6. Send the email

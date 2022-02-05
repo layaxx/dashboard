@@ -24,12 +24,9 @@ export const SignupForm = (props: SignupFormProps) => {
             await signupMutation(values)
             props.onSuccess?.()
           } catch (error: any) {
-            if (error.code === "P2002" && error.meta?.target?.includes("email")) {
-              // This error comes from Prisma
-              return { email: "This email is already being used" }
-            } else {
-              return { [FORM_ERROR]: error.toString() }
-            }
+            return error.code === "P2002" && error.meta?.target?.includes("email")
+              ? { email: "This email is already being used" }
+              : { [FORM_ERROR]: error.toString() }
           }
         }}
       >
