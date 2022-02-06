@@ -75,14 +75,14 @@ const DashboardLayout = ({ items, feeds }: Props) => {
             "w-full"
           )}
         >
-          <div className={clsx("flex", "flex-1", "flex-col", "w-full")}>
+          <section className={clsx("flex", "flex-1", "flex-col", "w-full")}>
             <div className={clsx("border-b", "border-gray-600", "mt-6", "pb-5", "pl-4", "w-full")}>
               <p className={clsx("font-bold", "leading-4", "text-primary", "underline")}>Reader</p>
 
               <div className={clsx("pr-4", "py-2")}>{feeds}</div>
             </div>
-          </div>
-          <div
+          </section>
+          <section
             className={clsx(
               "flex",
               "flex-col",
@@ -97,7 +97,7 @@ const DashboardLayout = ({ items, feeds }: Props) => {
             <Suspense fallback={<Loader />}>
               <UserInfo />
             </Suspense>
-          </div>
+          </section>
         </aside>
 
         <main
