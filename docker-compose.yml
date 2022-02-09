@@ -1,0 +1,14 @@
+---
+version: "3.8"
+services:
+  postgres:
+    image: postgres:12.4
+    env_file: .env.local
+    volumes:
+      - psql:/var/lib/postgresql/data
+    ports:
+      - 3001:5432
+    restart: unless-stopped
+
+volumes:
+  psql:

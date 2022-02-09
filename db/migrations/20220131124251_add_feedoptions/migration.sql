@@ -1,8 +1,0 @@
--- CreateTable
-CREATE TABLE "Feedoption" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
-    "expand" BOOLEAN NOT NULL DEFAULT false,
-    "oldestFirst" BOOLEAN NOT NULL DEFAULT true
-);

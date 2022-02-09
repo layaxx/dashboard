@@ -15,17 +15,16 @@ export default resolver.pipe(resolver.authorize(), async ({ id }: { id: number }
     .filter((key) => key !== "type" || id !== -1)
     .map((key) => url.searchParams.append(key, "" + parameter[key]))
 
-  console.log(url.toString())
-
   return {
-    items: await fetch(url.toString(), {
-      headers: {
-        Accept: "application/json",
-        Authorization: `Basic ${process.env["NEWS_CREDENTIALS"]}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((json) => json.items)
-      .catch((...data) => reportError("readItems", url, undefined, data)),
+    items:
+      (await fetch(url.toString(), {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Basic ${process.env["NEWS_CREDENTIALS"]}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((json) => json.items)
+        .catch((...data) => reportError("readItems", url, undefined, data))) || [],
   }
 })

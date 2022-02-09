@@ -21,7 +21,8 @@ export type FeedAPIResponse = {
 type Props = { feedState: [number | undefined, Dispatch<SetStateAction<number | undefined>>] }
 
 export const FeedsList = ({ feedState }: Props) => {
-  const [{ feeds }] = useQuery(getFeeds, {})
+  // eslint-disable-next-line unicorn/no-useless-undefined
+  const [{ feeds }] = useQuery(getFeeds, undefined)
 
   const [activeFeed, setActiveFeed] = feedState
 

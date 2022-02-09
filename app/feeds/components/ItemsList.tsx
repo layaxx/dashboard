@@ -37,7 +37,7 @@ export const ItemsList = ({ feedState }: Props) => {
     { enabled: !!feedState, placeholderData: defaultOptions }
   )
 
-  const [{ items } /*  { setQueryData } */] = useQuery(
+  const [{ items }] = useQuery(
     getItems,
     {
       id: feedState || -1,
