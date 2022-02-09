@@ -4,20 +4,27 @@ services:
   app:
     image: locally_built_dashboard_app
     env_file: .env.local
-    ports:
-      - 3000:3000
     restart: unless-stopped
     depends_on:
       - postgres
+    networks:
+      - frontend
+      - backend
 
   postgres:
     image: postgres:12.4
     env_file: .env.local
     volumes:
       - psql:/var/lib/postgresql/data
-    ports:
-      - 3001:5432
     restart: unless-stopped
+    networks:
+      - backend
 
 volumes:
   psql:
+
+networks:
+  frontend:
+    external:
+      name: proxy
+  backend:
