@@ -3,8 +3,10 @@
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://blitz:abcdefg@host.docker.internal:3001/dashboard"
+  url      = env("DATABASE_URL")
 }
+
+//"postgresql://blitz:abcdefg@host.docker.internal:3001/dashboard"
 
 generator client {
   provider = "prisma-client-js"
