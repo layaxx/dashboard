@@ -1,5 +1,8 @@
 FROM node:16-slim AS base
 
+ARG DB
+ENV DATABASE_URL=$DB
+
 WORKDIR /usr/src/app
 ENV NODE_ENV=production
 COPY package.json yarn.lock ./
@@ -8,7 +11,7 @@ RUN awk '/},/ { p = 0 } { if (!p) { print $0 } } /"devDependencies":/ { p = 1 }'
   && yarn install --prod --frozen-lockfile \
   && yarn cache clean && rm -rf ~/.cache/*
 
-FROM node:16-slim AS build
+FROM base AS build
 WORKDIR /usr/src/app
 
 ENV NODE_ENV=production
@@ -27,7 +30,7 @@ COPY --from=build /usr/src/app/db /usr/src/app/db
 COPY --from=build /usr/src/app/.blitz.config.compiled.js /usr/src/app/.blitz.config.compiled.js
 COPY --from=build /usr/src/app/node_modules/.prisma/client /usr/src/app/node_modules/.prisma/client
 
-RUN apt-get update && apt-get install -y --no-install-recommends openssl && yarn add prisma@3.9.1
+RUN apt-get update && apt-get install -y --no-install-recommends openssl
 # unsure why but works now
 
 EXPOSE 3000
