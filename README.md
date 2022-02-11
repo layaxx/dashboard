@@ -1,5 +1,9 @@
 [![Blitz.js](https://raw.githubusercontent.com/blitz-js/art/master/github-cover-photo.png)](https://blitzjs.com)
 
+# TODO
+
+For Docker deploy, db/schema.prisma must be changed to contain actual DB connection string instead of reference to env variable
+
 This is a [Blitz.js](https://github.com/blitz-js/blitz) app.
 
 # **dashboard**

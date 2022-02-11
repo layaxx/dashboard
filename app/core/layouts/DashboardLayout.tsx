@@ -5,6 +5,7 @@ import defaultTheme from "tailwindcss/defaultTheme"
 import Loader from "../components/Loader"
 import UserInfo from "../components/UserInfo"
 import DashboardGreeting from "app/core/components/DashboardGreeting"
+import Zen from "app/feeds/components/zen"
 
 type Props = { items: ReactChild; feeds: ReactChild }
 
@@ -81,6 +82,9 @@ const DashboardLayout = ({ items, feeds }: Props) => {
 
               <div className={clsx("pr-4", "py-2")}>{feeds}</div>
             </div>
+          </section>
+          <section className={clsx("flex", "flex-col", "h-32", "w-full")}>
+            <Zen />
           </section>
           <section
             className={clsx(
