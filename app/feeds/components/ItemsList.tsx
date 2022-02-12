@@ -43,9 +43,9 @@ export const ItemsList = ({ feedState }: Props) => {
       id: feedState || -1,
     },
     {
-      refetchInterval: 1000 * 60,
-      refetchOnReconnect: true,
-      refetchOnWindowFocus: true,
+      refetchInterval: false,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
     }
   )
 

@@ -1,11 +1,13 @@
 import { useState } from "react"
-import { useMutation } from "blitz"
+import { setQueryData, useMutation } from "blitz"
 import { Feedoption } from "@prisma/client"
 import clsx from "clsx"
+import { FeedAPIResponse } from "../FeedsList"
 import { ItemAPIResponse } from "../ItemsList"
 import ItemControls from "./ItemControls"
 import ItemInformation from "./ItemInformation"
 import readItem from "app/feeds/mutations/readItem"
+import getFeeds from "app/feeds/queries/getFeeds"
 
 type ItemProps = { item: ItemAPIResponse; settings: Feedoption }
 
@@ -21,6 +23,19 @@ const Item = ({ item, settings }: ItemProps) => {
     setHasBeenRead((previous) => !previous) // Optimistic UI
     updateReadState({ id: item.id, read: !hasBeenRead }).catch(() =>
       setHasBeenRead((previous) => !previous)
+    )
+    setQueryData(
+      getFeeds,
+      undefined,
+      (argument) => ({
+        feeds:
+          argument?.feeds?.map((feed: FeedAPIResponse) =>
+            feed.id !== item.feedId
+              ? feed
+              : { ...feed, unreadCount: feed.unreadCount + (hasBeenRead ? 1 : -1) }
+          ) || [],
+      }),
+      { refetch: false }
     )
   }
 
