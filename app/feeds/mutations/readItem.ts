@@ -9,10 +9,8 @@ const Options = z.object({
 
 export default resolver.pipe(resolver.zod(Options), resolver.authorize(), async ({ read, id }) => {
   const url = `${process.env["NEWS_BASE_URL"]}/items/${id}/${read ? "read" : "unread"}`
-  const response = await fetch(url, {
+  return await fetch(url, {
     headers: { Authorization: `Basic ${process.env["NEWS_CREDENTIALS"]}` },
     method: "PUT",
   }).catch((...data) => reportError("readItems", url, undefined, data))
-
-  return response.ok
 })

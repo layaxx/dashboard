@@ -20,7 +20,7 @@ const NewFeedPage: BlitzPage = () => {
         // initialValues={{}}
         onSubmit={async (values) => {
           try {
-            const feed = await createFeedMutation(values)
+            const feed = await createFeedMutation(values).then((response) => response.json())
             router.push(Routes.ShowFeedPage({ feedId: feed.id }))
           } catch (error: any) {
             console.error(error)

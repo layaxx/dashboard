@@ -1,15 +1,24 @@
 import { resolver } from "blitz"
 import { z } from "zod"
-import db from "db"
 
 const CreateFeed = z.object({
-  name: z.string(),
-  number: z.number(),
+  url: z.string(),
 })
 
 export default resolver.pipe(resolver.zod(CreateFeed), resolver.authorize(), async (input) => {
-  // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-  const feed = await db.feed.create({ data: input })
+  const body = {
+    // eslint-disable-next-line unicorn/no-null
+    folderId: null,
+    url: input.url,
+  }
 
-  return feed
+  const url = `${process.env["NEWS_BASE_URL"]}/feeds`
+  return await fetch(url, {
+    headers: {
+      Authorization: `Basic ${process.env["NEWS_CREDENTIALS"]}`,
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify(body),
+  })
 })

@@ -42,7 +42,6 @@ module.exports = {
       },
     ],
     "no-duplicate-imports": "error",
-    "sort-keys": ["warn", "asc"],
     "tailwindcss/no-custom-classname": [1, { whitelist: [".*\\-primary"] }],
     "unicorn/filename-case": "off",
     "unicorn/prefer-module": "off",

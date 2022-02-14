@@ -1,6 +1,9 @@
+import { useState } from "react"
 import { useQuery } from "blitz"
+import { PlusIcon } from "@heroicons/react/solid"
 import clsx from "clsx"
 import getFeeds from "../queries/getFeeds"
+import AddFeedModal from "app/core/components/Dashboard/AddFeedModal"
 import { activeFeedID, setActiveFeed } from "app/core/hooks/feedSlice"
 import { useAppSelector, useAppDispatch } from "app/core/hooks/redux"
 
@@ -32,9 +35,10 @@ export const FeedsList = () => {
 
   const showAllFeeds = false
 
+  const [showAddModal, setShowAddModal] = useState(false)
+
   return (
     <ul>
-      <li>Active Feed: {activeFeed}</li>
       {feeds &&
         feeds
           .filter((feed: FeedAPIResponse) => feed.unreadCount || showAllFeeds)
@@ -56,6 +60,14 @@ export const FeedsList = () => {
               </span>
             </li>
           ))}
+
+      <li
+        className={clsx("cursor-pointer", "inline-flex", "mt-4")}
+        onClick={() => setShowAddModal(true)}
+      >
+        <PlusIcon className="w-5" /> Add new Feed
+        {showAddModal && <AddFeedModal setIsOpen={setShowAddModal} />}
+      </li>
     </ul>
   )
 }
