@@ -1,6 +1,7 @@
 import { useQuery } from "blitz"
 import getItems from "../queries/getItems"
 import Item from "./items/Item"
+import { useAppSelector } from "app/core/hooks/redux"
 import getFeedoption from "app/feedoptions/queries/getFeedoption"
 
 export type ItemAPIResponse = {
@@ -20,9 +21,9 @@ export type ItemAPIResponse = {
   fingerprint: string
 }
 
-type Props = { feedState: number | undefined }
+export const ItemsList = () => {
+  const activeFeedID = useAppSelector((state) => state.feed.value)
 
-export const ItemsList = ({ feedState }: Props) => {
   const defaultOptions = {
     createdAt: new Date(),
     expand: false,
@@ -33,14 +34,14 @@ export const ItemsList = ({ feedState }: Props) => {
 
   const [settings] = useQuery(
     getFeedoption,
-    { id: feedState! },
-    { enabled: !!feedState, placeholderData: defaultOptions }
+    { id: activeFeedID! },
+    { enabled: !!activeFeedID, placeholderData: defaultOptions }
   )
 
   const [{ items }] = useQuery(
     getItems,
     {
-      id: feedState || -1,
+      id: activeFeedID || -1,
     },
     {
       refetchInterval: false,

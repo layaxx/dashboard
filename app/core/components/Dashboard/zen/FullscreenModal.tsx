@@ -1,3 +1,4 @@
+/* eslint-disable sort-keys */
 import clsx from "clsx"
 import { Dayjs } from "dayjs"
 import Particles from "react-tsparticles"

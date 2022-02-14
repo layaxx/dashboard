@@ -1,7 +1,8 @@
-import { Dispatch, SetStateAction } from "react"
 import { useQuery } from "blitz"
 import clsx from "clsx"
 import getFeeds from "../queries/getFeeds"
+import { activeFeedID, setActiveFeed } from "app/core/hooks/feedSlice"
+import { useAppSelector, useAppDispatch } from "app/core/hooks/redux"
 
 export type FeedAPIResponse = {
   id: number
@@ -18,9 +19,7 @@ export type FeedAPIResponse = {
   lastUpdateError: string
 }
 
-type Props = { feedState: [number | undefined, Dispatch<SetStateAction<number | undefined>>] }
-
-export const FeedsList = ({ feedState }: Props) => {
+export const FeedsList = () => {
   // eslint-disable-next-line unicorn/no-useless-undefined
   const [{ feeds }] = useQuery(getFeeds, undefined, {
     refetchInterval: 1000 * 60,
@@ -28,12 +27,14 @@ export const FeedsList = ({ feedState }: Props) => {
     refetchOnWindowFocus: true,
   })
 
-  const [activeFeed, setActiveFeed] = feedState
+  const activeFeed = useAppSelector(activeFeedID)
+  const dispatch = useAppDispatch()
 
   const showAllFeeds = false
 
   return (
     <ul>
+      <li>Active Feed: {activeFeed}</li>
       {feeds &&
         feeds
           .filter((feed: FeedAPIResponse) => feed.unreadCount || showAllFeeds)
@@ -47,7 +48,7 @@ export const FeedsList = ({ feedState }: Props) => {
                 "py-1",
                 activeFeed === feed.id && ["pl-2", "border-l-4", "border-primary"]
               )}
-              onClick={() => setActiveFeed(feed.id)}
+              onClick={() => dispatch(setActiveFeed(feed.id))}
             >
               <span className="grow">{feed.title}</span>{" "}
               <span className={clsx("bg-primary", "font-bold", "px-3", "rounded-xl", "text-white")}>

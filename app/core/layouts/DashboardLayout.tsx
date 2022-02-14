@@ -19,7 +19,7 @@ const DashboardLayout = ({ items, feeds }: Props) => {
     <div className={clsx("flex", "flex-row", "h-screen", "overflow-hidden", "w-full")}>
       <Aside hideNavbar={hideNavbar} setHideNavbar={setHideNavbar} title={title} feeds={feeds} />
 
-      <div className="overflow-x-clip">
+      <div className={clsx("overflow-x-clip", "w-full")}>
         <Header hideNavbar={hideNavbar} setHideNavbar={setHideNavbar} />
         <main
           className={clsx("h-full", "overflow-y-scroll", "px-10", "py-4")}

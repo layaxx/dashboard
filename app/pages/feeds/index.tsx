@@ -1,13 +1,11 @@
-import { Suspense, useState } from "react"
+import { Suspense } from "react"
 import { Head, BlitzPage } from "blitz"
 import Loader from "app/core/components/Loader"
 import DashboardLayout from "app/core/layouts/DashboardLayout"
-import { FeedAPIResponse, FeedsList } from "app/feeds/components/FeedsList"
+import { FeedsList } from "app/feeds/components/FeedsList"
 import { ItemsList } from "app/feeds/components/ItemsList"
 
 const FeedsPage: BlitzPage = () => {
-  const feedState = useState<FeedAPIResponse["id"] | undefined>()
-
   return (
     <>
       <Head>
@@ -16,12 +14,12 @@ const FeedsPage: BlitzPage = () => {
       <DashboardLayout
         feeds={
           <Suspense fallback={<Loader />}>
-            <FeedsList feedState={feedState} />
+            <FeedsList />
           </Suspense>
         }
         items={
           <Suspense fallback={<Loader />}>
-            <ItemsList feedState={feedState[0]} />
+            <ItemsList />
           </Suspense>
         }
       />
