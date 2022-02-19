@@ -1,7 +1,7 @@
 import React from "react"
 import clsx from "clsx"
 import GenericModal from "../GenericModal"
-import { activeFeedID } from "app/core/hooks/feedSlice"
+import { getActiveFeedID } from "app/core/hooks/feedSlice"
 import { useAppSelector } from "app/core/hooks/redux"
 
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
 }
 
 const SettingsModal = ({ setIsSettingsOpen }: Props) => {
-  const activeFeed = useAppSelector(activeFeedID)
+  const activeFeed = useAppSelector(getActiveFeedID)
 
   return (
     <GenericModal

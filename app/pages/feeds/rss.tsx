@@ -1,20 +1,21 @@
 import { Suspense } from "react"
 import { Head, BlitzPage } from "blitz"
 import Loader from "app/core/components/Loader"
+import { FEED_MODE } from "app/core/hooks/feedSlice"
 import DashboardLayout from "app/core/layouts/DashboardLayout"
 import { FeedsList } from "app/feeds/components/FeedsList"
 import { ItemsList } from "app/feeds/components/ItemsList"
 
-const FeedsPage: BlitzPage = () => {
+const FeedsRSSPage: BlitzPage = () => {
   return (
     <>
       <Head>
-        <title>Feeds</title>
+        <title>Feeds - RSS</title>
       </Head>
       <DashboardLayout
         feeds={
           <Suspense fallback={<Loader />}>
-            <FeedsList />
+            <FeedsList mode={FEED_MODE.RSS} />
           </Suspense>
         }
         items={
@@ -27,6 +28,6 @@ const FeedsPage: BlitzPage = () => {
   )
 }
 
-FeedsPage.authenticate = true
+FeedsRSSPage.authenticate = true
 
-export default FeedsPage
+export default FeedsRSSPage

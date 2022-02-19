@@ -6,12 +6,19 @@
   },
   "jest.autoRun": "off",
   "cSpell.words": [
+    "atalho",
     "blitzjs",
     "classname",
     "feedoption",
     "feedoptions",
     "heroicons",
+    "notistack",
+    "Readlist",
+    "readlistentries",
+    "readlistentry",
+    "reapop",
     "tailwindcss",
-    "tsparticles"
+    "tsparticles",
+    "unhide"
   ]
 }

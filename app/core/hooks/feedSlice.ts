@@ -3,12 +3,19 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import type { RootState } from "./store"
 
 interface FeedState {
-  value: number
+  activeFeedID: number
+  mode: FEED_MODE
+}
+
+export enum FEED_MODE {
+  RSS,
+  BOOKMARKS,
 }
 
 // Define the initial state using that type
 const initialState: FeedState = {
-  value: 0,
+  activeFeedID: 0,
+  mode: FEED_MODE.RSS,
 }
 
 export const feedSlice = createSlice({
@@ -16,15 +23,21 @@ export const feedSlice = createSlice({
   initialState,
   reducers: {
     setActiveFeed: (state, action: PayloadAction<number>) => {
-      state.value = action.payload
+      state.activeFeedID = action.payload
+      state.mode = FEED_MODE.RSS
+      return state
+    },
+    changeMode: (state, action: PayloadAction<FEED_MODE>) => {
+      state.mode = action.payload
       return state
     },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setActiveFeed } = feedSlice.actions
+export const { setActiveFeed, changeMode } = feedSlice.actions
 
-export const activeFeedID = (state: RootState) => state.feed.value
+export const getActiveFeedID = (state: RootState) => state.feed.activeFeedID
+export const getFeedMode = (state: RootState) => state.feed.mode
 
 export default feedSlice.reducer

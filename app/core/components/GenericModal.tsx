@@ -1,5 +1,6 @@
 import React, { ReactChild } from "react"
 import clsx from "clsx"
+import Button from "./Button"
 
 type Button = {
   props?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
@@ -9,7 +10,7 @@ type Button = {
 
 type Props = {
   cancelButton: Button
-  confirmButton: Button
+  confirmButton?: Button
   icon?: ReactChild
   title: ReactChild
   content: ReactChild
@@ -36,6 +37,11 @@ const GenericModal = ({ cancelButton, confirmButton, icon, title, content }: Pro
           "px-4",
           "text-center"
         )}
+        id="modal-backdrop"
+        onClick={(event) => {
+          // @ts-ignore
+          event.target.id === "modal-backdrop" && cancelButton.handler()
+        }}
       >
         <div
           className={clsx("-z-10", "bg-gray-500/75", "fixed", "inset-0", "transition-opacity")}
@@ -108,68 +114,15 @@ const GenericModal = ({ cancelButton, confirmButton, icon, title, content }: Pro
               "py-3"
             )}
           >
-            <button
-              type="button"
-              className={clsx(
-                "bg-red-600",
-                "hover:bg-red-700",
-                "border",
-                "border-transparent",
-                "font-medium",
-                "inline-flex",
-                "justify-center",
-                "sm:ml-3",
-                "focus:outline-none",
-                "px-4",
-                "py-2",
-                "focus:ring-2",
-                "focus:ring-offset-2",
-                "focus:ring-red-500",
-                "rounded-md",
-                "shadow-sm",
-                "text-base",
-                "sm:text-sm",
-                "text-white",
-                "sm:w-auto",
-                "w-full"
-              )}
-              {...confirmButton.props}
-              onClick={confirmButton.handler}
-            >
-              {confirmButton.text ?? "Deactivate"}
-            </button>
-            <button
-              type="button"
-              className={clsx(
-                "hover:bg-gray-50",
-                "bg-white",
-                "border",
-                "border-gray-300",
-                "font-medium",
-                "inline-flex",
-                "justify-center",
-                "sm:ml-3",
-                "sm:mt-0",
-                "mt-3",
-                "focus:outline-none",
-                "px-4",
-                "py-2",
-                "focus:ring-2",
-                "focus:ring-indigo-500",
-                "focus:ring-offset-2",
-                "rounded-md",
-                "shadow-sm",
-                "text-base",
-                "text-gray-700",
-                "sm:text-sm",
-                "sm:w-auto",
-                "w-full"
-              )}
-              {...cancelButton.props}
-              onClick={cancelButton.handler}
-            >
+            {confirmButton && (
+              <Button {...confirmButton.props} onClick={confirmButton.handler} variant="danger">
+                {confirmButton.text ?? "Deactivate"}
+              </Button>
+            )}
+
+            <Button onClick={cancelButton.handler} {...cancelButton.props}>
               {cancelButton.text ?? "Cancel"}
-            </button>
+            </Button>
           </div>
         </div>
       </div>

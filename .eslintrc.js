@@ -41,6 +41,8 @@ module.exports = {
         pathGroupsExcludedImportTypes: ["react"],
       },
     ],
+    "no-alert": "error",
+    "no-console": ["warn", { allow: ["warn", "error"] }],
     "no-duplicate-imports": "error",
     "tailwindcss/no-custom-classname": [1, { whitelist: [".*\\-primary"] }],
     "unicorn/filename-case": "off",

@@ -9,6 +9,7 @@ export default resolver.pipe(resolver.authorize(), async ({ id }: { id: number }
     id, // the id of the folder or feed, Use 0 for Starred and All
     oldestFirst: true, // implemented in 3.002, if true it reverse the sort order
     type: 0, // the type of the query (Feed: 0, Folder: 1, Starred: 2, All: 3)
+    batchSize: 50, // TODO: FIXME:
   }
 
   Object.keys(parameter)

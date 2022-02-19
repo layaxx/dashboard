@@ -8,8 +8,8 @@ import {
   useQueryErrorResetBoundary,
 } from "blitz"
 import { Provider } from "react-redux"
+import { NotificationsProvider } from "reapop"
 import LoginForm from "app/auth/components/LoginForm"
-
 import store from "app/core/hooks/store"
 
 import "app/core/styles/index.css"
@@ -22,7 +22,9 @@ export default function App({ Component, pageProps }: AppProps) {
       FallbackComponent={RootErrorFallback}
       onReset={useQueryErrorResetBoundary().reset}
     >
-      <Provider store={store}>{getLayout(<Component {...pageProps} />)}</Provider>
+      <NotificationsProvider>
+        <Provider store={store}>{getLayout(<Component {...pageProps} />)}</Provider>
+      </NotificationsProvider>
     </ErrorBoundary>
   )
 }

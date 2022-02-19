@@ -1,8 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit"
 import feedSlice from "./feedSlice"
+import readlistSlice from "./readlistSlice"
 
 const store = configureStore({
-  reducer: { feed: feedSlice },
+  reducer: { feed: feedSlice, readlist: readlistSlice },
 })
 export default store
 

@@ -27,10 +27,8 @@ export const Feed = () => {
         <button
           type="button"
           onClick={async () => {
-            if (window.confirm("This will be deleted")) {
-              await deleteFeedMutation({ id: feed.id })
-              router.push(Routes.FeedsPage())
-            }
+            await deleteFeedMutation({ id: feed.id })
+            router.push(Routes.FeedsPage())
           }}
           style={{ marginLeft: "0.5rem" }}
         >

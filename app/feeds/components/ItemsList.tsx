@@ -1,6 +1,7 @@
 import { useQuery } from "blitz"
 import getItems from "../queries/getItems"
 import Item from "./items/Item"
+import { getActiveFeedID } from "app/core/hooks/feedSlice"
 import { useAppSelector } from "app/core/hooks/redux"
 import getFeedoption from "app/feedoptions/queries/getFeedoption"
 
@@ -22,7 +23,7 @@ export type ItemAPIResponse = {
 }
 
 export const ItemsList = () => {
-  const activeFeedID = useAppSelector((state) => state.feed.value)
+  const activeFeedID = useAppSelector(getActiveFeedID)
 
   const defaultOptions = {
     createdAt: new Date(),
@@ -38,7 +39,7 @@ export const ItemsList = () => {
     { enabled: !!activeFeedID, placeholderData: defaultOptions }
   )
 
-  const [{ items }] = useQuery(
+  const [rssResult] = useQuery(
     getItems,
     {
       id: activeFeedID || -1,
@@ -52,7 +53,7 @@ export const ItemsList = () => {
 
   return (
     <div>
-      {items.map((item: ItemAPIResponse) => (
+      {rssResult?.items.map((item: ItemAPIResponse) => (
         <Item item={item} key={item.id} settings={settings || defaultOptions} />
       ))}
     </div>

@@ -1,11 +1,14 @@
 import { useState } from "react"
-import { useQuery } from "blitz"
+import { Link, Routes, useQuery } from "blitz"
 import { PlusIcon } from "@heroicons/react/solid"
 import clsx from "clsx"
+import { useRouter } from "next/dist/client/router"
 import getFeeds from "../queries/getFeeds"
+import countReadlistentries from "../readlistentries/queries/countReadlistentries"
+import FeedListItem from "./FeedListItem"
 import AddFeedModal from "app/core/components/Dashboard/AddFeedModal"
-import { activeFeedID, setActiveFeed } from "app/core/hooks/feedSlice"
-import { useAppSelector, useAppDispatch } from "app/core/hooks/redux"
+import { FEED_MODE, getActiveFeedID, setActiveFeed } from "app/core/hooks/feedSlice"
+import { useAppDispatch, useAppSelector } from "app/core/hooks/redux"
 
 export type FeedAPIResponse = {
   id: number
@@ -22,45 +25,54 @@ export type FeedAPIResponse = {
   lastUpdateError: string
 }
 
-export const FeedsList = () => {
-  // eslint-disable-next-line unicorn/no-useless-undefined
+type Props = {
+  mode: FEED_MODE
+}
+
+export const FeedsList = ({ mode }: Props) => {
   const [{ feeds }] = useQuery(getFeeds, undefined, {
     refetchInterval: 1000 * 60,
     refetchOnReconnect: true,
     refetchOnWindowFocus: true,
   })
 
-  const activeFeed = useAppSelector(activeFeedID)
-  const dispatch = useAppDispatch()
+  const [readListCount] = useQuery(countReadlistentries, {})
 
   const showAllFeeds = false
 
   const [showAddModal, setShowAddModal] = useState(false)
 
+  const dispatch = useAppDispatch()
+  const activeID = useAppSelector(getActiveFeedID)
+
+  const router = useRouter()
   return (
     <ul>
       {feeds &&
         feeds
           .filter((feed: FeedAPIResponse) => feed.unreadCount || showAllFeeds)
-          .map((feed: FeedAPIResponse) => (
-            <li
-              key={feed.id}
-              className={clsx(
-                "hover:bg-slate-200",
-                "cursor-pointer",
-                "flex",
-                "py-1",
-                activeFeed === feed.id && ["pl-2", "border-l-4", "border-primary"]
-              )}
-              onClick={() => dispatch(setActiveFeed(feed.id))}
-            >
-              <span className="grow">{feed.title}</span>{" "}
-              <span className={clsx("bg-primary", "font-bold", "px-3", "rounded-xl", "text-white")}>
-                {feed.unreadCount}
-              </span>
-            </li>
+          .map(({ id, title, unreadCount }: FeedAPIResponse) => (
+            <FeedListItem
+              title={title}
+              unreadCount={unreadCount}
+              onClick={() => {
+                mode === FEED_MODE.BOOKMARKS && router.push("/feeds/rss")
+                dispatch(setActiveFeed(id))
+              }}
+              key={id}
+              isActive={mode === FEED_MODE.RSS && activeID === id}
+            />
           ))}
-
+      <Link href={Routes.FeedsReadingPage()}>
+        <a>
+          <FeedListItem
+            title={"Reading List"}
+            unreadCount={readListCount}
+            isActive={mode === FEED_MODE.BOOKMARKS}
+            onClick={() => {}}
+          />
+        </a>
+      </Link>
       <li
         className={clsx("cursor-pointer", "inline-flex", "mt-4")}
         onClick={() => setShowAddModal(true)}

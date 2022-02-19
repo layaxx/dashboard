@@ -60,6 +60,7 @@ model Token {
 // NOTE: It's highly recommended to use an enum for the token type
 //       but enums only work in Postgres.
 //       See: https://blitzjs.com/docs/database-overview#switch-to-postgre-sql
+
 enum TokenType {
   RESET_PASSWORD
 }
@@ -78,4 +79,12 @@ model Feedoption {
   updatedAt   DateTime @updatedAt
   expand      Boolean  @default(false)
   oldestFirst Boolean  @default(true)
+}
+
+model Readlistentry {
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  url        String
+  isArchived Boolean  @default(false)
 }

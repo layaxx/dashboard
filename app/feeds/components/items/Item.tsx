@@ -40,7 +40,7 @@ const Item = ({ item, settings }: ItemProps) => {
   }
 
   return (
-    <div key={item.id}>
+    <div key={item.id} className="last:mb-80">
       <div
         className={clsx(
           "hover:bg-neutral-200",
