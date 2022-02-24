@@ -28,7 +28,7 @@ export const Feed = () => {
           type="button"
           onClick={async () => {
             await deleteFeedMutation({ id: feed.id })
-            router.push(Routes.FeedsPage())
+            router.push(Routes.FeedsRSSPage())
           }}
           style={{ marginLeft: "0.5rem" }}
         >
@@ -43,7 +43,7 @@ const ShowFeedPage: BlitzPage = () => {
   return (
     <div>
       <p>
-        <Link href={Routes.FeedsPage()}>
+        <Link href={Routes.FeedsRSSPage()}>
           <a>Feeds</a>
         </Link>
       </p>

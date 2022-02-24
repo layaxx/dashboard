@@ -41,7 +41,7 @@ const DashboardLayout = ({ items, feeds }: Props) => {
         <div className={clsx("overflow-x-clip", "w-full")}>
           <Header hideNavbar={hideNavbar} setHideNavbar={setHideNavbar} />
           <main
-            className={clsx("h-full", "overflow-y-scroll", "px-10", "py-4")}
+            className={clsx("h-full", "overflow-y-scroll", "px-10")}
             style={{ backgroundColor: "#f4f7fc" }}
           >
             {items}

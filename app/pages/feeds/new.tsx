@@ -32,7 +32,7 @@ const NewFeedPage: BlitzPage = () => {
       />
 
       <p>
-        <Link href={Routes.FeedsPage()}>
+        <Link href={Routes.FeedsRSSPage()}>
           <a>Feeds</a>
         </Link>
       </p>

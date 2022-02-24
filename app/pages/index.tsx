@@ -19,7 +19,7 @@ const Home: BlitzPage = () => {
         </div>
 
         <p>
-          <Link href="/feeds">
+          <Link href="/feeds/rss">
             <a>Feeds</a>
           </Link>
         </p>

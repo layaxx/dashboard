@@ -64,7 +64,7 @@ const EditFeedPage: BlitzPage = () => {
       </Suspense>
 
       <p>
-        <Link href={Routes.FeedsPage()}>
+        <Link href={Routes.FeedsRSSPage()}>
           <a>Feeds</a>
         </Link>
       </p>

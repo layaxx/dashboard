@@ -28,7 +28,7 @@ export const ItemList = () => {
   const [addRLE] = useMutation(createReadlistentry)
 
   return (
-    <div>
+    <>
       <div>
         <Form
           onSubmit={({ url }) => {
@@ -61,6 +61,6 @@ export const ItemList = () => {
       <Button onClick={() => fetchNextPage()} disabled={!hasNextPage || !!isFetchingNextPage}>
         {hasNextPage ? "Load More" : "Nothing more to load"}
       </Button>
-    </div>
+    </>
   )
 }

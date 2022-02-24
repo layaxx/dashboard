@@ -1,23 +1,31 @@
 import { resolver } from "blitz"
 import { reportError } from "../utils/reportErrors"
 
-export default resolver.pipe(resolver.authorize(), async ({ id }: { id: number }) => {
-  const url = new URL((process.env["NEWS_BASE_URL"] || "") + "/items")
+type InputParameters = {
+  id?: number
+  batchSize?: number
+  getRead?: boolean
+  oldestFirst?: boolean
+}
 
-  const parameter: { [key: string]: number | string | boolean } = {
-    getRead: false, // if true it returns all items, false returns only unread items
-    id, // the id of the folder or feed, Use 0 for Starred and All
-    oldestFirst: true, // implemented in 3.002, if true it reverse the sort order
-    type: 0, // the type of the query (Feed: 0, Folder: 1, Starred: 2, All: 3)
-    batchSize: 50, // TODO: FIXME:
-  }
+export default resolver.pipe(
+  resolver.authorize(),
+  async ({ id = -1, batchSize = 20, getRead = false, oldestFirst = true }: InputParameters) => {
+    const url = new URL((process.env["NEWS_BASE_URL"] || "") + "/items")
 
-  Object.keys(parameter)
-    .filter((key) => key !== "type" || id !== -1)
-    .map((key) => url.searchParams.append(key, "" + parameter[key]))
+    const parameter: { [key: string]: number | string | boolean } = {
+      getRead, // if true it returns all items, false returns only unread items
+      id, // the id of the folder or feed, Use 0 for Starred and All
+      oldestFirst, // implemented in 3.002, if true it reverse the sort order
+      type: 0, // the type of the query (Feed: 0, Folder: 1, Starred: 2, All: 3)
+      batchSize,
+    }
 
-  return {
-    items:
+    Object.keys(parameter)
+      .filter((key) => key !== "type" || id !== -1)
+      .map((key) => url.searchParams.append(key, "" + parameter[key]))
+
+    const items =
       (await fetch(url.toString(), {
         headers: {
           Accept: "application/json",
@@ -26,6 +34,11 @@ export default resolver.pipe(resolver.authorize(), async ({ id }: { id: number }
       })
         .then((response) => response.json())
         .then((json) => json.items)
-        .catch((...data) => reportError("readItems", url, undefined, data))) || [],
+        .catch((...data) => reportError("readItems", url, undefined, data))) || []
+
+    return {
+      items,
+      nextPage: { batchSize: batchSize },
+    }
   }
-})
+)

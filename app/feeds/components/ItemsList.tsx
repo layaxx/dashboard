@@ -1,6 +1,7 @@
-import { useQuery } from "blitz"
+import { useQuery, useInfiniteQuery } from "blitz"
 import getItems from "../queries/getItems"
 import Item from "./items/Item"
+import Button from "app/core/components/Button"
 import { getActiveFeedID } from "app/core/hooks/feedSlice"
 import { useAppSelector } from "app/core/hooks/redux"
 import getFeedoption from "app/feedoptions/queries/getFeedoption"
@@ -25,6 +26,8 @@ export type ItemAPIResponse = {
 export const ItemsList = () => {
   const activeFeedID = useAppSelector(getActiveFeedID)
 
+  const baseBatchSize = 20
+
   const defaultOptions = {
     createdAt: new Date(),
     expand: false,
@@ -39,23 +42,36 @@ export const ItemsList = () => {
     { enabled: !!activeFeedID, placeholderData: defaultOptions }
   )
 
-  const [rssResult] = useQuery(
+  const [response, { fetchNextPage }] = useInfiniteQuery(
     getItems,
-    {
-      id: activeFeedID || -1,
+    (parameter) => {
+      return {
+        id: activeFeedID || -1,
+        oldestFirst: defaultOptions.oldestFirst,
+        batchSize: parameter || baseBatchSize,
+      }
     },
     {
       refetchInterval: false,
       refetchOnReconnect: false,
       refetchOnWindowFocus: false,
+      useErrorBoundary: true,
+      notifyOnChangeProps: "tracked",
+      getPreviousPageParam: ({ items }) => Math.min(items.length - baseBatchSize, 0) ?? false,
+      getNextPageParam: ({ items }) => items.length + baseBatchSize ?? false,
     }
   )
 
   return (
-    <div>
-      {rssResult?.items.map((item: ItemAPIResponse) => (
-        <Item item={item} key={item.id} settings={settings || defaultOptions} />
-      ))}
-    </div>
+    <>
+      {response.length > 0 &&
+        response[response.length - 1]?.items.map((item: ItemAPIResponse) => (
+          <Item item={item} key={item.id} settings={settings || defaultOptions} />
+        ))}
+
+      <Button onClick={() => fetchNextPage()} style={{ marginTop: "2rem", marginBottom: "10rem" }}>
+        Load more
+      </Button>
+    </>
   )
 }

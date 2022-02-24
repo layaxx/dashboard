@@ -40,17 +40,21 @@ const Item = ({ item, settings }: ItemProps) => {
   }
 
   return (
-    <div key={item.id} className="last:mb-80">
+    <div key={item.id}>
       <div
         className={clsx(
           "hover:bg-neutral-200",
+          isExpanded && "border-b-2",
+          hasBeenRead ? "font-normal" : "font-medium",
           "cursor-pointer",
           "flex",
-          hasBeenRead ? "font-normal" : "font-medium",
           "px-2",
           "rounded-sm",
-          "text-lg"
+          "sticky",
+          "text-lg",
+          "top-0"
         )}
+        style={{ backgroundColor: "rgb(244, 247, 252)" }}
       >
         <span
           className={clsx("grow", "py-4", "truncate")}
@@ -72,7 +76,9 @@ const Item = ({ item, settings }: ItemProps) => {
             "px-2",
             "shrink-0",
             "text-gray-400",
-            "text-sm"
+            "text-right",
+            "text-sm",
+            "w-16"
           )}
         >
           <ItemInformation item={item} />
