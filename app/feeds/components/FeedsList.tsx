@@ -30,8 +30,10 @@ type Props = {
 }
 
 export const FeedsList = ({ mode }: Props) => {
+  const secondsInMinute = 60
+  const milliSecondsInSecond = 1000
   const [{ feeds }] = useQuery(getFeeds, undefined, {
-    refetchInterval: 1000 * 60,
+    refetchInterval: milliSecondsInSecond * secondsInMinute,
     refetchOnReconnect: true,
     refetchOnWindowFocus: true,
   })
@@ -56,7 +58,9 @@ export const FeedsList = ({ mode }: Props) => {
               title={title}
               unreadCount={unreadCount}
               onClick={() => {
-                mode === FEED_MODE.BOOKMARKS && router.push("/feeds/rss")
+                if (mode === FEED_MODE.BOOKMARKS) {
+                  router.push("/feeds/rss")
+                }
                 dispatch(setActiveFeed(id))
               }}
               key={id}

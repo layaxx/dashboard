@@ -45,7 +45,7 @@ const Button = ({
         disabled && "text-opacity-70",
         "sm:text-sm",
         "sm:w-auto",
-        variant == "light" && [
+        variant === "light" && [
           !disabled && "hover:bg-gray-50",
           "bg-white",
           "border-gray-300",

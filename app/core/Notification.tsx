@@ -78,7 +78,7 @@ const Notification = ({ notification, dismissNotification }: Props) => {
         {notification.buttons.map((button) => (
           <button
             onClick={() => {
-              button.onClick && button.onClick()
+              button.onClick?.call(this)
               dismissNotification(notification.id)
             }}
             className={clsx(

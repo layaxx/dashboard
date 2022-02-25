@@ -4,7 +4,7 @@ import Button from "./Button"
 
 type Button = {
   props?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
-  handler: React.MouseEventHandler<HTMLButtonElement>
+  handler: React.MouseEventHandler<HTMLButtonElement | HTMLDivElement>
   text?: string
 }
 
@@ -40,7 +40,9 @@ const GenericModal = ({ cancelButton, confirmButton, icon, title, content }: Pro
         id="modal-backdrop"
         onClick={(event) => {
           // @ts-ignore
-          event.target.id === "modal-backdrop" && cancelButton.handler()
+          if (event.target.id === "modal-backdrop") {
+            cancelButton.handler(event)
+          }
         }}
       >
         <div

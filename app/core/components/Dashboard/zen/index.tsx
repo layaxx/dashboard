@@ -19,7 +19,8 @@ const Zen = () => {
   const [time, setTime] = useState(dayjs())
 
   useEffect(() => {
-    const interval = setInterval(() => setTime(dayjs()), 1000)
+    const milliseconds = 1000
+    const interval = setInterval(() => setTime(dayjs()), milliseconds)
 
     return () => {
       clearInterval(interval)

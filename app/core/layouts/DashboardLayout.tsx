@@ -16,7 +16,7 @@ const DashboardLayout = ({ items, feeds }: Props) => {
   const { notifications, dismissNotification } = useNotifications()
 
   useEffect(() => {
-    setHideNavbar(window && window.innerWidth <= Number.parseInt(defaultTheme.screens.sm))
+    setHideNavbar(window && window.innerWidth <= Number.parseInt(defaultTheme.screens.sm, 10))
     setUpNotifications({
       defaultProps: {
         position: "top-right",
