@@ -13,6 +13,9 @@ module.exports = {
   plugins: [require("@tailwindcss/typography")],
   theme: {
     extend: {
+      fontFamily: {
+        serif: ["Peddana", "ui-serif", "Georgia", "serif"],
+      },
       colors: {
         primary: withOpacityValue("--color-primary"),
         secondary: withOpacityValue("--color-secondary"),
