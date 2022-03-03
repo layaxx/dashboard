@@ -7,12 +7,11 @@ import {
   ErrorFallbackProps,
   useQueryErrorResetBoundary,
 } from "blitz"
-import { Provider } from "react-redux"
 import { NotificationsProvider } from "reapop"
 import LoginForm from "app/auth/components/LoginForm"
-import store from "app/core/hooks/store"
 
 import "app/core/styles/index.css"
+import { SharedStateProvider } from "app/core/hooks/store"
 
 export default function App({ Component, pageProps }: AppProps) {
   const getLayout = Component.getLayout || ((page) => page)
@@ -23,7 +22,7 @@ export default function App({ Component, pageProps }: AppProps) {
       onReset={useQueryErrorResetBoundary().reset}
     >
       <NotificationsProvider>
-        <Provider store={store}>{getLayout(<Component {...pageProps} />)}</Provider>
+        <SharedStateProvider>{getLayout(<Component {...pageProps} />)}</SharedStateProvider>
       </NotificationsProvider>
     </ErrorBoundary>
   )

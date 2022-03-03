@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: "Enriqueta";
+  font-family: "Lora";
   src: url("/serif.ttf");
   font-style: normal;
   font-weight: 400;

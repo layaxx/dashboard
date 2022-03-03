@@ -2,8 +2,7 @@ import { useQuery, useInfiniteQuery } from "blitz"
 import getItems from "../queries/getItems"
 import Item from "./items/Item"
 import Button from "app/core/components/Button"
-import { getActiveFeedID } from "app/core/hooks/feedSlice"
-import { useAppSelector } from "app/core/hooks/redux"
+import { useSharedState } from "app/core/hooks/store"
 import getFeedoption from "app/feedoptions/queries/getFeedoption"
 
 export type ItemAPIResponse = {
@@ -24,7 +23,7 @@ export type ItemAPIResponse = {
 }
 
 export const ItemsList = () => {
-  const activeFeedID = useAppSelector(getActiveFeedID)
+  const [{ activeFeedID }] = useSharedState()
 
   const baseBatchSize = 20
 

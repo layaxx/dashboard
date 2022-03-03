@@ -14,7 +14,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        serif: ["Enriqueta", "ui-serif", "Georgia", "serif"],
+        serif: ["Lora", "ui-serif", "Georgia", "serif"],
       },
       colors: {
         primary: withOpacityValue("--color-primary"),

@@ -1,10 +1,10 @@
 import { Suspense } from "react"
 import { Head, BlitzPage } from "blitz"
 import Loader from "app/core/components/Loader"
-import { FEED_MODE } from "app/core/hooks/feedSlice"
 import DashboardLayout from "app/core/layouts/DashboardLayout"
 import { FeedsList } from "app/feeds/components/FeedsList"
 import { ItemList } from "app/feeds/components/reading/ItemList"
+import { FEED_MODE } from "types"
 
 const FeedsReadingPage: BlitzPage = () => {
   return (

@@ -17,3 +17,8 @@ declare module "blitz" {
     }
   }
 }
+
+export enum FEED_MODE {
+  RSS,
+  BOOKMARKS,
+}

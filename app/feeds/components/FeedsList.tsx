@@ -7,8 +7,8 @@ import getFeeds from "../queries/getFeeds"
 import countReadlistentries from "../readlistentries/queries/countReadlistentries"
 import FeedListItem from "./FeedListItem"
 import AddFeedModal from "app/core/components/Dashboard/AddFeedModal"
-import { FEED_MODE, getActiveFeedID, setActiveFeed } from "app/core/hooks/feedSlice"
-import { useAppDispatch, useAppSelector } from "app/core/hooks/redux"
+import { useSharedState } from "app/core/hooks/store"
+import { FEED_MODE } from "types"
 
 export type FeedAPIResponse = {
   id: number
@@ -44,8 +44,7 @@ export const FeedsList = ({ mode }: Props) => {
 
   const [showAddModal, setShowAddModal] = useState(false)
 
-  const dispatch = useAppDispatch()
-  const activeID = useAppSelector(getActiveFeedID)
+  const [{ activeFeedID }, setState] = useSharedState()
 
   const router = useRouter()
   return (
@@ -61,10 +60,10 @@ export const FeedsList = ({ mode }: Props) => {
                 if (mode === FEED_MODE.BOOKMARKS) {
                   router.push("/feeds/rss")
                 }
-                dispatch(setActiveFeed(id))
+                setState((previous) => ({ ...previous, activeFeedID: id }))
               }}
               key={id}
-              isActive={mode === FEED_MODE.RSS && activeID === id}
+              isActive={mode === FEED_MODE.RSS && activeFeedID === id}
             />
           ))}
       <Link href={Routes.FeedsReadingPage()}>
