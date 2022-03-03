@@ -90,7 +90,7 @@ const Item = ({ item, settings }: ItemProps) => {
 
       {isExpanded && (
         <article
-          className={clsx("prose-p:font-serif", "max-w-none", "pb-5", "prose", "prose-lg")}
+          className={clsx("prose-p:font-serif", "max-w-prose", "pb-5", "prose", "prose-lg")}
           dangerouslySetInnerHTML={{ __html: item.body }}
         />
       )}
