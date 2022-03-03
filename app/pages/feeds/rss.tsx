@@ -2,7 +2,7 @@ import { Suspense } from "react"
 import { Head, BlitzPage } from "blitz"
 import Loader from "app/core/components/Loader"
 import DashboardLayout from "app/core/layouts/DashboardLayout"
-import { FeedsList } from "app/feeds/components/FeedsList"
+import { FeedListContainer } from "app/feeds/components/FeedListContainer"
 import { ItemsList } from "app/feeds/components/ItemsList"
 import { FEED_MODE } from "types"
 
@@ -13,11 +13,7 @@ const FeedsRSSPage: BlitzPage = () => {
         <title>Feeds - RSS</title>
       </Head>
       <DashboardLayout
-        feeds={
-          <Suspense fallback={<Loader />}>
-            <FeedsList mode={FEED_MODE.RSS} />
-          </Suspense>
-        }
+        feeds={<FeedListContainer mode={FEED_MODE.RSS} />}
         items={
           <Suspense fallback={<Loader />}>
             <ItemsList />

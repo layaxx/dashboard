@@ -2,7 +2,7 @@ import { Suspense } from "react"
 import { Head, BlitzPage } from "blitz"
 import Loader from "app/core/components/Loader"
 import DashboardLayout from "app/core/layouts/DashboardLayout"
-import { FeedsList } from "app/feeds/components/FeedsList"
+import { FeedListContainer } from "app/feeds/components/FeedListContainer"
 import { ItemList } from "app/feeds/components/reading/ItemList"
 import { FEED_MODE } from "types"
 
@@ -13,11 +13,7 @@ const FeedsReadingPage: BlitzPage = () => {
         <title>Feeds - Reading</title>
       </Head>
       <DashboardLayout
-        feeds={
-          <Suspense fallback={<Loader />}>
-            <FeedsList mode={FEED_MODE.BOOKMARKS} />
-          </Suspense>
-        }
+        feeds={<FeedListContainer mode={FEED_MODE.BOOKMARKS} />}
         items={
           <Suspense fallback={<Loader />}>
             <ItemList />

@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { invalidateQuery, useMutation } from "blitz"
 import { PlusIcon } from "@heroicons/react/solid"
+import Button from "../Button"
 import Form from "../Form"
 import GenericModal from "../GenericModal"
 import LabeledTextField from "../LabeledTextField"
@@ -33,10 +34,7 @@ const AddFeedModal = ({ setIsOpen }: Props) => {
             value={url}
             onChange={(event) => setUrl(event.target.value)}
           />
-          <button>
-            <PlusIcon />
-            Add Feed
-          </button>
+          <Button icon={<PlusIcon />}>Add Feed</Button>
         </Form>
       }
       cancelButton={{ handler: () => setIsOpen(false), text: "Cancel" }}
