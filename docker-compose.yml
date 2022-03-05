@@ -1,17 +1,19 @@
 ---
 version: "3.3"
 services:
-  app:
-    image: locally_built_dashboard_app
+  dash-app:
+    build:
+      context: .
+      network: backend
     env_file: .env.local
     restart: unless-stopped
     depends_on:
-      - postgres
+      - dash-db
     networks:
-      - frontend
+      - public
       - backend
 
-  postgres:
+  dash-db:
     image: postgres:12.4-alpine
     env_file: .env.local
     volumes:
@@ -24,7 +26,7 @@ volumes:
   psql:
 
 networks:
-  frontend:
-    external:
-      name: proxy
+  public:
+    name: proxy
+    external: true
   backend:

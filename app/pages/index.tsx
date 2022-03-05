@@ -1,7 +1,6 @@
 import { Suspense } from "react"
 import { BlitzPage } from "blitz"
 import clsx from "clsx"
-import Button from "app/core/components/Button"
 import UserInfo from "app/core/components/UserInfo"
 import Layout from "app/core/layouts/Layout"
 
@@ -34,7 +33,7 @@ const Home: BlitzPage = () => {
         >
           <span className={clsx("block", "xl:inline")}>Dashboard</span>
         </h1>
-        <p
+        <div
           className={clsx(
             "sm:max-w-xl",
             "mt-3",
@@ -52,7 +51,7 @@ const Home: BlitzPage = () => {
           <Suspense fallback="Loading...">
             <UserInfo />
           </Suspense>
-        </p>
+        </div>
         <div
           className={clsx("sm:flex", "sm:justify-center", "lg:justify-start", "mt-5", "sm:mt-8")}
         >
