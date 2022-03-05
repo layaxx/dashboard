@@ -27,6 +27,7 @@ FROM base AS prod
 COPY --from=build /usr/src/app/public /usr/src/app/public
 COPY --from=build /usr/src/app/.next /usr/src/app/.next
 COPY --from=build /usr/src/app/db /usr/src/app/db
+COPY --from=build /usr/src/app/healthcheck.js /usr/src/app/healthcheck.js
 COPY --from=build /usr/src/app/.blitz.config.compiled.js /usr/src/app/.blitz.config.compiled.js
 COPY --from=build /usr/src/app/node_modules/.prisma/client /usr/src/app/node_modules/.prisma/client
 

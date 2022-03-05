@@ -4,11 +4,16 @@ services:
   dash-app:
     build:
       context: .
-      network: backend
     env_file: .env.local
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "healthcheck.js"]
+      timeout: 45s
+      interval: 10s
+      retries: 10
     depends_on:
-      - dash-db
+      dash-db:
+        condition: service_healthy
     networks:
       - public
       - backend
@@ -16,6 +21,11 @@ services:
   dash-db:
     image: postgres:12.4-alpine
     env_file: .env.local
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "${POSTGRES_DB}", "-U", "${POSTGRES_USER}"]
+      timeout: 45s
+      interval: 10s
+      retries: 10
     volumes:
       - psql:/var/lib/postgresql/data
     restart: unless-stopped
