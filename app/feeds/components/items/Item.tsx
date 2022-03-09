@@ -40,21 +40,21 @@ const Item = ({ item, settings }: ItemProps) => {
   }
 
   return (
-    <div key={item.id}>
+    <div key={item.id} className="border-b-2">
       <div
         className={clsx(
-          "hover:bg-neutral-200",
-          isExpanded && "border-b-2",
-          hasBeenRead ? "font-normal" : "font-medium",
+          "bg-slate-100",
+          "hover:bg-slate-200",
           "cursor-pointer",
           "flex",
+          "font-medium",
           "px-2",
           "rounded-sm",
           "sticky",
+          hasBeenRead && "text-gray-600",
           "text-lg",
           "top-0"
         )}
-        style={{ backgroundColor: "rgb(244, 247, 252)" }}
       >
         <span
           className={clsx("grow", "py-4", "truncate")}
@@ -72,7 +72,7 @@ const Item = ({ item, settings }: ItemProps) => {
             "flex",
             "flex-col",
             "font-normal",
-            "pt-2",
+            "my-auto",
             "px-2",
             "shrink-0",
             "text-gray-400",
@@ -90,7 +90,14 @@ const Item = ({ item, settings }: ItemProps) => {
 
       {isExpanded && (
         <article
-          className={clsx("prose-p:font-serif", "max-w-prose", "pb-5", "prose", "prose-lg")}
+          className={clsx(
+            "prose-p:font-serif",
+            "font-serif",
+            "max-w-prose",
+            "pb-5",
+            "prose",
+            "px-2"
+          )}
           dangerouslySetInnerHTML={{ __html: item.body }}
         />
       )}

@@ -60,7 +60,6 @@ export const FeedList = ({ mode }: Props) => {
               (feed: FeedAPIResponse) =>
                 feed.unreadCount || feed.id === activeFeedID || showAllFeeds
             )
-            .sort((a: FeedAPIResponse, b: FeedAPIResponse) => a.unreadCount > b.unreadCount)
             .map(({ id, title, unreadCount }: FeedAPIResponse) => (
               <FeedListItem
                 title={title}

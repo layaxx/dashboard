@@ -15,7 +15,7 @@ const Aside = ({ hideNavbar, setHideNavbar, title, feeds }: Props) => {
   return (
     <aside
       className={clsx(
-        "bg-slate-200",
+        "bg-slate-300",
         "flex",
         "flex-col",
         "h-full",

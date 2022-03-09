@@ -11,7 +11,7 @@ type HeaderProps = {
 const Header = ({ hideNavbar, setHideNavbar }: HeaderProps) => (
   <header
     className={clsx(
-      "bg-slate-200",
+      "bg-slate-300",
       "flex",
       "items-center",
       "justify-between",

@@ -24,6 +24,7 @@ const ItemControls = ({ item, toggle, hasBeenRead }: ItemControlProps) => {
         rel="noopener noreferrer"
         target="_blank"
         className={sharedClassName}
+        onClick={() => toggle()}
       >
         <ExternalLinkIcon />
       </a>

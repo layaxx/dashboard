@@ -12,10 +12,13 @@ const FeedListItem = ({ title, unreadCount, onClick, isActive }: Props) => {
     <li
       className={clsx(
         "hover:bg-slate-200",
+        "border-l-4",
+        "border-transparent",
         "cursor-pointer",
         "flex",
+        "pl-2",
         "py-1",
-        isActive && ["pl-2", "border-l-4", "border-primary"]
+        isActive && ["border-l-4", "border-primary"]
       )}
       onClick={onClick}
     >
