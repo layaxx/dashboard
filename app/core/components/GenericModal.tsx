@@ -2,21 +2,20 @@ import React, { ReactChild } from "react"
 import clsx from "clsx"
 import Button from "./Button"
 
-type Button = {
+interface IButton {
   props?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
   handler: React.MouseEventHandler<HTMLButtonElement | HTMLDivElement>
   text?: string
 }
 
-type Props = {
-  cancelButton: Button
-  confirmButton?: Button
+interface IProps {
+  cancelButton: IButton
+  confirmButton?: IButton
   icon?: ReactChild
   title: ReactChild
-  content: ReactChild
 }
 
-const GenericModal = ({ cancelButton, confirmButton, icon, title, content }: Props) => {
+const GenericModal: React.FC<IProps> = ({ cancelButton, confirmButton, icon, title, children }) => {
   return (
     <div
       className={clsx("fixed", "inset-0", "overflow-y-auto", "z-10")}
@@ -102,7 +101,7 @@ const GenericModal = ({ cancelButton, confirmButton, icon, title, content }: Pro
                 >
                   {title}
                 </h3>
-                <div className="mt-2">{content}</div>
+                <div className="mt-2">{children}</div>
               </div>
             </div>
           </div>

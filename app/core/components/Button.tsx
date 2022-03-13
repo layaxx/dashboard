@@ -1,20 +1,19 @@
-import { HTMLAttributes, MouseEventHandler, ReactChild } from "react"
+import { ButtonHTMLAttributes, MouseEventHandler, ReactChild } from "react"
 import clsx from "clsx"
 
 type ButtonVariant = "danger" | "success" | "light" | "primary"
 
-interface Props extends HTMLAttributes<HTMLButtonElement> {
+interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: any
   variant?: ButtonVariant
   onClick?: MouseEventHandler<HTMLButtonElement>
   icon?: ReactChild
   submit?: boolean
-  disabled?: boolean
 }
 
 const Button = ({
   children,
-  submit = false,
+  type = "button",
   variant = "light",
   onClick,
   icon,
@@ -23,7 +22,7 @@ const Button = ({
 }: Props) => {
   return (
     <button
-      type={submit ? "submit" : "button"}
+      {...rest}
       // eslint-disable-next-line tailwindcss/no-custom-classname
       className={clsx(
         "align-middle",
@@ -61,9 +60,7 @@ const Button = ({
         ],
         "w-full"
       )}
-      {...rest}
       onClick={onClick}
-      disabled={disabled}
     >
       {icon && <span className={clsx("mr-2", "w-5")}>{icon}</span>}
       {children}

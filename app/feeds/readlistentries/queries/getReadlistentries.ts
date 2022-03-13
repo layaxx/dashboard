@@ -17,7 +17,11 @@ export default resolver.pipe(
       take,
       count: () => db.readlistentry.count({ where }),
       query: (paginateArguments) =>
-        db.readlistentry.findMany({ ...paginateArguments, where, orderBy }),
+        db.readlistentry.findMany({
+          ...paginateArguments,
+          where,
+          orderBy: orderBy ?? { id: "desc" },
+        }),
     })
 
     return {

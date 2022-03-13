@@ -60,20 +60,26 @@ export const FeedList = ({ mode }: Props) => {
               (feed: FeedAPIResponse) =>
                 feed.unreadCount || feed.id === activeFeedID || showAllFeeds
             )
-            .map(({ id, title, unreadCount }: FeedAPIResponse) => (
-              <FeedListItem
-                title={title}
-                unreadCount={unreadCount}
-                onClick={() => {
-                  if (mode === FEED_MODE.BOOKMARKS) {
-                    router.push("/feeds/rss")
-                  }
-                  setState((previous) => ({ ...previous, activeFeedID: id }))
-                }}
-                key={id}
-                isActive={mode === FEED_MODE.RSS && activeFeedID === id}
-              />
-            ))}
+            .map(({ id, title, unreadCount }: FeedAPIResponse) => {
+              const isActive = mode === FEED_MODE.RSS && activeFeedID === id
+              return (
+                <FeedListItem
+                  title={title}
+                  unreadCount={unreadCount}
+                  onClick={() => {
+                    if (mode === FEED_MODE.BOOKMARKS) {
+                      router.push("/feeds/rss")
+                    }
+                    if (isActive) {
+                      // TODO: console.log("should invalidate")
+                    }
+                    setState((previous) => ({ ...previous, activeFeedID: id }))
+                  }}
+                  key={id}
+                  isActive={isActive}
+                />
+              )
+            })}
         </>
       )}
     </>

@@ -1,10 +1,9 @@
-import { Link, useRouter, useMutation, BlitzPage, Routes } from "blitz"
+import { Link, useMutation, BlitzPage, Routes } from "blitz"
 import Layout from "app/core/layouts/Layout"
 import { FeedForm, FORM_ERROR } from "app/feeds/components/FeedForm"
 import createFeed from "app/feeds/mutations/createFeed"
 
 const NewFeedPage: BlitzPage = () => {
-  const router = useRouter()
   const [createFeedMutation] = useMutation(createFeed)
 
   return (
@@ -20,8 +19,7 @@ const NewFeedPage: BlitzPage = () => {
         // initialValues={{}}
         onSubmit={async (values) => {
           try {
-            const feed = await createFeedMutation(values).then((response) => response.json())
-            router.push(Routes.ShowFeedPage({ feedId: feed.id }))
+            await createFeedMutation(values)
           } catch (error: any) {
             console.error(error)
             return {

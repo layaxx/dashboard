@@ -13,7 +13,8 @@ export default resolver.pipe(resolver.zod(CreateFeed), resolver.authorize(), asy
   }
 
   const url = `${process.env["NEWS_BASE_URL"]}/feeds`
-  return await fetch(url, {
+
+  const response = await fetch(url, {
     headers: {
       Authorization: `Basic ${process.env["NEWS_CREDENTIALS"]}`,
       "Content-Type": "application/json",
@@ -21,4 +22,8 @@ export default resolver.pipe(resolver.zod(CreateFeed), resolver.authorize(), asy
     method: "POST",
     body: JSON.stringify(body),
   })
+  if (!response.ok) {
+    throw new Error(response.statusText)
+  }
+  return response.status
 })
