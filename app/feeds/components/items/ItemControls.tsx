@@ -13,9 +13,9 @@ const ItemControls = ({ item, toggle, hasBeenRead }: ItemControlProps) => {
   return (
     <>
       <StarIcon className={sharedClassName} />
-      <span className={sharedClassName}>
-        {hasBeenRead && <EyeIcon onClick={() => toggle()} />}
-        {!hasBeenRead && <EyeOffIcon onClick={() => toggle()} />}
+      <span className={sharedClassName} onClick={() => toggle()}>
+        {hasBeenRead && <EyeIcon />}
+        {!hasBeenRead && <EyeOffIcon />}
       </span>
       <a
         href={item.url}
@@ -24,7 +24,7 @@ const ItemControls = ({ item, toggle, hasBeenRead }: ItemControlProps) => {
         rel="noopener noreferrer"
         target="_blank"
         className={sharedClassName}
-        onClick={() => toggle()}
+        onClick={() => toggle(true)}
       >
         <ExternalLinkIcon />
       </a>

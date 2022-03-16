@@ -19,9 +19,9 @@ const Item = ({ item, settings }: ItemProps) => {
 
   const [updateReadState] = useMutation(readItem)
 
-  const toggleUnreadStatus = () => {
-    setHasBeenRead((previous) => !previous) // Optimistic UI
-    updateReadState({ id: item.id, read: !hasBeenRead }).catch(() =>
+  const toggleUnreadStatus = (hasBeenReadParameter?: boolean) => {
+    setHasBeenRead((previous) => hasBeenReadParameter ?? !previous) // Optimistic UI
+    updateReadState({ id: item.id, read: !(hasBeenReadParameter ?? hasBeenRead) }).catch(() =>
       setHasBeenRead((previous) => !previous)
     )
     setQueryData(
@@ -32,7 +32,10 @@ const Item = ({ item, settings }: ItemProps) => {
           argument?.feeds?.map((feed: FeedAPIResponse) =>
             feed.id !== item.feedId
               ? feed
-              : { ...feed, unreadCount: feed.unreadCount + (hasBeenRead ? 1 : -1) }
+              : {
+                  ...feed,
+                  unreadCount: feed.unreadCount + (hasBeenReadParameter ?? hasBeenRead ? 1 : -1),
+                }
           ) || [],
       }),
       { refetch: false }
