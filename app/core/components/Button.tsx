@@ -23,6 +23,8 @@ const Button = ({
   return (
     <button
       {...rest}
+      disabled={disabled}
+      type={type}
       // eslint-disable-next-line tailwindcss/no-custom-classname
       className={clsx(
         "align-middle",

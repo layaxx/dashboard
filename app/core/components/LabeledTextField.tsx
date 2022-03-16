@@ -1,4 +1,5 @@
 import { forwardRef, ComponentPropsWithoutRef, PropsWithoutRef } from "react"
+import clsx from "clsx"
 import { useField, UseFieldConfig } from "react-final-form"
 
 export interface LabeledTextFieldProps extends PropsWithoutRef<JSX.IntrinsicElements["input"]> {
@@ -17,7 +18,7 @@ export const LabeledTextField = forwardRef<HTMLInputElement, LabeledTextFieldPro
   ({ name, label, outerProps, fieldProps, labelProps, ...props }, reference) => {
     const {
       input,
-      meta: { touched, error, submitError, submitting },
+      meta: { touched, error, submitError, submitting, pristine, valid },
     } = useField(name, {
       parse:
         props.type === "number"
@@ -32,9 +33,28 @@ export const LabeledTextField = forwardRef<HTMLInputElement, LabeledTextFieldPro
 
     return (
       <div {...outerProps}>
-        <label {...labelProps}>
+        <label {...labelProps} className={clsx("flex", "flex-col", "items-start", "mt-4")}>
           {label}
-          <input {...input} disabled={submitting} {...props} ref={reference} />
+          <input
+            {...input}
+            disabled={submitting}
+            {...props}
+            ref={reference}
+            className={clsx(
+              "appearance-none",
+              "border-2",
+              (props.disabled || props["aria-disabled"]) && "border-gray-400",
+              !pristine && valid && "border-green-700",
+              pristine && !(props.disabled || props["aria-disabled"]) && "border-purple-700",
+              touched && normalizedError && "border-red-700",
+              "border-solid",
+              (props.disabled || props["aria-disabled"]) && "cursor-not-allowed",
+              "mt-2",
+              "px-2",
+              "py-1",
+              "rounded-md"
+            )}
+          />
         </label>
 
         {touched && normalizedError && (
@@ -43,22 +63,7 @@ export const LabeledTextField = forwardRef<HTMLInputElement, LabeledTextFieldPro
           </div>
         )}
 
-        <style jsx>{`
-          label {
-            display: flex;
-            flex-direction: column;
-            align-items: start;
-            font-size: 1rem;
-          }
-          input {
-            font-size: 1rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 3px;
-            border: 1px solid purple;
-            appearance: none;
-            margin-top: 0.5rem;
-          }
-        `}</style>
+        <style jsx>{``}</style>
       </div>
     )
   }

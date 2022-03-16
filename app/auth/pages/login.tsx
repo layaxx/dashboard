@@ -18,6 +18,10 @@ const LoginPage: BlitzPage = () => {
 }
 
 LoginPage.redirectAuthenticatedTo = "/"
-LoginPage.getLayout = (page) => <Layout title="Log In">{page}</Layout>
+LoginPage.getLayout = (page) => (
+  <Layout heading="Login" title="Log In">
+    {page}
+  </Layout>
+)
 
 export default LoginPage

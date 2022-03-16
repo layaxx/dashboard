@@ -12,6 +12,7 @@ export interface FormProps<S extends z.ZodType<any, any>>
   children?: ReactNode
   /** Text to display in the submit button */
   submitText?: string
+  resetText?: string
   schema?: S
   onSubmit: FinalFormProps<z.infer<S>>["onSubmit"]
   initialValues?: FinalFormProps<z.infer<S>>["initialValues"]
@@ -25,6 +26,7 @@ export function Form<S extends z.ZodType<any, any>>({
   schema,
   initialValues,
   onSubmit,
+  resetText,
   ...props
 }: FormProps<S>) {
   return (
@@ -32,8 +34,8 @@ export function Form<S extends z.ZodType<any, any>>({
       initialValues={initialValues}
       validate={validateZodSchema(schema)}
       onSubmit={onSubmit}
-      render={({ handleSubmit, submitting, submitError }) => (
-        <form onSubmit={handleSubmit} className="form" {...props}>
+      render={({ handleSubmit, form, submitting, submitError, pristine }) => (
+        <form onSubmit={handleSubmit} {...props}>
           {/* Form fields supplied as children are rendered here */}
           {children}
 
@@ -43,17 +45,24 @@ export function Form<S extends z.ZodType<any, any>>({
             </div>
           )}
 
-          {submitText && (
-            <Button type="submit" icon={submitIcon} disabled={submitting}>
-              {submitText}
-            </Button>
-          )}
+          <div className="mt-4">
+            {submitText && (
+              <Button
+                type="submit"
+                variant="primary"
+                icon={submitIcon}
+                disabled={submitting || pristine}
+              >
+                {submitText}
+              </Button>
+            )}
 
-          <style global jsx>{`
-            .form > * + * {
-              margin-top: 1rem;
-            }
-          `}</style>
+            {resetText && (
+              <Button type="button" onClick={form.reset} disabled={submitting || pristine}>
+                Reset
+              </Button>
+            )}
+          </div>
         </form>
       )}
     />
