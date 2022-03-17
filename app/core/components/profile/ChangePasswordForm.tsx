@@ -1,5 +1,6 @@
 import { useMutation } from "blitz"
 import { FORM_ERROR } from "final-form"
+import { useNotifications } from "reapop"
 import Form from "../Form"
 import LabeledTextField from "../LabeledTextField"
 import changePasswordMutation from "app/auth/mutations/changePassword"
@@ -7,6 +8,8 @@ import { ChangePassword as schema } from "app/auth/validations"
 
 const ChangePasswordForm = () => {
   const [changePassword] = useMutation(changePasswordMutation)
+
+  const { notify } = useNotifications()
 
   return (
     <Form
@@ -17,6 +20,11 @@ const ChangePasswordForm = () => {
         if (!pristine && valid) {
           try {
             await changePassword({ currentPassword, newPassword, newPasswordConfirm })
+            notify({
+              title: "Successfully changed Password",
+              dismissAfter: 5000,
+              dismissible: true,
+            })
           } catch (error) {
             if (error instanceof Error) {
               try {

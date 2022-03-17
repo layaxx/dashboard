@@ -1,14 +1,16 @@
 import { useMutation } from "blitz"
 import { FORM_ERROR } from "final-form"
+import { useNotifications } from "reapop"
 import Form from "../Form"
 import LabeledTextField from "../LabeledTextField"
 import changeProfileMutation from "app/auth/mutations/changeProfile"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 
 const UserSettings = () => {
-  const currentUser = useCurrentUser()
+  const user = useCurrentUser()
 
   const [changeProfile] = useMutation(changeProfileMutation)
+  const { notify } = useNotifications()
 
   return (
     <Form
@@ -18,6 +20,11 @@ const UserSettings = () => {
         if (!pristine && valid) {
           try {
             form.initialize(await changeProfile({ name, email }))
+            notify({
+              title: "Successfully changed Profile Settings",
+              dismissAfter: 5000,
+              dismissible: true,
+            })
           } catch (error) {
             if (error instanceof Error) {
               try {
@@ -41,19 +48,19 @@ const UserSettings = () => {
       <LabeledTextField
         label="email"
         type="email"
-        fieldProps={{ initialValue: currentUser?.email }}
+        fieldProps={{ initialValue: user?.email }}
         name={"email"}
       />
       <LabeledTextField
         label="name"
-        fieldProps={{ initialValue: currentUser?.name ?? undefined }}
+        fieldProps={{ initialValue: user?.name ?? undefined }}
         placeholder="username"
         name={"name"}
       />
       <LabeledTextField
         name="role"
         label="role"
-        value={currentUser?.role}
+        value={user?.role}
         outerProps={{ "aria-disabled": true }}
         disabled
       />

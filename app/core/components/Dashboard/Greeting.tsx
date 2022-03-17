@@ -1,6 +1,6 @@
 import React from "react"
-import { useSession } from "blitz"
 import clsx from "clsx"
+import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 
 const greeting = ((hour: number) => {
   let greetings: string[]
@@ -22,11 +22,11 @@ const greeting = ((hour: number) => {
 })(new Date().getHours())
 
 const DashboardGreeting = React.memo(() => {
-  const session = useSession()
+  const user = useCurrentUser()
 
   return (
     <h1 className={clsx("font-bold", "text-2xl", "text-primary")}>
-      {greeting}, {session.userName}!
+      {greeting}, {user?.name ?? user?.email}!
     </h1>
   )
 })

@@ -47,12 +47,7 @@ export function Form<S extends z.ZodType<any, any>>({
 
           <div className="mt-4">
             {submitText && (
-              <Button
-                type="submit"
-                variant="primary"
-                icon={submitIcon}
-                disabled={submitting || pristine}
-              >
+              <Button type="submit" icon={submitIcon} disabled={submitting || pristine}>
                 {submitText}
               </Button>
             )}
