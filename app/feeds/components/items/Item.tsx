@@ -19,28 +19,33 @@ const Item = ({ item, settings }: ItemProps) => {
 
   const [updateReadState] = useMutation(readItem)
 
-  const toggleUnreadStatus = (hasBeenReadParameter?: boolean) => {
-    setHasBeenRead((previous) => hasBeenReadParameter ?? !previous) // Optimistic UI
-    updateReadState({ id: item.id, read: !(hasBeenReadParameter ?? hasBeenRead) }).catch(() =>
-      setHasBeenRead((previous) => !previous)
-    )
-    setQueryData(
-      getFeeds,
-      undefined,
-      (argument) => ({
-        feeds:
-          argument?.feeds?.map((feed: FeedAPIResponse) =>
-            feed.id !== item.feedId
-              ? feed
-              : {
-                  ...feed,
-                  unreadCount: feed.unreadCount + (hasBeenReadParameter ?? hasBeenRead ? 1 : -1),
-                }
-          ) || [],
-      }),
-      { refetch: false }
-    )
+  const genericReadStateChange = (isRead: boolean) => {
+    return () => {
+      setHasBeenRead(isRead) // Optimistic UI
+      updateReadState({ id: item.id, read: isRead }).then(() =>
+        setQueryData(
+          getFeeds,
+          undefined,
+          (argument) => ({
+            feeds:
+              argument?.feeds?.map((feed: FeedAPIResponse) =>
+                feed.id !== item.feedId
+                  ? feed
+                  : {
+                      ...feed,
+                      unreadCount: feed.unreadCount + (isRead ? -1 : 1),
+                    }
+              ) || [],
+          }),
+          { refetch: false }
+        ).catch(() => setHasBeenRead(!isRead))
+      )
+    }
   }
+
+  const read = genericReadStateChange(true)
+
+  const unread = genericReadStateChange(false)
 
   return (
     <div key={item.id} className="border-b-2">
@@ -63,7 +68,7 @@ const Item = ({ item, settings }: ItemProps) => {
           className={clsx("grow", "py-4", "truncate")}
           onClick={() => {
             setIsExpanded((previous) => !previous)
-            if (!hasBeenRead) toggleUnreadStatus()
+            if (!hasBeenRead) read()
           }}
           title={item.title}
         >
@@ -87,7 +92,7 @@ const Item = ({ item, settings }: ItemProps) => {
           <ItemInformation item={item} />
         </span>
         <span className={clsx("border-l-2", "flex", "py-4", "shrink-0", "text-gray-400")}>
-          <ItemControls item={item} toggle={toggleUnreadStatus} hasBeenRead={hasBeenRead} />
+          <ItemControls item={item} read={read} unread={unread} hasBeenRead={hasBeenRead} />
         </span>
       </div>
 
