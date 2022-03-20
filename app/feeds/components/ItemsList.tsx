@@ -2,6 +2,7 @@ import { useQuery, useInfiniteQuery } from "blitz"
 import getItems from "../queries/getItems"
 import Item from "./items/Item"
 import Button from "app/core/components/Button"
+import Loader from "app/core/components/Loader"
 import { useSharedState } from "app/core/hooks/store"
 import getFeedoption from "app/feedoptions/queries/getFeedoption"
 
@@ -41,7 +42,7 @@ export const ItemsList = () => {
     { enabled: !!activeFeedID, placeholderData: defaultOptions }
   )
 
-  const [response, { fetchNextPage }] = useInfiniteQuery(
+  const [response, { fetchNextPage, hasNextPage, isFetchingNextPage }] = useInfiniteQuery(
     getItems,
     (parameter) => {
       return {
@@ -57,7 +58,8 @@ export const ItemsList = () => {
       useErrorBoundary: true,
       notifyOnChangeProps: "tracked",
       getPreviousPageParam: ({ items }) => Math.min(items.length - baseBatchSize, 0) ?? false,
-      getNextPageParam: ({ items }) => items.length + baseBatchSize ?? false,
+      getNextPageParam: ({ items, hasMore }) =>
+        hasMore ? items.length + baseBatchSize : undefined,
     }
   )
 
@@ -68,8 +70,13 @@ export const ItemsList = () => {
           <Item item={item} key={item.id} settings={settings || defaultOptions} />
         ))}
 
-      <Button onClick={() => fetchNextPage()} style={{ marginTop: "2rem", marginBottom: "10rem" }}>
-        Load more
+      <Button
+        onClick={() => fetchNextPage()}
+        disabled={!hasNextPage || !!isFetchingNextPage}
+        style={{ marginTop: "2rem", marginBottom: "10rem" }}
+      >
+        {isFetchingNextPage && <Loader />}
+        {!isFetchingNextPage && (hasNextPage ? "Load More" : "Nothing more to load")}
       </Button>
     </>
   )

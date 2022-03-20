@@ -8,6 +8,7 @@ import ReadlistItem from "./ReadlistItem"
 import Button from "app/core/components/Button"
 import Form from "app/core/components/Form"
 import LabeledTextField from "app/core/components/LabeledTextField"
+import Loader from "app/core/components/Loader"
 
 export const ItemList = () => {
   const pageSize = 20
@@ -58,8 +59,13 @@ export const ItemList = () => {
           ))
       )}
 
-      <Button onClick={() => fetchNextPage()} disabled={!hasNextPage || !!isFetchingNextPage}>
-        {hasNextPage ? "Load More" : "Nothing more to load"}
+      <Button
+        onClick={() => fetchNextPage()}
+        disabled={!hasNextPage || !!isFetchingNextPage}
+        style={{ marginTop: "2rem", marginBottom: "10rem" }}
+      >
+        {isFetchingNextPage && <Loader />}
+        {!isFetchingNextPage && (hasNextPage ? "Load More" : "Nothing more to load")}
       </Button>
     </>
   )

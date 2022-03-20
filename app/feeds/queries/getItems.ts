@@ -1,4 +1,5 @@
 import { resolver } from "blitz"
+import { FeedAPIResponse } from "../components/FeedList"
 import { reportError } from "../utils/reportErrors"
 
 type InputParameters = {
@@ -26,7 +27,7 @@ export default resolver.pipe(
       .map((key) => url.searchParams.append(key, "" + parameter[key]))
 
     const items =
-      (await fetch(url.toString(), {
+      fetch(url.toString(), {
         headers: {
           Accept: "application/json",
           Authorization: `Basic ${process.env["NEWS_CREDENTIALS"]}`,
@@ -34,11 +35,30 @@ export default resolver.pipe(
       })
         .then((response) => response.json())
         .then((json) => json.items)
-        .catch((...data) => reportError("readItems", url, undefined, data))) || []
+        .catch((...data) => reportError("readItems", url, undefined, data)) || []
+
+    const count = fetch(process.env["NEWS_BASE_URL"] + "/feeds", {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Basic ${process.env["NEWS_CREDENTIALS"]}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        return id !== -1
+          ? json.feeds.find(({ id: idC }: FeedAPIResponse) => idC === id).unreadCount
+          : json.feeds
+              .map((feed: FeedAPIResponse) => feed.unreadCount)
+              .reduce((a: number, b: number) => a + b, 0)
+      })
+      .catch((...data) =>
+        reportError("countItems", process.env["NEWS_BASE_URL"] + "/feeds", undefined, data)
+      )
 
     return {
-      items,
-      nextPage: { batchSize: batchSize },
+      items: (await items) ?? [],
+      hasMore: (await count) > batchSize,
+      nextPage: { batchSize },
     }
   }
 )
