@@ -6,7 +6,7 @@ import DashboardGreeting from "./Greeting"
 
 type HeaderProps = {
   hideNavbar: boolean
-  setHideNavbar: React.Dispatch<React.SetStateAction<boolean>>
+  setHideNavbar: (argument0: boolean | ((argument0_: boolean) => boolean)) => void
 }
 const Header = ({ hideNavbar, setHideNavbar }: HeaderProps) => (
   <header

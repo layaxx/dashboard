@@ -2,7 +2,7 @@ import { useQuery } from "blitz"
 import { useRouter } from "next/dist/client/router"
 import getFeeds from "../queries/getFeeds"
 import FeedListItem from "./FeedListItem"
-import { useSharedState } from "app/core/hooks/store"
+import { LOCALSTORAGE_FEEDID, useSharedState } from "app/core/hooks/store"
 import { FEED_MODE } from "types"
 
 export type FeedAPIResponse = {
@@ -73,6 +73,7 @@ export const FeedList = ({ mode }: Props) => {
                     if (isActive) {
                       // TODO: console.log("should invalidate")
                     }
+                    localStorage.setItem(LOCALSTORAGE_FEEDID, JSON.stringify(id))
                     setState((previous) => ({ ...previous, activeFeedID: id }))
                   }}
                   key={id}
