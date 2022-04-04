@@ -1,8 +1,10 @@
-import { ReactChild, useState } from "react"
+import { ReactChild, Suspense, useState } from "react"
 import { CogIcon } from "@heroicons/react/solid"
 import clsx from "clsx"
+import Loader from "../Loader"
 import SettingsModal from "./SettingsModal"
 import Zen from "./zen"
+import Warnings from "app/feeds/components/Warnings"
 
 type Props = {
   hideNavbar: boolean
@@ -57,6 +59,11 @@ const Aside = ({ hideNavbar, setHideNavbar, title, feeds }: Props) => {
           <p className={clsx("font-bold", "leading-4", "text-primary", "uppercase")}>Reader</p>
           <div className={clsx("pr-4", "py-2")}>{feeds}</div>
         </div>
+      </section>
+      <section>
+        <Suspense fallback={<Loader />}>
+          <Warnings />
+        </Suspense>
       </section>
       <section className={clsx("flex", "flex-col", "h-32", "w-full")}>
         <Zen />

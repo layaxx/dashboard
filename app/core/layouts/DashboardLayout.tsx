@@ -11,13 +11,16 @@ type Props = { items: ReactChild; feeds: ReactChild }
 const DashboardLayout = ({ items, feeds }: Props) => {
   const title = "Dashboard"
 
-  const [hideNavbar, setHideNavbar] = useState<boolean>(
-    typeof window === "undefined" ? -1 : JSON.parse(localStorage.getItem("hideNavbar") ?? "false")
-  )
+  // eslint-disable-next-line unicorn/consistent-function-scoping
+  const loadFromLocalStorage = (): boolean =>
+    JSON.parse(localStorage.getItem("hideNavbar") ?? "false")
+
+  const [hideNavbar, setHideNavbar] = useState<boolean>(false)
 
   const { notifications, dismissNotification } = useNotifications()
 
   useEffect(() => {
+    setHideNavbar(loadFromLocalStorage())
     setUpNotifications({
       defaultProps: {
         position: "top-right",
