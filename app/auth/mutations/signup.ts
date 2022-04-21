@@ -4,6 +4,10 @@ import db from "db"
 import { Role } from "types"
 
 export default resolver.pipe(resolver.zod(Signup), async ({ email, password }, context) => {
+  if (process.env.NODE_ENV !== "development") {
+    throw new Error("Signup is currently disabled.")
+  }
+
   const hashedPassword = await SecurePassword.hash(password.trim())
   const user = await db.user.create({
     data: { email: email.toLowerCase().trim(), hashedPassword, role: "USER" },
