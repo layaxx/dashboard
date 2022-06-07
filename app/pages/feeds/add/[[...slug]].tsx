@@ -25,7 +25,7 @@ const AddNewFeedPage: BlitzPage = () => {
     if (!!url) {
       addToReadlist({ url })
         .then(() => router.push(Routes.FeedsReadingPage()))
-        .catch(console.log)
+        .catch(console.error)
     }
   }, [url])
 

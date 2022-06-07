@@ -1,15 +1,13 @@
 import { useState } from "react"
 import { setQueryData, useMutation } from "blitz"
-import { Feedoption } from "@prisma/client"
+import { Feedentry, Feedoption } from "@prisma/client"
 import clsx from "clsx"
-import { FeedAPIResponse } from "../FeedList"
-import { ItemAPIResponse } from "../ItemsList"
 import ItemControls from "./ItemControls"
 import ItemInformation from "./ItemInformation"
 import readItem from "app/feeds/mutations/readItem"
 import getFeeds from "app/feeds/queries/getFeeds"
 
-type ItemProps = { item: ItemAPIResponse; settings: Feedoption }
+type ItemProps = { item: Feedentry; settings: Feedoption }
 
 const Item = ({ item, settings }: ItemProps) => {
   const defaultExpanded = settings.expand
@@ -27,15 +25,14 @@ const Item = ({ item, settings }: ItemProps) => {
           getFeeds,
           undefined,
           (argument) => ({
+            ...argument,
             feeds:
-              argument?.feeds?.map((feed: FeedAPIResponse) =>
-                feed.id !== item.feedId
-                  ? feed
-                  : {
-                      ...feed,
-                      unreadCount: feed.unreadCount + (isRead ? -1 : 1),
-                    }
-              ) || [],
+              argument?.feeds.map((feed) => ({
+                ...feed,
+                _count: {
+                  Feedentry: isRead ? feed.unreadCount - 1 : feed.unreadCount + 1,
+                },
+              })) || [],
           }),
           { refetch: false }
         ).catch(() => setHasBeenRead(!isRead))
@@ -106,7 +103,7 @@ const Item = ({ item, settings }: ItemProps) => {
             "prose",
             "px-2"
           )}
-          dangerouslySetInnerHTML={{ __html: item.body }}
+          dangerouslySetInnerHTML={{ __html: item.text }}
         />
       )}
     </div>

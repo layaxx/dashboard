@@ -1,8 +1,8 @@
 import { StarIcon, EyeIcon, EyeOffIcon, ExternalLinkIcon } from "@heroicons/react/solid"
-import { ItemAPIResponse } from "../ItemsList"
+import { Feedentry } from "@prisma/client"
 
 type ItemControlProps = {
-  item: ItemAPIResponse
+  item: Feedentry
   read: Function
   unread: Function
   hasBeenRead: boolean
@@ -28,7 +28,7 @@ const ItemControls = ({ item, read, unread, hasBeenRead }: ItemControlProps) => 
         {!hasBeenRead && <EyeOffIcon />}
       </span>
       <a
-        href={item.url}
+        href={item.link}
         title={item.title}
         referrerPolicy="no-referrer"
         rel="noopener noreferrer"

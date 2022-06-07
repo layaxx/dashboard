@@ -1,9 +1,10 @@
+import { Fragment } from "react"
 import { useQuery, useInfiniteQuery } from "blitz"
-import getItems from "../queries/getItems"
 import Item from "./items/Item"
 import Button from "app/core/components/Button"
 import Loader from "app/core/components/Loader"
 import { useSharedState } from "app/core/hooks/store"
+import getFeedentries from "app/feedentries/queries/getFeedentries"
 import getFeedoption from "app/feedoptions/queries/getFeedoption"
 
 export type ItemAPIResponse = {
@@ -42,14 +43,16 @@ export const ItemsList = () => {
     { enabled: !!activeFeedID, placeholderData: defaultOptions }
   )
 
-  const [response, { fetchNextPage, hasNextPage, isFetchingNextPage }] = useInfiniteQuery(
-    getItems,
-    (parameter) => {
-      return {
-        id: activeFeedID || -1,
-        oldestFirst: defaultOptions.oldestFirst,
-        batchSize: parameter || baseBatchSize,
-      }
+  const [pages, { fetchNextPage, hasNextPage, isFetchingNextPage }] = useInfiniteQuery(
+    getFeedentries,
+    (fetchNextPageVariable) => {
+      return (
+        fetchNextPageVariable ?? {
+          take: baseBatchSize,
+          skip: 0,
+          where: { feedId: activeFeedID === -1 ? undefined : activeFeedID },
+        }
+      )
     },
     {
       refetchInterval: false,
@@ -57,17 +60,19 @@ export const ItemsList = () => {
       refetchOnWindowFocus: false,
       useErrorBoundary: true,
       notifyOnChangeProps: "tracked",
-      getPreviousPageParam: ({ items }) => Math.min(items.length - baseBatchSize, 0) ?? false,
-      getNextPageParam: ({ items, hasMore }) =>
-        hasMore ? items.length + baseBatchSize : undefined,
+      getNextPageParam: ({ nextPage }) => nextPage,
     }
   )
 
   return (
     <>
-      {response.length > 0 &&
-        response[response.length - 1]?.items.map((item: ItemAPIResponse) => (
-          <Item item={item} key={item.id} settings={settings || defaultOptions} />
+      {pages.length > 0 &&
+        pages.map((page, index) => (
+          <Fragment key={index}>
+            {page.feedentries.map((item) => (
+              <Item item={item} key={item.id} settings={settings || defaultOptions} />
+            ))}
+          </Fragment>
         ))}
 
       <Button

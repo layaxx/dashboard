@@ -68,6 +68,9 @@ module.exports = {
     "tailwindcss/no-custom-classname": ["warn", { whitelist: [".*\\-primary"] }],
     "unicorn/filename-case": "off",
     "unicorn/prefer-module": "off",
+    "unicorn/no-array-for-each": "off",
+    "unicorn/no-array-callback-reference": "off",
+    "unicorn/no-array-reduce": "off",
     "unicorn/prevent-abbreviations": [
       "error",
       {

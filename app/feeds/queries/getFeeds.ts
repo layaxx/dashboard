@@ -1,19 +1,14 @@
 import { resolver } from "blitz"
-import { reportError } from "../utils/reportErrors"
+import db from "db"
 
 export default resolver.pipe(resolver.authorize(), async () => {
+  const allFeeds = await db.feed.findMany()
   return {
-    feeds:
-      (await fetch(process.env["NEWS_BASE_URL"] + "/feeds", {
-        headers: {
-          Accept: "application/json",
-          Authorization: `Basic ${process.env["NEWS_CREDENTIALS"]}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((json) => json.feeds)
-        .catch((...data) =>
-          reportError("readItems", process.env["NEWS_BASE_URL"] + "/feeds", undefined, data)
-        )) || [],
+    feeds: await Promise.all(
+      allFeeds.map(async (feed) => ({
+        ...feed,
+        unreadCount: await db.feedentry.count({ where: { feedId: feed.id, isArchived: false } }),
+      }))
+    ),
   }
 })

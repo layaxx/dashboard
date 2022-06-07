@@ -1,16 +1,17 @@
+import { Feedentry } from "@prisma/client"
 import dayjs from "dayjs"
 import { useReadTime } from "use-read-time"
-import { ItemAPIResponse } from "../ItemsList"
 
-type Props = { item: ItemAPIResponse }
+type Props = { item: Feedentry }
 
 const ItemInformation = ({ item }: Props) => {
   const wpm = 180
-  const { readTime } = useReadTime({ text: item.body, wpm })
+  const { readTime } = useReadTime({ text: item.text, wpm })
 
   return (
     <>
-      <span>{dayjs.unix(item.pubDate).format("DD.MM")}</span>
+      {/* FIXME: should not use creation date, should use separate value */}
+      <span>{dayjs(item.createdAt).format("DD.MM")}</span>
       <span>{readTime} min</span>
     </>
   )

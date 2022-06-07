@@ -66,11 +66,15 @@ enum TokenType {
 }
 
 model Feed {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  number    Int
-  name      String
+  id            Int         @id @default(autoincrement())
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  number        Int
+  name          String
+  url           String      @unique
+  lastLoad      DateTime
+  loadIntervall Int         @default(60)
+  Feedentry     Feedentry[]
 }
 
 model Feedoption {
@@ -87,4 +91,16 @@ model Readlistentry {
   updatedAt  DateTime @updatedAt
   url        String   @unique
   isArchived Boolean  @default(false)
+}
+
+model Feedentry {
+  id         String   @id
+  feed       Feed     @relation(fields: [feedId], references: [id])
+  title      String
+  text       String
+  link       String
+  isArchived Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  feedId     Int
 }

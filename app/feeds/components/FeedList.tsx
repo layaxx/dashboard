@@ -1,3 +1,4 @@
+import { FC } from "react"
 import { useQuery } from "blitz"
 import { useRouter } from "next/dist/client/router"
 import getFeeds from "../queries/getFeeds"
@@ -5,26 +6,11 @@ import FeedListItem from "./FeedListItem"
 import { LOCALSTORAGE_FEEDID, useSharedState } from "app/core/hooks/store"
 import { FEED_MODE } from "types"
 
-export type FeedAPIResponse = {
-  id: number
-  url: string
-  title: string
-  faviconLink: string
-  added: number
-  folderId: number
-  unreadCount: number
-  ordering: number
-  link: string
-  pinned: boolean
-  updateErrorCount: number
-  lastUpdateError: string
-}
-
 type Props = {
   mode: FEED_MODE
 }
 
-export const FeedList = ({ mode }: Props) => {
+export const FeedList: FC<Props> = ({ mode }) => {
   const secondsInMinute = 60
   const milliSecondsInSecond = 1000
   const [{ feeds }] = useQuery(getFeeds, undefined, {
@@ -45,7 +31,7 @@ export const FeedList = ({ mode }: Props) => {
           <FeedListItem
             title={"All Feeds"}
             unreadCount={feeds
-              .map((feed: FeedAPIResponse) => feed.unreadCount)
+              .map((feed) => feed.unreadCount)
               .reduce((accumulator: number, current: number) => accumulator + current, 0)}
             isActive={mode === FEED_MODE.RSS && activeFeedID === -1}
             onClick={() => {
@@ -56,15 +42,12 @@ export const FeedList = ({ mode }: Props) => {
             }}
           />
           {feeds
-            .filter(
-              (feed: FeedAPIResponse) =>
-                feed.unreadCount || feed.id === activeFeedID || showAllFeeds
-            )
-            .map(({ id, title, unreadCount }: FeedAPIResponse) => {
+            .filter((feed) => feed.unreadCount || feed.id === activeFeedID || showAllFeeds)
+            .map(({ id, unreadCount, name }) => {
               const isActive = mode === FEED_MODE.RSS && activeFeedID === id
               return (
                 <FeedListItem
-                  title={title}
+                  title={name}
                   unreadCount={unreadCount}
                   onClick={() => {
                     if (mode === FEED_MODE.BOOKMARKS) {
