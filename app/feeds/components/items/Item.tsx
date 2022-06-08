@@ -41,7 +41,6 @@ const Item = ({ item, settings }: ItemProps) => {
   }
 
   const read = genericReadStateChange(true)
-
   const unread = genericReadStateChange(false)
 
   return (
