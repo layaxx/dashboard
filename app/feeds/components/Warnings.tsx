@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react"
-import { getAntiCSRFToken, useQuery } from "blitz"
+import { getAntiCSRFToken, Link, Routes, useQuery } from "blitz"
 import { CheckCircleIcon, ExclamationCircleIcon } from "@heroicons/react/solid"
 import clsx from "clsx"
-import getWarnings, { IStatusResult } from "../queries/getWarnings"
+import getStatus, { IStatusResult } from "../queries/getStatus"
 import Button from "app/core/components/Button"
 import Loader from "app/core/components/Loader"
+import {
+  maxAcceptableAverageLoadTime,
+  maxAcceptableTimeBetweenLoads,
+  targetTimeBetweenLoads,
+} from "config/feeds/status"
 
 type Props = {
   result: IStatusResult
   isLoading: boolean
   isError: boolean
 }
-
-const maxAcceptableTimeBetweenLoads = 61
-const maxAcceptableAverageLoadTime = 250
 
 const WarningsIcon = ({ result, isLoading, isError }: Props) => {
   if (isLoading) {
@@ -25,7 +27,7 @@ const WarningsIcon = ({ result, isLoading, isError }: Props) => {
   }
 
   const isAverageLoadTimeTooLong =
-    (result.averageLoadTimeInMilliSeconds ?? 1000) > maxAcceptableAverageLoadTime
+    result.averageLoadTimeInMilliSeconds > maxAcceptableAverageLoadTime
   const isTooMuchTimeBetweenLoads =
     result.averageMinutesBetweenLoads > maxAcceptableTimeBetweenLoads
 
@@ -45,7 +47,7 @@ const WarningsIcon = ({ result, isLoading, isError }: Props) => {
 }
 
 const Warnings = () => {
-  const [result, { isLoading, isError, refetch }] = useQuery(getWarnings, {})
+  const [result, { isLoading, isError, refetch }] = useQuery(getStatus, {})
 
   const [isLoadingRSS, setIsLoadingRSS] = useState(false)
 
@@ -61,7 +63,7 @@ const Warnings = () => {
   }
 
   useEffect(() => {
-    if (result.minutesSinceLastLoad > maxAcceptableTimeBetweenLoads) {
+    if (result.minutesSinceLastLoad > targetTimeBetweenLoads) {
       setIsLoadingRSS(true)
       handleOnForceReload().then(() => {
         setIsLoadingRSS(false)
@@ -72,9 +74,11 @@ const Warnings = () => {
 
   return (
     <div className={clsx("flex", "items-center")}>
-      <div className={clsx("h-6", "w-6")}>
-        <WarningsIcon result={result} isLoading={isLoading} isError={isError} />
-      </div>
+      <Link href={Routes.FeedsStatusPage()}>
+        <a className={clsx("h-6", "w-6")}>
+          <WarningsIcon result={result} isLoading={isLoading} isError={isError} />
+        </a>
+      </Link>
       {isLoadingRSS ? <Loader /> : <Button onClick={handleOnForceReload}>Force Reload</Button>}
     </div>
   )

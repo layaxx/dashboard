@@ -1,12 +1,3 @@
-function withOpacityValue(variable) {
-  return ({ opacityValue }) => {
-    if (opacityValue === undefined) {
-      return `rgb(var(${variable}))`
-    }
-    return `rgb(var(${variable}) / ${opacityValue})`
-  }
-}
-
 // tailwind.config.js
 module.exports = {
   content: ["{pages,app}/**/*.{js,ts,jsx,tsx}"],
@@ -17,9 +8,10 @@ module.exports = {
         serif: ["Lora", "ui-serif", "Georgia", "serif"],
       },
       colors: {
-        primary: withOpacityValue("--color-primary"),
-        secondary: withOpacityValue("--color-secondary"),
-        // ...
+        primary: "var(--color-primary)",
+        secondary: "var(--color-secondary)",
+        error: "var(--color-error)",
+        warning: "var(--color-warning)",
       },
     },
   },
