@@ -1,21 +1,41 @@
 import { resolver } from "blitz"
-import { reportError } from "../utils/reportErrors"
+import dayjs from "dayjs"
+import db from "db"
+
+export interface IStatusResult {
+  averageLoadTimeInMilliSeconds: number
+  averageMinutesBetweenLoads: number
+  minutesSinceLastLoad: number
+  count: number
+  errors: string[]
+}
 
 export default resolver.pipe(resolver.authorize(), async () => {
-  const url = new URL((process.env["NEWS_BASE_URL"] || "") + "/status")
+  const status = await db.status.aggregate({
+    take: 10,
+    orderBy: { createdAt: "desc" },
+    _avg: { loadDuration: true },
+    _count: { id: true },
+    _min: { loadTime: true },
+    _max: { loadTime: true },
+  })
 
-  const warnings =
-    fetch(url.toString(), {
-      headers: {
-        Accept: "application/json",
-        Authorization: `Basic ${process.env["NEWS_CREDENTIALS"]}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((json) => json.warnings)
-      .catch((...data) => reportError("getWarnings", url, undefined, data)) || []
+  const errors = await db.status.findMany({
+    take: 10,
+    orderBy: { createdAt: "desc" },
+    select: { errors: true },
+  })
 
-  return {
-    warnings: (await warnings) ?? [],
-  }
+  const allErrors = errors.flatMap((object) => object.errors)
+
+  const results: IStatusResult = {
+    averageLoadTimeInMilliSeconds: status._avg.loadDuration ?? Number.MAX_VALUE,
+    averageMinutesBetweenLoads:
+      dayjs(status._max.loadTime).diff(dayjs(status._min.loadTime), "minutes") / status._count.id,
+    minutesSinceLastLoad: dayjs().diff(dayjs(status._max.loadTime), "minutes"),
+    count: status._count.id,
+    errors: allErrors,
+  } as const
+
+  return results
 })

@@ -104,3 +104,12 @@ model Feedentry {
   updatedAt  DateTime @updatedAt
   feedId     Int
 }
+
+model Status {
+  id           Int      @id @default(autoincrement())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  loadTime     DateTime
+  loadDuration Float
+  errors       String[]
+}

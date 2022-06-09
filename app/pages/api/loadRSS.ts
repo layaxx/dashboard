@@ -3,6 +3,8 @@ import dayjs from "dayjs"
 import { FeedItem } from "domutils"
 import { parseFeed } from "htmlparser2"
 import fetch from "node-fetch"
+// eslint-disable-next-line unicorn/prefer-node-protocol
+import { performance } from "perf_hooks"
 import db, { Feed } from "db"
 
 const loadFeed = async (feed: Feed, forceReload: boolean) => {
@@ -83,6 +85,8 @@ const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => 
     return response.end()
   }
 
+  const before = performance.now()
+
   const force: boolean = Boolean(request.query["force"])
 
   const feeds = await db.feed.findMany()
@@ -95,9 +99,15 @@ const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => 
     }))
   )
 
+  const after = performance.now()
+
+  await db.status.create({
+    data: { loadTime: dayjs().toISOString(), loadDuration: after - before },
+  })
+
   response.statusCode = 200
   response.setHeader("Content-Type", "application/json")
-  response.end(JSON.stringify({ results }, undefined, 2))
+  response.end(JSON.stringify({ results, timeElapsed: after - before }, undefined, 2))
 }
 export default handler
 
