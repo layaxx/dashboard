@@ -27,12 +27,12 @@ const Item = ({ item, settings }: ItemProps) => {
           (argument) => ({
             ...argument,
             feeds:
-              argument?.feeds.map((feed) => ({
-                ...feed,
-                _count: {
-                  Feedentry: isRead ? feed.unreadCount - 1 : feed.unreadCount + 1,
-                },
-              })) || [],
+              argument?.feeds.map((feed) => {
+                if (feed.id === item.feedId) {
+                  feed.unreadCount = isRead ? feed.unreadCount - 1 : feed.unreadCount + 1
+                }
+                return feed
+              }) || [],
           }),
           { refetch: false }
         ).catch(() => setHasBeenRead(!isRead))
