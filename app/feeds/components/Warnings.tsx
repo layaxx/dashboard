@@ -51,9 +51,9 @@ const Warnings = () => {
 
   const [isLoadingRSS, setIsLoadingRSS] = useState(false)
 
-  const handleOnForceReload = async () => {
+  const handleOnForceReload = async (force: boolean) => {
     window
-      .fetch("/api/loadRSS", {
+      .fetch("/api/loadRSS" + force ? "?force=true" : "", {
         credentials: "include",
         headers: {
           "anti-csrf": getAntiCSRFToken(),
@@ -65,7 +65,7 @@ const Warnings = () => {
   useEffect(() => {
     if (result.minutesSinceLastLoad > targetTimeBetweenLoads) {
       setIsLoadingRSS(true)
-      handleOnForceReload().then(() => {
+      handleOnForceReload(false).then(() => {
         setIsLoadingRSS(false)
         refetch()
       })
@@ -79,7 +79,11 @@ const Warnings = () => {
           <WarningsIcon result={result} isLoading={isLoading} isError={isError} />
         </a>
       </Link>
-      {isLoadingRSS ? <Loader /> : <Button onClick={handleOnForceReload}>Force Reload</Button>}
+      {isLoadingRSS ? (
+        <Loader />
+      ) : (
+        <Button onClick={() => handleOnForceReload(true)}>Force Reload</Button>
+      )}
     </div>
   )
 }

@@ -7,33 +7,57 @@ import fetch from "node-fetch"
 import { performance } from "perf_hooks"
 import db, { Feed } from "db"
 
-const loadFeed = async (feed: Feed, forceReload: boolean) => {
+type LoadFeedResult = {
+  error: string | undefined
+  updated: number
+  created: number
+  ignored: number
+}
+
+const loadFeed = async (feed: Feed, forceReload: boolean): Promise<LoadFeedResult> => {
+  const defaultReturnValue = { updated: 0, created: 0, ignored: 0, error: undefined }
+
   const minutesSinceLastLoad = dayjs().diff(dayjs(feed.lastLoad), "minutes")
   console.log("Minutes since last load", minutesSinceLastLoad)
   if (!forceReload && feed.loadIntervall > minutesSinceLastLoad) {
     console.log("Skipping", feed.name)
-    return false
+    return defaultReturnValue
   }
 
-  const content = await fetch(feed.url).then((response) => response.text())
+  let content
+  try {
+    content = await fetch(feed.url).then((response) => response.text())
+  } catch {
+    console.error("Encountered an error while fetching " + feed.url)
+    return { ...defaultReturnValue, error: "Failed to fetch from url " + feed.url }
+  }
 
   const fetchedFeed = parseFeed(content, { xmlMode: true })
 
-  const results = await Promise.all(fetchedFeed?.items.map((item) => handleItem(item, feed)) ?? [])
+  let results
+  try {
+    results = await Promise.all(fetchedFeed?.items.map((item) => handleItem(item, feed)) ?? [])
+  } catch {
+    console.error("Encountered an error while processing items for " + feed.url)
+    return { ...defaultReturnValue, error: "Failed to process items for url " + feed.url }
+  }
 
   await db.feed.update({
     data: { lastLoad: dayjs().toISOString() },
     where: { id: feed.id },
   })
 
-  return results.reduce(
-    (previous, current) => ({
-      updated: (previous.updated ?? 0) + (current.updated ?? 0),
-      created: (previous.created ?? 0) + (current.created ?? 0),
-      ignored: (previous.ignored ?? 0) + (current.ignored ?? 0),
-    }),
-    { updated: 0, created: 0, ignored: 0 }
-  )
+  return {
+    ...results.reduce(
+      (previous, current) => ({
+        updated: previous.updated + current.updated,
+        created: previous.created + current.created,
+        ignored: previous.ignored + current.ignored,
+      }),
+      defaultReturnValue
+    ),
+    error: undefined,
+  }
 }
 
 const handleItem = async (
@@ -72,6 +96,12 @@ const handleItem = async (
   }
 }
 
+type Result = {
+  name: string
+  id: number
+  changes: LoadFeedResult
+}
+
 const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => {
   const session = await getSession(request, response)
 
@@ -91,7 +121,7 @@ const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => 
 
   const feeds = await db.feed.findMany()
 
-  const results = await Promise.all(
+  const results: Result[] = await Promise.all(
     feeds.map(async (feed) => ({
       name: feed.name,
       id: feed.id,
@@ -99,10 +129,28 @@ const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => 
     }))
   )
 
+  const { updated, created } = results.reduce(
+    (previous, { changes }) => {
+      return {
+        updated: previous.updated + changes.updated,
+        created: previous.created + changes.created,
+      }
+    },
+    { updated: 0, created: 0 }
+  )
+
   const after = performance.now()
 
   await db.status.create({
-    data: { loadTime: dayjs().toISOString(), loadDuration: after - before },
+    data: {
+      loadTime: dayjs().toISOString(),
+      loadDuration: after - before,
+      errors: results
+        .map((result) => (result.changes && result.changes.error) ?? false)
+        .filter(Boolean) as string[],
+      updateCount: updated,
+      insertCount: created,
+    },
   })
 
   response.statusCode = 200

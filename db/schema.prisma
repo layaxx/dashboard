@@ -112,4 +112,6 @@ model Status {
   loadTime     DateTime
   loadDuration Float
   errors       String[]
+  updateCount  Int      @default(0)
+  insertCount  Int      @default(0)
 }

@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Status" ADD COLUMN     "insertCount" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "updateCount" INTEGER NOT NULL DEFAULT 0;

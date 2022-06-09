@@ -3,11 +3,9 @@ import { ExclamationIcon } from "@heroicons/react/solid"
 import clsx from "clsx"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
-import { StatusWithWarningsAndErrors } from "./Overview"
+import { formatToTwoDigits, StatusWithWarningsAndErrors } from "app/feeds/lib/status"
 
 dayjs.extend(relativeTime)
-
-const format = (number: number): string => number.toFixed(2)
 
 const ListElement = ({ text, isError }: { text: string; isError?: boolean }) => {
   return (
@@ -29,6 +27,8 @@ const StatusItem: FC<StatusWithWarningsAndErrors> = ({
   loadDurationTooHigh,
   timeBetweenLoadsHigherThanAverage,
   timeBetweenLoadsHigherThanMax,
+  insertCount,
+  updateCount,
 }) => {
   return (
     <div
@@ -38,7 +38,7 @@ const StatusItem: FC<StatusWithWarningsAndErrors> = ({
         "border-purple-700",
         "border-solid",
         "border-t-4",
-        hasWarnings && "border-warning",
+        hasWarnings && !hasErrors && "border-warning",
         "max-w-md",
         "my-12",
         "px-8",
@@ -59,7 +59,7 @@ const StatusItem: FC<StatusWithWarningsAndErrors> = ({
               <th className="text-left" scope="row">
                 Duration of Load
               </th>
-              <td className="text-right">{format(loadDuration)} ms</td>
+              <td className="text-right">{formatToTwoDigits(loadDuration)} ms</td>
             </tr>
             <tr>
               <th className="text-left" scope="row">
@@ -75,6 +75,14 @@ const StatusItem: FC<StatusWithWarningsAndErrors> = ({
                 {previousLoad ? minutesSinceLastLoad + " min" : "not available"}
               </td>
             </tr>
+            <tr>
+              <th className="text-left" scope="row">
+                Items inserted / updated
+              </th>
+              <td className="text-right">
+                {insertCount} / {updateCount}
+              </td>
+            </tr>
           </tbody>
         </table>
         {(hasErrors || hasWarnings) && (
@@ -83,12 +91,11 @@ const StatusItem: FC<StatusWithWarningsAndErrors> = ({
             {timeBetweenLoadsHigherThanAverage && !timeBetweenLoadsHigherThanMax && (
               <ListElement text="time between Loads is higher than average" />
             )}
-            {errors && errors.length > 0 && <ListElement isError text="Has Errors" />}
             {timeBetweenLoadsHigherThanMax && (
               <ListElement isError text="time between Loads is higher than max" />
             )}
             {errors.map((error) => (
-              <li key={error}>{error}</li>
+              <ListElement key={error} isError text={"Error: " + error} />
             ))}
           </ul>
         )}

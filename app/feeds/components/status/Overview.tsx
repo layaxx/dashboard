@@ -5,49 +5,12 @@ import clsx from "clsx"
 import dayjs from "dayjs"
 import { VictoryChart, VictoryBar, VictoryAxis, VictoryTheme } from "victory"
 import StatusItem from "./StatusItem"
+import StatusTable from "./Table"
 import Loader from "app/core/components/Loader"
+import { calculateErrorsAndWarnings, computeStatistics, Statistics } from "app/feeds/lib/status"
 import getStatusDetailed from "app/feeds/queries/getStatusDetailed"
-import {
-  maxAcceptableAverageLoadTime,
-  maxAcceptableTimeBetweenLoads,
-  targetTimeBetweenLoads,
-} from "config/feeds/status"
+
 import { Status } from "db"
-
-export type StatusWithWarningsAndErrors = Status & {
-  hasErrors: boolean
-  hasWarnings: boolean
-  loadDurationTooHigh: boolean
-  timeBetweenLoadsHigherThanAverage: boolean
-  timeBetweenLoadsHigherThanMax: boolean
-  previousLoad: Date | undefined
-  minutesSinceLastLoad: number
-}
-
-const calculateErrorsAndWarnings = (
-  status: Status,
-  previousLoad: Date | undefined
-): StatusWithWarningsAndErrors => {
-  const minutesSinceLastLoad = dayjs(status.loadTime).diff(dayjs(previousLoad), "minutes")
-
-  const loadDurationTooHigh = status.loadDuration > maxAcceptableAverageLoadTime
-  const timeBetweenLoadsHigherThanAverage = minutesSinceLastLoad > targetTimeBetweenLoads
-  const hasWarnings = loadDurationTooHigh || timeBetweenLoadsHigherThanAverage
-
-  const timeBetweenLoadsHigherThanMax = minutesSinceLastLoad > maxAcceptableTimeBetweenLoads
-  const hasErrors = (status.errors && status.errors.length > 0) || timeBetweenLoadsHigherThanMax
-
-  return {
-    ...status,
-    hasErrors,
-    hasWarnings,
-    loadDurationTooHigh,
-    timeBetweenLoadsHigherThanAverage,
-    timeBetweenLoadsHigherThanMax,
-    previousLoad,
-    minutesSinceLastLoad,
-  }
-}
 
 const StatusOverview: FC = () => {
   const [{ status }, { isLoading, isError }]: [
@@ -67,14 +30,9 @@ const StatusOverview: FC = () => {
     )
   }
 
-  const limits = [dayjs(status[status.length - 1]?.loadTime) ?? dayjs(), dayjs()] as const
-  let current = limits[0]?.set("minutes", 0)
-
+  let current = dayjs(status[status.length - 1]?.loadTime) ?? dayjs().set("minutes", 0)
   const tickValues = [current]
-
-  const now = dayjs()
-
-  while (current.isBefore(now)) {
+  while (current.isBefore(dayjs())) {
     current = current.add(1, "hour")
     tickValues.push(current)
   }
@@ -82,6 +40,8 @@ const StatusOverview: FC = () => {
   const statusWithWarnings = status.map((stat, index, array) =>
     calculateErrorsAndWarnings(stat, array[index + 1]?.loadTime)
   )
+
+  const statistics: Statistics = computeStatistics(statusWithWarnings)
 
   return (
     <>
@@ -118,6 +78,8 @@ const StatusOverview: FC = () => {
           style={{ tickLabels: { fill: "black", fontSize: "8px" } }}
         />
       </VictoryChart>
+
+      <StatusTable {...statistics} />
 
       {statusWithWarnings.map((status) => (
         <StatusItem {...status} key={status.id} />
