@@ -2,23 +2,23 @@ import { Suspense } from "react"
 import { Head, BlitzPage } from "blitz"
 import Loader from "app/core/components/Loader"
 import Layout from "app/core/layouts/Layout"
-import StatusOverview from "app/feeds/components/status/Overview"
+import SettingsForm from "app/feeds/components/settings/Form"
 
-const FeedsStatusPage: BlitzPage = () => {
+const FeedsAddPage: BlitzPage = () => {
   return (
     <>
       <Head>
-        <title>Feeds - Status</title>
+        <title>Feeds - Add Feed</title>
       </Head>
-      <Layout heading="RSS Status Page">
+      <Layout heading="RSS Settings Page">
         <Suspense fallback={<Loader />}>
-          <StatusOverview />
+          <SettingsForm isCreate />
         </Suspense>
       </Layout>
     </>
   )
 }
 
-FeedsStatusPage.authenticate = true
+FeedsAddPage.authenticate = true
 
-export default FeedsStatusPage
+export default FeedsAddPage

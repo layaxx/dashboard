@@ -1,29 +1,20 @@
 import { resolver } from "blitz"
+import dayjs from "dayjs"
 import { z } from "zod"
+import db from "db"
 
 const CreateFeed = z.object({
+  name: z.string(),
   url: z.string(),
+  loadIntervall: z.number(),
 })
 
-export default resolver.pipe(resolver.zod(CreateFeed), resolver.authorize(), async (input) => {
-  const body = {
-    // eslint-disable-next-line unicorn/no-null
-    folderId: null,
-    url: input.url,
+export default resolver.pipe(
+  resolver.zod(CreateFeed),
+  resolver.authorize(),
+  async ({ name, url, loadIntervall }) => {
+    return await db.feed.create({
+      data: { name, url, loadIntervall, number: -1, lastLoad: dayjs(0).toDate() },
+    })
   }
-
-  const url = `${process.env["NEWS_BASE_URL"]}/feeds`
-
-  const response = await fetch(url, {
-    headers: {
-      Authorization: `Basic ${process.env["NEWS_CREDENTIALS"]}`,
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-    body: JSON.stringify(body),
-  })
-  if (!response.ok) {
-    throw new Error(response.statusText)
-  }
-  return response.status
-})
+)

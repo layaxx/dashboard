@@ -4,14 +4,15 @@ import db from "db"
 
 const UpdateFeed = z.object({
   id: z.number(),
+  url: z.string(),
   name: z.string(),
+  loadIntervall: z.number(),
 })
 
 export default resolver.pipe(
   resolver.zod(UpdateFeed),
   resolver.authorize(),
   async ({ id, ...data }) => {
-    // TODO: in multi-tenant app, you must add validation to ensure correct tenant
     const feed = await db.feed.update({ data, where: { id } })
 
     return feed

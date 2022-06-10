@@ -13,7 +13,7 @@ function getURLFromSlug(slug: string[]) {
   return slug.join("/")
 }
 
-const AddNewFeedPage: BlitzPage = () => {
+const AddNewReadListItemPage: BlitzPage = () => {
   const slug = useParam("slug")
 
   const [addToReadlist] = useMutation(createReadlistentry)
@@ -35,4 +35,4 @@ const AddNewFeedPage: BlitzPage = () => {
 
   return <p>{url}</p>
 }
-export default AddNewFeedPage
+export default AddNewReadListItemPage

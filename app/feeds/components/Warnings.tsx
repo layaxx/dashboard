@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { getAntiCSRFToken, Link, Routes, useQuery } from "blitz"
-import { CheckCircleIcon, ExclamationCircleIcon } from "@heroicons/react/solid"
+import { CheckCircleIcon, ExclamationCircleIcon, PlusCircleIcon } from "@heroicons/react/solid"
 import clsx from "clsx"
 import getStatus, { IStatusResult } from "../queries/getStatus"
 import Button from "app/core/components/Button"
@@ -53,7 +53,7 @@ const Warnings = () => {
 
   const handleOnForceReload = async (force: boolean) => {
     window
-      .fetch("/api/loadRSS" + force ? "?force=true" : "", {
+      .fetch("/api/loadRSS" + (force ? "?force=true" : ""), {
         credentials: "include",
         headers: {
           "anti-csrf": getAntiCSRFToken(),
@@ -73,7 +73,7 @@ const Warnings = () => {
   }, [result, refetch])
 
   return (
-    <div className={clsx("flex", "items-center")}>
+    <div className={clsx("flex", "items-center", "w-full")}>
       <Link href={Routes.FeedsStatusPage()}>
         <a className={clsx("h-6", "w-6")}>
           <WarningsIcon result={result} isLoading={isLoading} isError={isError} />
@@ -84,6 +84,12 @@ const Warnings = () => {
       ) : (
         <Button onClick={() => handleOnForceReload(true)}>Force Reload</Button>
       )}
+
+      <Link href={Routes.FeedsAddPage()}>
+        <a className={clsx("h-6", "w-6")}>
+          <PlusCircleIcon color="green" />
+        </a>
+      </Link>
     </div>
   )
 }
