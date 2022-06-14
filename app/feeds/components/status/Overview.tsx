@@ -45,19 +45,20 @@ const StatusOverview: FC = () => {
 
   return (
     <>
-      <StatusTable {...statistics} />
       <StatusChart
-        data={statusWithWarnings.map((stat) => ({
-          x: stat.loadTime,
-          y: 1,
-          opacity: 0.9,
-          color:
-            (stat.hasErrors && tailwindConfig.theme.extend.colors.error) ||
-            (stat.hasWarnings && tailwindConfig.theme.extend.colors.warning) ||
-            tailwindConfig.theme.extend.colors.primary,
-        }))}
+        data={statusWithWarnings.map(
+          ({ insertCount, updateCount, loadTime, hasErrors, hasWarnings }) => ({
+            x: loadTime,
+            insertCount,
+            updateCount,
+            color:
+              (hasErrors && tailwindConfig.theme.extend.colors.error) ||
+              (hasWarnings && tailwindConfig.theme.extend.colors.warning) ||
+              tailwindConfig.theme.extend.colors.primary,
+          })
+        )}
       />
-      z
+      <StatusTable {...statistics} />
       {statusWithWarnings.map((status) => (
         <StatusItem {...status} key={status.id} />
       ))}

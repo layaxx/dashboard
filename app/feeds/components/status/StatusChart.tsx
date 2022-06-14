@@ -22,22 +22,41 @@ const options: ChartOptions<"bar"> = {
     legend: {
       display: false,
     },
+    tooltip: {
+      callbacks: {
+        label: ({ raw, formattedValue }) => {
+          return !(raw as { hidden?: boolean; title: string } | undefined)?.hidden
+            ? (raw as { title: string }).title + " " + formattedValue
+            : ""
+        },
+      },
+    },
   },
+  animation: false,
   scales: {
     x: {
       type: "time" as const,
       max: dayjs().toISOString(),
+      stacked: true,
     },
     y: {
       display: false,
+      stacked: true,
     },
   },
 }
 
 type Props = {
-  data: { x: Date; y: number; color: string }[]
+  data: { x: Date; color: string; insertCount: number; updateCount: number }[]
 }
 export default function StatusChart({ data }: Props) {
+  const borderProps = { borderWidth: 1, borderColor: "#222" }
+  const maxCountSum = data.reduce(
+    (previous, { insertCount, updateCount }) =>
+      insertCount + updateCount > previous ? insertCount + updateCount : previous,
+    0
+  )
+
   return (
     <Bar
       options={options}
@@ -45,8 +64,23 @@ export default function StatusChart({ data }: Props) {
       data={{
         datasets: [
           {
-            backgroundColor: data.map((status) => status.color + "aa"),
-            data,
+            ...borderProps,
+            backgroundColor: data.map((status) => status.color),
+            data: data.map((d) => ({ x: d.x, y: d.insertCount, title: "insert Count:" })),
+          },
+          {
+            ...borderProps,
+            backgroundColor: data.map((status) => status.color + "77"),
+            data: data.map((d) => ({ x: d.x, y: d.updateCount, title: "update Count:" })),
+          },
+          {
+            backgroundColor: data.map((status) => status.color + "11"),
+            data: data.map((d) => ({
+              x: d.x,
+              y: maxCountSum - (d.insertCount + d.updateCount),
+              title: "combined",
+              hidden: true,
+            })),
           },
         ],
       }}

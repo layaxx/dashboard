@@ -29,18 +29,19 @@ const StatusTable = (statistics: Statistics) => {
         </tr>
         <tr>
           <th className="text-left" scope="row">
-            number of warnings / errors
+            number / fraction of warnings
           </th>
           <td className="text-right">
-            {statistics.countWarnings} / {statistics.countErrors}
+            {statistics.countWarnings} /{" "}
+            {formatToTwoDigits((statistics.countWarnings / statistics.count) * 100)}%
           </td>
         </tr>
         <tr>
           <th className="text-left" scope="row">
-            fraction with warnings / errors
+            number / fraction of errors
           </th>
           <td className="text-right">
-            {formatToTwoDigits((statistics.countWarnings / statistics.count) * 100)}% /{" "}
+            {statistics.countErrors} /{" "}
             {formatToTwoDigits((statistics.countErrors / statistics.count) * 100)}%
           </td>
         </tr>
