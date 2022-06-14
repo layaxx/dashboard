@@ -34,6 +34,8 @@
     "@tailwindcss/typography": "0.5.1",
     "autoprefixer": "10.x",
     "blitz": "0.45.2",
+    "chart.js": "^3.0.0",
+    "chartjs-adapter-dayjs-3": "1.2.3",
     "clsx": "1.1.1",
     "dayjs": "1.10.7",
     "final-form": "4.20.6",
@@ -41,6 +43,7 @@
     "node-fetch": "3.2.3",
     "postcss": "8.x",
     "react": "18.0.0-beta-149b420f6-20211119",
+    "react-chartjs-2": "4.2.0",
     "react-dom": "18.0.0-alpha-5ca4b0433-20211020",
     "react-final-form": "6.5.7",
     "react-tracked": "1.7.6",
@@ -49,7 +52,6 @@
     "tailwindcss": "3.x",
     "ts-node": "10.7.0",
     "use-read-time": "1.0.2",
-    "victory": "36.5.0",
     "zod": "3.11.6"
   },
   "devDependencies": {

@@ -40,8 +40,8 @@ const StatusTable = (statistics: Statistics) => {
             fraction with warnings / errors
           </th>
           <td className="text-right">
-            {(statistics.countWarnings / statistics.count) * 100}% /{" "}
-            {(statistics.countErrors / statistics.count) * 100}%
+            {formatToTwoDigits((statistics.countWarnings / statistics.count) * 100)}% /{" "}
+            {formatToTwoDigits((statistics.countErrors / statistics.count) * 100)}%
           </td>
         </tr>
         <tr>
@@ -57,8 +57,8 @@ const StatusTable = (statistics: Statistics) => {
             inserts / updates per Update
           </th>
           <td className="text-right">
-            {(statistics.sumInsertCount / statistics.count) * 100} /{" "}
-            {(statistics.sumUpdateCount / statistics.count) * 100}
+            {formatToTwoDigits(statistics.sumInsertCount / statistics.count)} /{" "}
+            {formatToTwoDigits(statistics.sumUpdateCount / statistics.count)}
           </td>
         </tr>
       </tbody>

@@ -10,11 +10,6 @@
   font-display: swap;
 }
 
-:root {
-  --color-primary: #493282;
-  --color-warning: #f97316;
-  --color-error: #b91c1c;
-}
 
 @layer components {
   .hero {

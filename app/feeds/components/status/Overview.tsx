@@ -3,14 +3,14 @@ import { useQuery } from "blitz"
 import { ExclamationCircleIcon } from "@heroicons/react/solid"
 import clsx from "clsx"
 import dayjs from "dayjs"
-import { VictoryChart, VictoryBar, VictoryAxis, VictoryTheme } from "victory"
+import StatusChart from "./StatusChart"
 import StatusItem from "./StatusItem"
 import StatusTable from "./Table"
 import Loader from "app/core/components/Loader"
 import { calculateErrorsAndWarnings, computeStatistics, Statistics } from "app/feeds/lib/status"
 import getStatusDetailed from "app/feeds/queries/getStatusDetailed"
-
 import { Status } from "db"
+import tailwindConfig from "tailwind.config"
 
 const StatusOverview: FC = () => {
   const [{ status }, { isLoading, isError }]: [
@@ -45,42 +45,19 @@ const StatusOverview: FC = () => {
 
   return (
     <>
-      <VictoryChart
-        maxDomain={{
-          x: dayjs().toDate() as unknown as number, // TODO: not pretty but works
-        }}
-        theme={VictoryTheme.material}
-        height={50}
-      >
-        <VictoryBar
-          data={statusWithWarnings.map((stat) => ({
-            x: stat.loadTime,
-            y: 1,
-            opacity: 0.9,
-            color:
-              (stat.hasErrors && "var(--color-error)") ||
-              (stat.hasWarnings && "var(--color-warning)") ||
-              "var(--color-primary)",
-          }))}
-          barWidth={2}
-          style={{
-            data: {
-              opacity: ({ datum }) => datum.opacity,
-              fill: ({ datum }) => datum.color,
-            },
-          }}
-        />
-        <VictoryAxis
-          tickValues={tickValues}
-          tickFormat={(date) => {
-            return dayjs(date).format("HH:mm")
-          }}
-          style={{ tickLabels: { fill: "black", fontSize: "8px" } }}
-        />
-      </VictoryChart>
-
       <StatusTable {...statistics} />
-
+      <StatusChart
+        data={statusWithWarnings.map((stat) => ({
+          x: stat.loadTime,
+          y: 1,
+          opacity: 0.9,
+          color:
+            (stat.hasErrors && tailwindConfig.theme.extend.colors.error) ||
+            (stat.hasWarnings && tailwindConfig.theme.extend.colors.warning) ||
+            tailwindConfig.theme.extend.colors.primary,
+        }))}
+      />
+      z
       {statusWithWarnings.map((status) => (
         <StatusItem {...status} key={status.id} />
       ))}

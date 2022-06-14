@@ -8,10 +8,10 @@ module.exports = {
         serif: ["Lora", "ui-serif", "Georgia", "serif"],
       },
       colors: {
-        primary: "var(--color-primary)",
+        primary: "#493282",
         secondary: "var(--color-secondary)",
-        error: "var(--color-error)",
-        warning: "var(--color-warning)",
+        error: "#b91c1c",
+        warning: "#f97316",
       },
     },
   },
