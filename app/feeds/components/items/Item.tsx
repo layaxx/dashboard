@@ -13,7 +13,7 @@ const Item = ({ item, settings }: ItemProps) => {
   const defaultExpanded = settings.expand
 
   const [isExpanded, setIsExpanded] = useState(defaultExpanded)
-  const [hasBeenRead, setHasBeenRead] = useState(false)
+  const [hasBeenRead, setHasBeenRead] = useState(item.isArchived)
 
   const [updateReadState] = useMutation(readItem)
 
@@ -26,13 +26,14 @@ const Item = ({ item, settings }: ItemProps) => {
           undefined,
           (argument) => ({
             ...argument,
+            recentlyReadCount: argument?.recentlyReadCount ?? 0,
             feeds:
               argument?.feeds.map((feed) => {
                 if (feed.id === item.feedId) {
                   feed.unreadCount = isRead ? feed.unreadCount - 1 : feed.unreadCount + 1
                 }
                 return feed
-              }) || [],
+              }) ?? [],
           }),
           { refetch: false }
         ).catch(() => setHasBeenRead(!isRead))

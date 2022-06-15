@@ -1,28 +1,13 @@
 import { Fragment } from "react"
-import { useQuery, useInfiniteQuery } from "blitz"
+import { useQuery, useInfiniteQuery, ErrorComponent } from "blitz"
 import Item from "./items/Item"
 import Button from "app/core/components/Button"
 import Loader from "app/core/components/Loader"
 import { useSharedState } from "app/core/hooks/store"
 import getFeedentries from "app/feedentries/queries/getFeedentries"
+import getRecentlyReadFeedentries from "app/feedentries/queries/getRecentlyReadFeedentries"
 import getFeedoption from "app/feedoptions/queries/getFeedoption"
-
-export type ItemAPIResponse = {
-  id: number
-  guid: string
-  guidHash: string
-  url: string
-  title: string
-  author: string
-  pubDate: number
-  body: string
-  feedId: number
-  unread: boolean
-  starred: boolean
-  rtl: boolean
-  lastModified: number
-  fingerprint: string
-}
+import { ALL_FEEDS_ID, RECENTLY_READ_ID } from "config/feeds/feedIDs"
 
 export const ItemsList = () => {
   const [{ activeFeedID }] = useSharedState()
@@ -50,7 +35,7 @@ export const ItemsList = () => {
         fetchNextPageVariable ?? {
           take: baseBatchSize,
           skip: 0,
-          where: { feedId: activeFeedID === -1 ? undefined : activeFeedID },
+          where: { feedId: activeFeedID === ALL_FEEDS_ID ? undefined : activeFeedID },
         }
       )
     },
@@ -61,10 +46,27 @@ export const ItemsList = () => {
       useErrorBoundary: true,
       notifyOnChangeProps: "tracked",
       getNextPageParam: ({ nextPage }) => nextPage,
+      enabled: activeFeedID !== RECENTLY_READ_ID,
     }
   )
 
-  return (
+  const [recentlyReadResult] = useQuery(
+    getRecentlyReadFeedentries,
+    {},
+    { enabled: activeFeedID === RECENTLY_READ_ID }
+  )
+
+  if (activeFeedID === RECENTLY_READ_ID && recentlyReadResult && recentlyReadResult.feedentries) {
+    return (
+      <div style={{ marginBottom: "10rem" }}>
+        {recentlyReadResult.feedentries.map((item) => (
+          <Item item={item} key={item.id} settings={settings || defaultOptions} />
+        ))}
+      </div>
+    )
+  }
+
+  return pages ? (
     <>
       {pages.length > 0 &&
         pages.map((page, index) => (
@@ -84,5 +86,7 @@ export const ItemsList = () => {
         {!isFetchingNextPage && (hasNextPage ? "Load More" : "Nothing more to load")}
       </Button>
     </>
+  ) : (
+    <ErrorComponent statusCode={500} title={"Error in ItemsList"} />
   )
 }
