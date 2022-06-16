@@ -55,7 +55,7 @@ const SettingsForm = ({ id, isCreate }: Props) => {
       )}
     >
       <Form
-        onSubmit={(values: { name: string; url: string; loadIntervall: number }) => {
+        onSubmit={(values: { name: string; url: string; loadIntervall: number | string }) => {
           try {
             new URL(values.url)
           } catch {
@@ -63,7 +63,10 @@ const SettingsForm = ({ id, isCreate }: Props) => {
             return
           }
           if (isCreate) {
-            createFeed(values).then(
+            createFeed({
+              ...values,
+              loadIntervall: Number.parseInt("" + values.loadIntervall, 10),
+            }).then(
               () => {
                 notify({ title: "Successfully created Feed.", status: "success" })
                 router.push(Routes.FeedsSettingsOverviewPage())
@@ -81,7 +84,7 @@ const SettingsForm = ({ id, isCreate }: Props) => {
             updateFeed({
               id: feed!.id,
               name: values.name,
-              loadIntervall: values.loadIntervall,
+              loadIntervall: Number.parseInt("" + values.loadIntervall, 10),
               url: values.url,
             }).then(
               () => notify({ title: "Successfully updated Feed.", status: "success" }),

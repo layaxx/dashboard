@@ -10,7 +10,6 @@ import {
   LinearScale,
   ChartOptions,
 } from "chart.js"
-import dayjs from "dayjs"
 import { Bar } from "react-chartjs-2"
 import "chartjs-adapter-dayjs-3"
 
@@ -36,7 +35,6 @@ const options: ChartOptions<"bar"> = {
   scales: {
     x: {
       type: "time" as const,
-      max: dayjs().toISOString(),
       stacked: true,
     },
     y: {
