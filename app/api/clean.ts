@@ -1,4 +1,6 @@
 import { BlitzApiRequest, BlitzApiResponse, getSession } from "blitz"
+import dayjs from "dayjs"
+import db from "db"
 
 const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => {
   const session = await getSession(request, response)
@@ -13,17 +15,24 @@ const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => 
     return response.end()
   }
 
-  /* TODO:  delete already read entries that are older than X
-            delete status entries other tha last X (30 maybe? 50?) */
+  // Delete all but 25 most recent status entries
+  const statusToBeDeleted = await db.status.findMany({ orderBy: { createdAt: "desc" }, skip: 25 })
+  const { count: countStatusDeleted } = await db.status.deleteMany({
+    where: { id: { in: statusToBeDeleted.map((status) => status.id) } },
+  })
 
-  /*TODO:   More generally:   - Overview over recently read articles
-                              - Options to  - add feed
-                                            - edit feed
-                                            - remove feed
-  */
+  // delete all archived feedentries that have not been modified in the last 30 days
+  const deleteEntriesOlderThanXDays = 30
+  const timeThreshold = dayjs().subtract(deleteEntriesOlderThanXDays, "days").toISOString()
+  const entriesToBeDeleted = await db.feedentry.findMany({
+    where: { isArchived: true, updatedAt: { lt: timeThreshold } },
+  })
+  const { count: countEntriesDeleted } = await db.feedentry.deleteMany({
+    where: { id: { in: entriesToBeDeleted.map((entry) => entry.id) } },
+  })
 
   response.statusCode = 200
   response.setHeader("Content-Type", "application/json")
-  response.end(JSON.stringify({ response: "Hello World" }, undefined, 2))
+  response.end(JSON.stringify({ countEntriesDeleted, countStatusDeleted }, undefined, 2))
 }
 export default handler
