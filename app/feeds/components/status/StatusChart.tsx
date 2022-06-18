@@ -52,7 +52,7 @@ export default function StatusChart({ data }: Props) {
   const maxCountSum = data.reduce(
     (previous, { insertCount, updateCount }) =>
       insertCount + updateCount > previous ? insertCount + updateCount : previous,
-    0
+    1 // minimal value
   )
 
   return (

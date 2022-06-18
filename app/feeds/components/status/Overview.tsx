@@ -2,12 +2,11 @@ import { FC } from "react"
 import { useQuery } from "blitz"
 import { ExclamationCircleIcon } from "@heroicons/react/solid"
 import clsx from "clsx"
-import dayjs from "dayjs"
 import StatusChart from "./StatusChart"
 import StatusItem from "./StatusItem"
 import StatusTable from "./Table"
 import Loader from "app/core/components/Loader"
-import { calculateErrorsAndWarnings, computeStatistics, Statistics } from "app/feeds/lib/status"
+import { calculateErrorsAndWarnings, computeStatistics } from "app/feeds/lib/status"
 import getStatusDetailed from "app/feeds/queries/getStatusDetailed"
 import { Status } from "db"
 import tailwindConfig from "tailwind.config"
@@ -30,18 +29,11 @@ const StatusOverview: FC = () => {
     )
   }
 
-  let current = dayjs(status[status.length - 1]?.loadTime) ?? dayjs().set("minutes", 0)
-  const tickValues = [current]
-  while (current.isBefore(dayjs())) {
-    current = current.add(1, "hour")
-    tickValues.push(current)
-  }
-
   const statusWithWarnings = status.map((stat, index, array) =>
     calculateErrorsAndWarnings(stat, array[index + 1]?.loadTime)
   )
 
-  const statistics: Statistics = computeStatistics(statusWithWarnings)
+  const statistics = computeStatistics(statusWithWarnings)
 
   return (
     <>
