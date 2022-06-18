@@ -2,7 +2,9 @@
   "name": "dashboard",
   "version": "1.0.0",
   "scripts": {
+    "predev": "node scripts/writeVersion.js --dev",
     "dev": "blitz dev",
+    "prebuild": "node scripts/writeVersion.js",
     "build": "blitz build",
     "start": "blitz start",
     "studio": "blitz prisma studio",

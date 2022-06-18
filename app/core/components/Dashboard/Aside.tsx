@@ -5,6 +5,7 @@ import Loader from "../Loader"
 import SettingsModal from "./SettingsModal"
 import Zen from "./zen"
 import Warnings from "app/feeds/components/Warnings"
+import version from "config/version"
 
 type Props = {
   hideNavbar: boolean
@@ -45,6 +46,7 @@ const Aside = ({ hideNavbar, setHideNavbar, title, feeds }: Props) => {
           className={clsx("font-bold", "focus:outline-none", "focus:ring-2", "text-2xl")}
           aria-label={hideNavbar ? "open" : "close"}
           onClick={() => setHideNavbar((previous) => !previous)}
+          title={version || "unknown version"}
         >
           {title}
         </h1>
