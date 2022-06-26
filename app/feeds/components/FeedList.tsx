@@ -4,7 +4,7 @@ import { useRouter } from "next/dist/client/router"
 import getFeeds from "../queries/getFeeds"
 import FeedListItem from "./FeedListItem"
 import { LOCALSTORAGE_FEEDID, useSharedState } from "app/core/hooks/store"
-import { ALL_FEEDS_ID, RECENTLY_READ_ID } from "config/feeds/feedIDs"
+import { ALL_FEEDS_ID, RECENTLY_READ_ID } from "lib/config/feeds/feedIDs"
 import { FEED_MODE } from "types"
 
 type Props = {

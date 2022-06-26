@@ -1,10 +1,10 @@
 import dayjs from "dayjs"
+import { Status } from "db"
 import {
   maxAcceptableAverageLoadTime,
   targetTimeBetweenLoads,
   maxAcceptableTimeBetweenLoads,
-} from "config/feeds/status"
-import { Status } from "db"
+} from "lib/config/feeds/status"
 
 export type StatusWithWarningsAndErrors = Status & {
   hasErrors: boolean

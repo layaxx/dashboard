@@ -5,7 +5,7 @@ import Loader from "../Loader"
 import SettingsModal from "./SettingsModal"
 import Zen from "./zen"
 import Warnings from "app/feeds/components/Warnings"
-import version from "config/version"
+import version from "lib/config/version"
 
 type Props = {
   hideNavbar: boolean

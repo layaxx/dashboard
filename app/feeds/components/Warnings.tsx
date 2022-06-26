@@ -9,7 +9,7 @@ import {
   maxAcceptableAverageLoadTime,
   maxAcceptableTimeBetweenLoads,
   targetTimeBetweenLoads,
-} from "config/feeds/status"
+} from "lib/config/feeds/status"
 
 type Props = {
   result: IStatusResult

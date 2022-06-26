@@ -98,6 +98,7 @@ model Feedentry {
   feed       Feed     @relation(fields: [feedId], references: [id])
   title      String
   text       String
+  summary    String
   link       String
   isArchived Boolean  @default(false)
   createdAt  DateTime @default(now())

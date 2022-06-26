@@ -1,5 +1,5 @@
 import { BlitzApiRequest, BlitzApiResponse, getSession } from "blitz"
-import version from "config/version"
+import version from "lib/config/version"
 
 const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => {
   const session = await getSession(request, response)

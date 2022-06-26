@@ -7,7 +7,7 @@ import { useSharedState } from "app/core/hooks/store"
 import getFeedentries from "app/feedentries/queries/getFeedentries"
 import getRecentlyReadFeedentries from "app/feedentries/queries/getRecentlyReadFeedentries"
 import getFeedoption from "app/feedoptions/queries/getFeedoption"
-import { ALL_FEEDS_ID, RECENTLY_READ_ID } from "config/feeds/feedIDs"
+import { ALL_FEEDS_ID, RECENTLY_READ_ID } from "lib/config/feeds/feedIDs"
 
 export const ItemsList = () => {
   const [{ activeFeedID }] = useSharedState()

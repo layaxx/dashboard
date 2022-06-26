@@ -9,7 +9,7 @@ if (process.argv[2] === "--dev") {
   console.log("current Commit Hash is " + version)
 }
 fs.writeFileSync(
-  "./config/version.ts",
+  "./lib/config/version.ts",
   `const version = "${version}"
 export default version`
 )

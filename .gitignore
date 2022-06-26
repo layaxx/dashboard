@@ -56,3 +56,5 @@ lib-cov
 .vscode-test
 
 Dockerfile.*
+
+**/*git-ignore*

@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { createContainer } from "react-tracked"
-import { ALL_FEEDS_ID } from "config/feeds/feedIDs"
+import { ALL_FEEDS_ID } from "lib/config/feeds/feedIDs"
 
 export const LOCALSTORAGE_FEEDID = "activeFeedID"
 
