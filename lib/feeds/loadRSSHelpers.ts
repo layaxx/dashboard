@@ -17,14 +17,15 @@ export const handleItem = async (
   item: Parser.Item,
   feed: Feed
 ): Promise<{ updated: number; created: number; ignored: number }> => {
-  if (!item.guid) {
+  const id = item.guid ?? item.id ?? item.link
+  if (!id) {
     console.error("No ID was provided", item)
   }
-  const databaseResponse = await db.feedentry.findUnique({ where: { id: item.guid } })
+  const databaseResponse = await db.feedentry.findUnique({ where: { id } })
   if (!databaseResponse) {
     await db.feedentry.create({
       data: {
-        id: item.guid!,
+        id,
         text: getContentFromParsedItem(item),
         title: item.title ?? "No Title provided",
         link: getLinkFromParsedItem(item, feed.url),
@@ -65,8 +66,14 @@ export const loadFeed = async (feed: Feed, forceReload: boolean): Promise<LoadFe
     return { ...defaultReturnValue, error: "Failed to fetch from url " + feed.url }
   }
 
-  const rssParser = new Parser()
-  const parsedFeed = await rssParser.parseString(content)
+  let parsedFeed
+  try {
+    const rssParser = new Parser()
+    parsedFeed = await rssParser.parseString(content)
+  } catch {
+    console.error("Encountered an error while parsing " + feed.url)
+    return { ...defaultReturnValue, error: "Failed to parse " + feed.url }
+  }
 
   let results
   try {
