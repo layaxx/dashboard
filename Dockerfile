@@ -18,10 +18,10 @@ ENV NODE_ENV=production
 RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates
 COPY package.json yarn.lock ./
 COPY db/ ./db/
-RUN yarn install --frozen-lockfile --prefer-offline && yarn blitz prisma migrate deploy ; yarn cache clean && rm -rf ~/.cache/*
+RUN yarn install --frozen-lockfile --prefer-offline
 
 COPY . .
-RUN yarn build
+RUN yarn build && yarn blitz prisma generate
 
 FROM base AS prod
 COPY --from=build /usr/src/app/public /usr/src/app/public

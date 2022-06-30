@@ -4,6 +4,8 @@ services:
   dash-app:
     build:
       context: .
+      args:
+        DB: $DATABASE_URL
     env_file: .env.local
     restart: unless-stopped
     healthcheck:
