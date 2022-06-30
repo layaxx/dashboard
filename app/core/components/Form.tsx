@@ -1,4 +1,4 @@
-import { ReactNode, PropsWithoutRef, ReactChild } from "react"
+import { ReactNode, PropsWithoutRef, ReactChild, MouseEventHandler } from "react"
 import { validateZodSchema } from "blitz"
 import { Form as FinalForm, FormProps as FinalFormProps } from "react-final-form"
 import { z } from "zod"
@@ -12,6 +12,8 @@ export interface FormProps<S extends z.ZodType<any, any>>
   children?: ReactNode
   /** Text to display in the submit button */
   submitText?: string
+  deleteText?: string
+  onDelete?: MouseEventHandler<HTMLButtonElement>
   resetText?: string
   schema?: S
   onSubmit: FinalFormProps<z.infer<S>>["onSubmit"]
@@ -27,6 +29,8 @@ export function Form<S extends z.ZodType<any, any>>({
   initialValues,
   onSubmit,
   resetText,
+  deleteText,
+  onDelete,
   ...props
 }: FormProps<S>) {
   return (
@@ -54,7 +58,13 @@ export function Form<S extends z.ZodType<any, any>>({
 
             {resetText && (
               <Button type="button" onClick={form.reset} disabled={submitting || pristine}>
-                Reset
+                {resetText}
+              </Button>
+            )}
+
+            {onDelete && (
+              <Button type="button" onClick={onDelete} variant="danger">
+                {deleteText ?? "Delete"}
               </Button>
             )}
           </div>

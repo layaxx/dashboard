@@ -5,6 +5,7 @@ import { useNotifications } from "reapop"
 import Form from "app/core/components/Form"
 import Loader from "app/core/components/Loader"
 import createFeedMutation from "app/feeds/mutations/createFeed"
+import removeFeedMutation from "app/feeds/mutations/deleteFeed"
 import updateFeedMutation from "app/feeds/mutations/updateFeed"
 import getFeed from "app/feeds/queries/getFeed"
 
@@ -23,6 +24,7 @@ const SettingsForm = ({ id, isCreate }: Props) => {
 
   const [createFeed] = useMutation(createFeedMutation)
   const [updateFeed] = useMutation(updateFeedMutation)
+  const [removeFeed] = useMutation(removeFeedMutation)
 
   const router = useRouter()
   const { notify } = useNotifications()
@@ -37,6 +39,73 @@ const SettingsForm = ({ id, isCreate }: Props) => {
   const styledInput = (props: any) => (
     <input {...props.input} className={clsx("text-right", "w-full")} />
   )
+
+  const submitHandler = (values: { name: string; url: string; loadIntervall: number | string }) => {
+    try {
+      new URL(values.url)
+    } catch {
+      console.error("invalid URL")
+      return
+    }
+    if (isCreate) {
+      createFeed({
+        ...values,
+        loadIntervall: Number.parseInt("" + values.loadIntervall, 10),
+      }).then(
+        () => {
+          notify({ title: "Successfully created Feed.", status: "success" })
+          router.push(Routes.FeedsSettingsOverviewPage())
+        },
+        (error) => {
+          notify({
+            title: "Failed to create Feed",
+            message: "View console for additional information.",
+            status: "error",
+          })
+          console.error(error)
+        }
+      )
+    } else {
+      updateFeed({
+        id: feed!.id,
+        name: values.name,
+        loadIntervall: Number.parseInt("" + values.loadIntervall, 10),
+        url: values.url,
+      }).then(
+        () => notify({ title: "Successfully updated Feed.", status: "success" }),
+        (error) => {
+          notify({
+            title: "Failed to update Feed",
+            message: "View console for additional information.",
+            status: "error",
+          })
+          console.error(error)
+        }
+      )
+    }
+  }
+
+  const deleteHandler = isCreate
+    ? undefined
+    : () =>
+        removeFeed({ id: id ?? -1 }).then(
+          () => {
+            notify({
+              title: "Successfully deleted Feed",
+              status: "success",
+              dismissAfter: 5000,
+              dismissible: true,
+            })
+            router.push(Routes.FeedsSettingsOverviewPage())
+          },
+          () =>
+            notify({
+              title: "Failed to delete Feed",
+              status: "error",
+              dismissAfter: 5000,
+              dismissible: true,
+            })
+        )
 
   return (
     <div
@@ -55,52 +124,11 @@ const SettingsForm = ({ id, isCreate }: Props) => {
       )}
     >
       <Form
-        onSubmit={(values: { name: string; url: string; loadIntervall: number | string }) => {
-          try {
-            new URL(values.url)
-          } catch {
-            console.error("invalid URL")
-            return
-          }
-          if (isCreate) {
-            createFeed({
-              ...values,
-              loadIntervall: Number.parseInt("" + values.loadIntervall, 10),
-            }).then(
-              () => {
-                notify({ title: "Successfully created Feed.", status: "success" })
-                router.push(Routes.FeedsSettingsOverviewPage())
-              },
-              (error) => {
-                notify({
-                  title: "Failed to create Feed",
-                  message: "View console for additional information.",
-                  status: "error",
-                })
-                console.error(error)
-              }
-            )
-          } else {
-            updateFeed({
-              id: feed!.id,
-              name: values.name,
-              loadIntervall: Number.parseInt("" + values.loadIntervall, 10),
-              url: values.url,
-            }).then(
-              () => notify({ title: "Successfully updated Feed.", status: "success" }),
-              (error) => {
-                notify({
-                  title: "Failed to update Feed",
-                  message: "View console for additional information.",
-                  status: "error",
-                })
-                console.error(error)
-              }
-            )
-          }
-        }}
+        onSubmit={submitHandler}
         initialValues={isCreate ? { url: "", name: "new Feed", loadIntervall: 60 } : feed}
         submitText={isCreate ? "Add new Feed" : "Update Settings"}
+        deleteText="Delete"
+        onDelete={deleteHandler}
       >
         <div className={clsx("flex", "flex-col", "font-semibold")}>
           <h3 className={clsx("font-semibold", "text-2xl")}>
