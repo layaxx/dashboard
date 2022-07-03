@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { getAntiCSRFToken, Link, Routes, useQuery } from "blitz"
 import { CheckCircleIcon, ExclamationCircleIcon, PlusCircleIcon } from "@heroicons/react/solid"
 import clsx from "clsx"
+import { useNotifications } from "reapop"
 import getStatus, { IStatusResult } from "../queries/getStatus"
 import Button from "app/core/components/Button"
 import Loader from "app/core/components/Loader"
@@ -51,6 +52,8 @@ const Warnings = () => {
 
   const [isLoadingRSS, setIsLoadingRSS] = useState(false)
 
+  const { notify } = useNotifications()
+
   const handleOnForceReload = async (force: boolean) => {
     window
       .fetch("/api/loadRSS" + (force ? "?force=true" : ""), {
@@ -59,6 +62,21 @@ const Warnings = () => {
           "anti-csrf": getAntiCSRFToken(),
         },
       })
+      .then(
+        async (result) => {
+          const { errors } = JSON.parse(await result.text())
+          console.log("hasErrors", errors)
+          notify({
+            title: "Successfully loaded Feeds" + (errors ? " (with Warnings)" : ""),
+            status: "success",
+            message: errors,
+          })
+        },
+        (error) => {
+          notify({ message: "Failed to load Feeds", status: "error" })
+          console.error(error)
+        }
+      )
       .finally(() => setIsLoadingRSS(false))
   }
 

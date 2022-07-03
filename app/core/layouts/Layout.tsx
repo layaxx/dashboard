@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { Fragment, useEffect } from "react"
 import { Head, BlitzLayout, Link, useRouter } from "blitz"
 import clsx from "clsx"
 import NotificationsSystem, { useNotifications, setUpNotifications, atalhoTheme } from "reapop"
@@ -54,12 +54,12 @@ const Layout: BlitzLayout<{ title?: string; heading: string }> = ({ title, child
             .map((element, index, array) => {
               const path = array.slice(0, index + 1).join("/")
               return (
-                <>
-                  <Link href={path || "/"} key={path}>
+                <Fragment key={path}>
+                  <Link href={path || "/"}>
                     <a>{element || "Home"}</a>
                   </Link>
                   <span className="mx-2">/</span>
-                </>
+                </Fragment>
               )
             })}
         </nav>

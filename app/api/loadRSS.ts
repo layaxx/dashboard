@@ -1,6 +1,5 @@
 import { BlitzApiRequest, BlitzApiResponse, getSession } from "blitz"
 import dayjs from "dayjs"
-// eslint-disable-next-line unicorn/prefer-node-protocol
 import { performance } from "perf_hooks"
 import db from "db"
 import { loadFeed } from "lib/feeds/loadRSSHelpers"
@@ -45,13 +44,15 @@ const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => 
 
   const after = performance.now()
 
+  const errors = results
+    .map((result) => (result.changes && result.changes.error) ?? false)
+    .filter(Boolean) as string[]
+
   await db.status.create({
     data: {
       loadTime: dayjs().toISOString(),
       loadDuration: after - before,
-      errors: results
-        .map((result) => (result.changes && result.changes.error) ?? false)
-        .filter(Boolean) as string[],
+      errors,
       updateCount: updated,
       insertCount: created,
     },
@@ -59,6 +60,6 @@ const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => 
 
   response.statusCode = 200
   response.setHeader("Content-Type", "application/json")
-  response.end(JSON.stringify({ results, timeElapsed: after - before }, undefined, 2))
+  response.end(JSON.stringify({ results, timeElapsed: after - before, errors }, undefined, 2))
 }
 export default handler
