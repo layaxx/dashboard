@@ -25,7 +25,8 @@ const FullscreenModal = ({ time, close }: Props) => {
         "justify-center",
         "left-0",
         "top-0",
-        "w-full"
+        "w-full",
+        "z-50"
       )}
       style={{ transition: "opacity 0.25s ease" }}
     >

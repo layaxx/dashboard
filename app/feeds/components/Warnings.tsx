@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
-import { getAntiCSRFToken, Link, Routes, useQuery } from "blitz"
+import { getAntiCSRFToken, invalidateQuery, Link, Routes, useQuery } from "blitz"
 import { CheckCircleIcon, ExclamationCircleIcon, PlusCircleIcon } from "@heroicons/react/solid"
 import clsx from "clsx"
 import { useNotifications } from "reapop"
+import getFeeds from "../queries/getFeeds"
 import getStatus, { IStatusResult } from "../queries/getStatus"
 import Button from "app/core/components/Button"
 import Loader from "app/core/components/Loader"
@@ -65,7 +66,7 @@ const Warnings = () => {
       .then(
         async (result) => {
           const { errors } = JSON.parse(await result.text())
-          console.log("hasErrors", errors)
+          invalidateQuery(getFeeds)
           notify({
             title: "Successfully loaded Feeds" + (errors ? " (with Warnings)" : ""),
             status: "success",
@@ -93,8 +94,10 @@ const Warnings = () => {
   return (
     <div className={clsx("flex", "items-center", "w-full")}>
       <Link href={Routes.FeedsStatusPage()}>
-        <a className={clsx("h-6", "w-6")}>
-          <WarningsIcon result={result} isLoading={isLoading} isError={isError} />
+        <a>
+          <Button icon={<WarningsIcon result={result} isLoading={isLoading} isError={isError} />}>
+            Status
+          </Button>
         </a>
       </Link>
       {isLoadingRSS ? (
@@ -104,8 +107,8 @@ const Warnings = () => {
       )}
 
       <Link href={Routes.FeedsAddPage()}>
-        <a className={clsx("h-6", "w-6")}>
-          <PlusCircleIcon color="green" />
+        <a>
+          <Button icon={<PlusCircleIcon color="green" />}>Add</Button>
         </a>
       </Link>
     </div>

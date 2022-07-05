@@ -1,4 +1,5 @@
 import { ReactChild, Suspense, useState } from "react"
+import { Link, Routes } from "blitz"
 import { CogIcon } from "@heroicons/react/solid"
 import clsx from "clsx"
 import Loader from "../Loader"
@@ -50,10 +51,11 @@ const Aside = ({ hideNavbar, setHideNavbar, title, feeds }: Props) => {
         >
           {title}
         </h1>
-        <CogIcon
-          className={clsx("active:animate-spin", "h-7", "ml-auto", "w-auto")}
-          onClick={() => setIsSettingsOpen((pre) => !pre)}
-        />
+        <Link href={Routes.FeedsSettingsOverviewPage()}>
+          <a className="w-full">
+            <CogIcon className={clsx("active:animate-spin", "h-7", "ml-auto")} />
+          </a>
+        </Link>
         {isSettingsOpen && <SettingsModal setIsSettingsOpen={setIsSettingsOpen} />}
       </section>
       <section className={clsx("flex", "flex-1", "flex-col", "w-full")}>

@@ -4,9 +4,10 @@ import db from "db"
 
 const UpdateFeed = z.object({
   id: z.number(),
-  url: z.string(),
-  name: z.string(),
-  loadIntervall: z.number(),
+  url: z.string().optional(),
+  name: z.string().optional(),
+  number: z.number().optional(),
+  loadIntervall: z.number().optional(),
 })
 
 export default resolver.pipe(

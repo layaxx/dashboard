@@ -53,8 +53,16 @@ const SettingsForm = ({ id, isCreate }: Props) => {
         loadIntervall: Number.parseInt("" + values.loadIntervall, 10),
       }).then(
         () => {
-          notify({ title: "Successfully created Feed.", status: "success" })
-          router.push(Routes.FeedsSettingsOverviewPage())
+          fetch("/api/loadRSS?force=true")
+            .then(
+              () => notify({ title: "Successfully created Feed.", status: "success" }),
+              () =>
+                notify({
+                  title: "Successfully created Feed but failed initial Load.",
+                  status: "warning",
+                })
+            )
+            .finally(() => router.push(Routes.FeedsSettingsOverviewPage()))
         },
         (error) => {
           notify({
@@ -88,7 +96,7 @@ const SettingsForm = ({ id, isCreate }: Props) => {
   const deleteHandler = isCreate
     ? undefined
     : () =>
-        removeFeed({ id: id ?? -1 }).then(
+        removeFeed({ id: id ?? -1, removeEntries: true }).then(
           () => {
             notify({
               title: "Successfully deleted Feed",
