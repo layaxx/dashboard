@@ -2,6 +2,7 @@ import { useState } from "react"
 import { setQueryData, useMutation } from "blitz"
 import { Feedentry, Feedoption } from "@prisma/client"
 import clsx from "clsx"
+import parse, { HTMLReactParserOptions, Element } from "html-react-parser"
 import ItemControls from "./ItemControls"
 import ItemInformation from "./ItemInformation"
 import readItem from "app/feeds/mutations/readItem"
@@ -43,6 +44,22 @@ const Item = ({ item, settings }: ItemProps) => {
 
   const read = genericReadStateChange(true)
   const unread = genericReadStateChange(false)
+
+  const options: HTMLReactParserOptions = {
+    replace: (domNode) => {
+      if (domNode instanceof Element && domNode.attribs.href && domNode.name === "a") {
+        domNode.attribs = { target: "_blank", rel: "noopener", href: domNode.attribs.href }
+        return domNode
+      }
+    },
+  }
+
+  let content: string | JSX.Element | JSX.Element[]
+  try {
+    content = parse(item.text, options)
+  } catch {
+    content = <p>Failed to parse Text</p>
+  }
 
   return (
     <div key={item.id} className="border-b-2">
@@ -103,8 +120,9 @@ const Item = ({ item, settings }: ItemProps) => {
             "prose",
             "px-2"
           )}
-          dangerouslySetInnerHTML={{ __html: item.text }}
-        />
+        >
+          {content}
+        </article>
       )}
     </div>
   )
