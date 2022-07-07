@@ -13,8 +13,10 @@ export default resolver.pipe(
   resolver.zod(CreateFeed),
   resolver.authorize(),
   async ({ name, url, loadIntervall }) => {
+    const maxPositionResult = await db.feed.aggregate({ _max: { position: true } })
+    const position = (maxPositionResult._max.position ?? -1) + 1
     return await db.feed.create({
-      data: { name, url, loadIntervall, number: -1, lastLoad: dayjs(0).toDate() },
+      data: { name, url, loadIntervall, position, lastLoad: dayjs(0).toDate() },
     })
   }
 )

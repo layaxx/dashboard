@@ -69,11 +69,12 @@ model Feed {
   id            Int         @id @default(autoincrement())
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
-  number        Int
+  position      Int
   name          String
   url           String      @unique
   lastLoad      DateTime
   loadIntervall Int         @default(60)
+  etag          String?
   Feedentry     Feedentry[]
 }
 

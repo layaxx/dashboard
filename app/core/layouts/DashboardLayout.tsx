@@ -25,6 +25,10 @@ const DashboardLayout = ({ items, feeds }: Props) => {
       defaultProps: {
         position: "top-right",
         dismissible: true,
+        dismissAfter: 5000,
+        status: "info",
+        allowHTML: false,
+        showDismissButton: false,
       },
     })
   }, [])

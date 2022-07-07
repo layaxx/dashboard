@@ -2,7 +2,7 @@ import { resolver } from "blitz"
 import db from "db"
 
 export default resolver.pipe(resolver.authorize(), async () => {
-  const allFeeds = await db.feed.findMany({ orderBy: { number: "asc" } })
+  const allFeeds = await db.feed.findMany({ orderBy: { position: "asc" } })
   const unreadCounts = await db.feedentry.groupBy({
     by: ["feedId"],
     _count: { id: true },

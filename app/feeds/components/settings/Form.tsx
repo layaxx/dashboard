@@ -1,9 +1,9 @@
 import { Routes, useMutation, useQuery, useRouter } from "blitz"
 import clsx from "clsx"
 import { FormApi } from "final-form"
-import { Field } from "react-final-form"
 import { useNotifications } from "reapop"
 import Form from "app/core/components/Form"
+import FormField from "app/core/components/FormField"
 import Loader from "app/core/components/Loader"
 import createFeedMutation from "app/feeds/mutations/createFeed"
 import removeFeedMutation from "app/feeds/mutations/deleteFeed"
@@ -40,10 +40,6 @@ const SettingsForm = ({ id, isCreate }: Props) => {
     return <p>Invalid id provided: {id}</p>
   }
 
-  const styledInput = (props: any) => (
-    <input {...props.input} className={clsx("text-right", "w-full")} />
-  )
-
   const submitHandler = async (
     values: { name: string; url: string; loadIntervall: number | string },
     form: FormApi
@@ -52,12 +48,20 @@ const SettingsForm = ({ id, isCreate }: Props) => {
       new URL(values.url)
     } catch {
       console.error("invalid URL")
-      return
+      return { url: "Invalid URL" }
     }
     if (isCreate) {
       const shouldGetNameFromFeed: boolean = form.getFieldState("name")?.pristine ?? true
       if (shouldGetNameFromFeed) {
-        const [title, ttl] = await getTitleAndTTL({ url: values.url })
+        let hasError = false
+        const [title, ttl] = await getTitleAndTTL({ url: values.url }).catch(() => {
+          notify({ title: "Failed to fetch from url.", status: "error" })
+          hasError = true
+          return [undefined, undefined]
+        })
+        if (hasError) {
+          return { url: "Failed to fetch from URL" }
+        }
         if (title) {
           values.name = title
         }
@@ -118,8 +122,6 @@ const SettingsForm = ({ id, isCreate }: Props) => {
             notify({
               title: "Successfully deleted Feed",
               status: "success",
-              dismissAfter: 5000,
-              dismissible: true,
             })
             router.push(Routes.FeedsSettingsOverviewPage())
           },
@@ -127,8 +129,6 @@ const SettingsForm = ({ id, isCreate }: Props) => {
             notify({
               title: "Failed to delete Feed",
               status: "error",
-              dismissAfter: 5000,
-              dismissible: true,
             })
         )
 
@@ -159,26 +159,17 @@ const SettingsForm = ({ id, isCreate }: Props) => {
           <h3 className={clsx("font-semibold", "text-2xl")}>
             {isCreate ? "Add new Feed" : "Edit Settings"}
           </h3>
-          <label className={clsx("flex", "flex-row")}>
-            Name:{" "}
-            <Field name="name" type="text">
-              {styledInput}
-            </Field>
-          </label>
 
-          <label className={clsx("flex", "flex-row")}>
-            URL:{" "}
-            <Field name="url" type="url">
-              {styledInput}
-            </Field>
-          </label>
+          <FormField name="name" label="Name: " type="Text" />
 
-          <label className={clsx("flex", "flex-row")}>
-            LoadIntervall:{" "}
-            <Field name="loadIntervall" type="number">
-              {styledInput}
-            </Field>
-          </label>
+          <FormField name="url" type="url" label="URL: " />
+
+          <FormField
+            name="loadIntervall"
+            type="number"
+            label="Load Intervall: "
+            labelProps={{ style: { whiteSpace: "pre" } }}
+          />
         </div>
       </Form>
     </div>

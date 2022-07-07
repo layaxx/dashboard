@@ -12,6 +12,7 @@ module.exports = {
         secondary: "var(--color-secondary)",
         error: "#b91c1c",
         warning: "#f97316",
+        success: "#15803d",
       },
     },
   },

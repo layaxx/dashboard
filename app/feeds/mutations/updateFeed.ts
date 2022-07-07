@@ -6,7 +6,7 @@ const UpdateFeed = z.object({
   id: z.number(),
   url: z.string().optional(),
   name: z.string().optional(),
-  number: z.number().optional(),
+  position: z.number().optional(),
   loadIntervall: z.number().optional(),
 })
 

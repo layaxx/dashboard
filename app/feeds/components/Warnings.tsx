@@ -25,7 +25,7 @@ const WarningsIcon = ({ result, isLoading, isError }: Props) => {
   }
 
   if (isError || result.errors.length > 0) {
-    return <ExclamationCircleIcon color={isError ? "gray" : "red"} />
+    return <ExclamationCircleIcon className={clsx(!isError && "text-error")} />
   }
 
   const isAverageLoadTimeTooLong =
@@ -36,7 +36,7 @@ const WarningsIcon = ({ result, isLoading, isError }: Props) => {
   if (isAverageLoadTimeTooLong || isTooMuchTimeBetweenLoads) {
     return (
       <>
-        <ExclamationCircleIcon color="orange" />
+        <ExclamationCircleIcon className="text-warning" />
         {isAverageLoadTimeTooLong &&
           "Average Load time is " + result.averageLoadTimeInMilliSeconds + "ms"}
         {isTooMuchTimeBetweenLoads &&
@@ -45,7 +45,7 @@ const WarningsIcon = ({ result, isLoading, isError }: Props) => {
     )
   }
 
-  return <CheckCircleIcon color="green" />
+  return <CheckCircleIcon className="text-success" />
 }
 
 const Warnings = () => {
@@ -68,7 +68,7 @@ const Warnings = () => {
           const { errors } = JSON.parse(await result.text())
           invalidateQuery(getFeeds)
           notify({
-            title: "Successfully loaded Feeds" + (errors ? " (with Warnings)" : ""),
+            title: "Loaded Feeds" + (errors ? " (with Errors)" : ""),
             status: "success",
             message: errors,
           })
@@ -108,7 +108,7 @@ const Warnings = () => {
 
       <Link href={Routes.FeedsAddPage()}>
         <a>
-          <Button icon={<PlusCircleIcon color="green" />}>Add</Button>
+          <Button icon={<PlusCircleIcon className="text-success" />}>Add</Button>
         </a>
       </Link>
     </div>

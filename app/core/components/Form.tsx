@@ -44,7 +44,7 @@ export function Form<S extends z.ZodType<any, any>>({
           {children}
 
           {submitError && (
-            <div role="alert" style={{ color: "red" }}>
+            <div role="alert" className="text-error">
               {submitError}
             </div>
           )}

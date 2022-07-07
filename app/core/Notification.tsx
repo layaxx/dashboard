@@ -1,6 +1,11 @@
 import { Image } from "blitz"
+import {
+  CheckCircleIcon,
+  ExclamationCircleIcon,
+  InformationCircleIcon,
+} from "@heroicons/react/outline"
 import clsx from "clsx"
-import { Notification as NotificationType } from "reapop"
+import { Notification as NotificationType, Status } from "reapop"
 import { DismissNotification } from "reapop/dist/components/NotificationsSystem"
 
 type Props = {
@@ -38,6 +43,23 @@ const Button = ({ text, onClick }: ButtonProps) => (
   </button>
 )
 
+const getIcon = (status: Status) => {
+  switch (status) {
+    case "error":
+      return <ExclamationCircleIcon className="text-error" />
+    case "info":
+      return <InformationCircleIcon />
+    case "success":
+      return <CheckCircleIcon className="text-success" />
+    case "warning":
+      return <ExclamationCircleIcon className="text-warning" />
+    case "loading":
+    case "none":
+    default:
+      return <></>
+  }
+}
+
 const Notification = ({ notification, dismissNotification }: Props) => {
   return (
     <div
@@ -55,7 +77,7 @@ const Notification = ({ notification, dismissNotification }: Props) => {
     >
       <div className={clsx("flex-1", "p-4", "w-0")}>
         <div className={clsx("flex", "items-start")}>
-          {notification.image && (
+          {notification.image ? (
             <div className={clsx("pt-0.5", "shrink-0")}>
               <Image
                 className={clsx("h-10", "rounded-full", "w-10")}
@@ -63,10 +85,17 @@ const Notification = ({ notification, dismissNotification }: Props) => {
                 alt=""
               />
             </div>
+          ) : (
+            <div className={clsx("h-auto", "pt-0.5", "shrink-0", "w-6")}>
+              {getIcon(notification.status)}
+            </div>
           )}
-          <div className={clsx("flex-1", "ml-3")}>
+
+          <div className={clsx("flex-1", "ml-3", "self-center")}>
             <p className={clsx("font-medium", "text-gray-900", "text-sm")}>{notification.title}</p>
-            <p className={clsx("mt-1", "text-gray-500", "text-sm")}>{notification.message}</p>
+            {notification.message && (
+              <p className={clsx("mt-1", "text-gray-500", "text-sm")}>{notification.message}</p>
+            )}
           </div>
         </div>
       </div>

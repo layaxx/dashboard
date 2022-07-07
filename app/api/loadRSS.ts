@@ -3,7 +3,7 @@ import dayjs from "dayjs"
 import { performance } from "perf_hooks"
 import db from "db"
 import { loadFeed } from "lib/feeds/loadRSSHelpers"
-import { Result } from "lib/feeds/types"
+import { LoadFeedStatus, Result } from "lib/feeds/types"
 
 const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => {
   const session = await getSession(request, response)
@@ -28,24 +28,26 @@ const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => 
     feeds.map(async (feed) => ({
       name: feed.name,
       id: feed.id,
-      changes: await loadFeed(feed, force),
+      ...(await loadFeed(feed, force)),
     }))
   )
 
-  const { updated, created } = results.reduce(
-    (previous, { changes }) => {
-      return {
-        updated: previous.updated + changes.updated,
-        created: previous.created + changes.created,
-      }
-    },
-    { updated: 0, created: 0 }
-  )
+  const { updated, created } = results
+    .filter((result) => result.changes)
+    .reduce(
+      ({ updated, created }, current) => {
+        return {
+          updated: updated + (current.changes?.updated ?? 0),
+          created: created + (current.changes?.created ?? 0),
+        }
+      },
+      { updated: 0, created: 0 }
+    )
 
   const after = performance.now()
 
   const errors = results
-    .map((result) => (result.changes && result.changes.error) ?? false)
+    .map((result) => (result.status === LoadFeedStatus.ERROR && result.statusMessage) ?? false)
     .filter(Boolean) as string[]
 
   await db.status.create({

@@ -21,14 +21,14 @@ const SettingsOverview = () => {
 
   const [updateFeed] = useMutation(updateFeedMutation)
 
-  const anyNotInCorrectOrder = list.map((feed, index) => feed.number !== index).some(Boolean)
+  const anyNotInCorrectOrder = list.map((feed, index) => feed.position !== index).some(Boolean)
   const { notify } = useNotifications()
 
   const saveCurrentOrder = async () => {
     await Promise.all(
       list.map((feed, index) => {
-        if (feed.number !== index) {
-          return updateFeed({ number: index, id: feed.id })
+        if (feed.position !== index) {
+          return updateFeed({ position: index, id: feed.id })
         }
       })
     )

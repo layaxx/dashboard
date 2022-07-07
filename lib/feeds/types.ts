@@ -1,12 +1,16 @@
-export type LoadFeedResult = {
-  error: string | undefined
-  updated: number
-  created: number
-  ignored: number
+export enum LoadFeedStatus {
+  SKIPPED = "skipped",
+  UPDATED = "updated",
+  ERROR = "error",
 }
 
-export type Result = {
+export type LoadFeedResult = {
+  status: LoadFeedStatus
+  statusMessage?: string
+  changes?: { updated: number; created: number; ignored: number }
+}
+
+export type Result = LoadFeedResult & {
   name: string
   id: number
-  changes: LoadFeedResult
 }

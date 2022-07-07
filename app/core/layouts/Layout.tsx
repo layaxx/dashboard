@@ -12,6 +12,10 @@ const Layout: BlitzLayout<{ title?: string; heading: string }> = ({ title, child
       defaultProps: {
         position: "top-right",
         dismissible: true,
+        dismissAfter: 5000,
+        status: "info",
+        allowHTML: false,
+        showDismissButton: false,
       },
     })
   }, [])
