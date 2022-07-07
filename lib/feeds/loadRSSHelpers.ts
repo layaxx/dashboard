@@ -60,12 +60,7 @@ export const loadFeed = async (feed: Feed, forceReload: boolean): Promise<LoadFe
 
   let content
   try {
-    content = await fetch(feed.url, {
-      headers: new Headers({
-        Accept: "text/xml",
-        "user-agent": "dashboard-rss-reader",
-      }),
-    }).then((response) => response.text())
+    content = await fetchFromURL(feed.url)
   } catch {
     console.error("Encountered an error while fetching " + feed.url)
     return { ...defaultReturnValue, error: "Failed to fetch from url " + feed.url }
@@ -133,4 +128,35 @@ function getSummaryFromParsedItem(item: Parser.Item): string {
   }
 
   return getContentFromParsedItem(item).slice(0, summaryLength) + "..." // TODO: content could be html
+}
+
+function fetchFromURL(url: string) {
+  return fetch(url, {
+    headers: new Headers({
+      Accept: "text/xml",
+      "user-agent": "dashboard-rss-reader",
+    }),
+  }).then((response) => response.text())
+}
+
+export async function getTitleAndTTLFromFeed(
+  url: string
+): Promise<[string | undefined, string | undefined]> {
+  let content
+  try {
+    content = await fetchFromURL(url)
+  } catch {
+    console.error("Encountered an error while fetching " + url)
+    return [undefined, undefined]
+  }
+
+  let parsedFeed
+  try {
+    parsedFeed = await new Parser().parseString(content)
+  } catch (error) {
+    console.error("Encountered an error while parsing " + url, error)
+    return [undefined, undefined]
+  }
+
+  return [parsedFeed.title, parsedFeed.ttl]
 }

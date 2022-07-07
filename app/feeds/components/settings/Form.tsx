@@ -1,11 +1,13 @@
 import { Routes, useMutation, useQuery, useRouter } from "blitz"
 import clsx from "clsx"
+import { FormApi } from "final-form"
 import { Field } from "react-final-form"
 import { useNotifications } from "reapop"
 import Form from "app/core/components/Form"
 import Loader from "app/core/components/Loader"
 import createFeedMutation from "app/feeds/mutations/createFeed"
 import removeFeedMutation from "app/feeds/mutations/deleteFeed"
+import getTitleAndTTLMutation from "app/feeds/mutations/getInfoFromFeedURL"
 import updateFeedMutation from "app/feeds/mutations/updateFeed"
 import getFeed from "app/feeds/queries/getFeed"
 
@@ -21,6 +23,8 @@ const SettingsForm = ({ id, isCreate }: Props) => {
       enabled: !isCreate,
     }
   )
+
+  const [getTitleAndTTL] = useMutation(getTitleAndTTLMutation)
 
   const [createFeed] = useMutation(createFeedMutation)
   const [updateFeed] = useMutation(updateFeedMutation)
@@ -40,7 +44,10 @@ const SettingsForm = ({ id, isCreate }: Props) => {
     <input {...props.input} className={clsx("text-right", "w-full")} />
   )
 
-  const submitHandler = (values: { name: string; url: string; loadIntervall: number | string }) => {
+  const submitHandler = async (
+    values: { name: string; url: string; loadIntervall: number | string },
+    form: FormApi
+  ) => {
     try {
       new URL(values.url)
     } catch {
@@ -48,6 +55,16 @@ const SettingsForm = ({ id, isCreate }: Props) => {
       return
     }
     if (isCreate) {
+      const shouldGetNameFromFeed: boolean = form.getFieldState("name")?.pristine ?? true
+      if (shouldGetNameFromFeed) {
+        const [title, ttl] = await getTitleAndTTL({ url: values.url })
+        if (title) {
+          values.name = title
+        }
+        if (ttl && Number.parseInt(ttl, 10)) {
+          values.loadIntervall = ttl
+        }
+      }
       createFeed({
         ...values,
         loadIntervall: Number.parseInt("" + values.loadIntervall, 10),
