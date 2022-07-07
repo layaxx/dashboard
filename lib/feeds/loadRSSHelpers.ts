@@ -1,6 +1,7 @@
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import Parser from "rss-to-js"
+import xss, { whiteList } from "xss"
 import { LoadFeedResult, LoadFeedStatus } from "./types"
 import db, { Feed } from "db"
 import summaryLength from "lib/config/feeds/summaryLength"
@@ -25,13 +26,21 @@ export const handleItem = async (item: Parser.Item, feed: Feed): Promise<HandleI
   }
   const databaseResponse = await db.feedentry.findUnique({ where: { id } })
   if (!databaseResponse) {
+    const XSSOptions = {
+      whiteList: {
+        a: ["href", "title", "target"],
+        picture: [],
+        source: ["type", "srcset", "sizes"],
+        ...whiteList,
+      },
+    }
     await db.feedentry.create({
       data: {
         id,
-        text: getContentFromParsedItem(item),
-        title: item.title ?? "No Title provided",
+        text: xss(getContentFromParsedItem(item), XSSOptions),
+        title: xss(item.title ?? "No Title provided", XSSOptions),
         link: getLinkFromParsedItem(item, feed.url),
-        summary: getSummaryFromParsedItem(item),
+        summary: xss(getSummaryFromParsedItem(item), XSSOptions),
         feedId: feed.id,
         createdAt: dayjs(item.pubDate).toISOString(),
       },

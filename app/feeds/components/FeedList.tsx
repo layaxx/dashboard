@@ -1,6 +1,5 @@
 import { FC } from "react"
-import { useQuery } from "blitz"
-import { useRouter } from "next/dist/client/router"
+import { useQuery, useRouter } from "blitz"
 import getFeeds from "../queries/getFeeds"
 import FeedListItem from "./FeedListItem"
 import { LOCALSTORAGE_FEEDID, useSharedState } from "app/core/hooks/store"
