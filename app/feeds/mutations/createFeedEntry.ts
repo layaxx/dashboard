@@ -1,7 +1,9 @@
 import { resolver } from "blitz"
 import dayjs from "dayjs"
 import { z } from "zod"
+import { createHash } from "crypto"
 import db from "db"
+import { cleanXSS } from "lib/feeds/feedHelpers"
 
 const CreateFeedEntry = z.object({
   id: z.string(),
@@ -23,13 +25,16 @@ export default resolver.pipe(
       data: {
         id,
         link,
-        summary,
-        text,
-        title,
+        summary: cleanXSS(summary),
+        text: cleanXSS(text),
+        title: cleanXSS(title),
         feedId,
         isArchived,
         updatedAt,
         createdAt,
+        preXSSHash: createHash("sha1")
+          .update(text + summary)
+          .digest("hex"),
       },
     })
   }

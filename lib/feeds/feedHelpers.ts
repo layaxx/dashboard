@@ -1,4 +1,5 @@
 import Parser from "rss-to-js"
+import xss, { whiteList } from "xss"
 import summaryLength from "lib/config/feeds/summaryLength"
 
 export function idAsLinkIfSensible(id: string | undefined): string | undefined {
@@ -38,4 +39,17 @@ export function getSummaryFromParsedItem(item: Parser.Item): string {
   }
 
   return getContentFromParsedItem(item).slice(0, summaryLength) + "..." // TODO: content could be html
+}
+
+const XSSOptions = {
+  whiteList: {
+    a: ["href", "title", "target"],
+    picture: [],
+    source: ["type", "srcset", "sizes"],
+    ...whiteList,
+  },
+}
+
+export function cleanXSS(string: string) {
+  return xss(string, XSSOptions)
 }

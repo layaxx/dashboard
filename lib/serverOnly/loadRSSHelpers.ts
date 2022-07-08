@@ -3,7 +3,7 @@ import { Prisma } from "@prisma/client"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import Parser from "rss-to-js"
-import xss, { whiteList } from "xss"
+import { createHash } from "crypto"
 import { LoadFeedResult, LoadFeedStatus } from "../feeds/types"
 import createManyFeedEntries from "app/feeds/mutations/createManyFeedEntries"
 import updateFeedentry from "app/feeds/mutations/updateFeedentry"
@@ -21,21 +21,12 @@ export const handleItem = (item: Parser.Item, feed: Feed): Prisma.FeedentryUnche
   if (!id) {
     console.error("No ID was provided", item)
   }
-
-  const XSSOptions = {
-    whiteList: {
-      a: ["href", "title", "target"],
-      picture: [],
-      source: ["type", "srcset", "sizes"],
-      ...whiteList,
-    },
-  }
   return {
     id,
-    text: xss(getContentFromParsedItem(item), XSSOptions),
-    title: xss(item.title ?? "No Title provided", XSSOptions),
+    text: getContentFromParsedItem(item),
+    title: item.title ?? "No Title provided",
     link: getLinkFromParsedItem(item, feed.url),
-    summary: xss(getSummaryFromParsedItem(item), XSSOptions),
+    summary: getSummaryFromParsedItem(item),
     feedId: feed.id,
     createdAt: dayjs(item.pubDate).toISOString(),
   }
@@ -97,8 +88,7 @@ export const loadFeed = async (
 
   const alreadyExistingEntries = await db.feedentry.findMany({
     where: { id: { in: items.map((item) => item.id) } },
-    select: { id: true, text: true },
-    /* TODO: probably should hash? */
+    select: { id: true, preXSSHash: true },
   })
 
   const existingEntryIds = new Set(alreadyExistingEntries.map((entry) => entry.id))
@@ -120,8 +110,21 @@ export const loadFeed = async (
     .filter((item) => existingEntryIds.has(item.id))
     .map((item): Prisma.FeedentryUncheckedUpdateInput | undefined => {
       const oldItem = alreadyExistingEntries.find((oldItem) => item.id === oldItem.id)
-      if (oldItem && item.text && oldItem.text !== item.text) {
-        return { ...oldItem, text: item.text, isArchived: false, updatedAt: dayjs().toISOString() }
+      if (oldItem && item.text) {
+        const preXSSHash = createHash("sha1")
+          .update(item.text + item.summary)
+          .digest("hex")
+
+        if (oldItem.preXSSHash !== item.preXSSHash) {
+          return {
+            id: oldItem.id,
+            text: item.text,
+            summary: item.summary,
+            isArchived: false,
+            preXSSHash,
+            updatedAt: dayjs().toISOString(),
+          }
+        }
       }
     })
     .filter(

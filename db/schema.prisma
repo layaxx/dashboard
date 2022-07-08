@@ -99,6 +99,7 @@ model Feedentry {
   feed       Feed     @relation(fields: [feedId], references: [id])
   title      String
   text       String
+  preXSSHash String   @default("")
   summary    String
   link       String
   isArchived Boolean  @default(false)
