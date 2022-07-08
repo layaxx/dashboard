@@ -8,6 +8,8 @@ const UpdateFeed = z.object({
   name: z.string().optional(),
   position: z.number().optional(),
   loadIntervall: z.number().optional(),
+  etag: z.string().optional(),
+  lastLoad: z.string().optional(),
 })
 
 export default resolver.pipe(

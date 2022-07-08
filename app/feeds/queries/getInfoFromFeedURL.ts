@@ -1,6 +1,6 @@
 import { resolver } from "blitz"
 import { z } from "zod"
-import { getTitleAndTTLFromFeed } from "lib/feeds/loadRSSHelpers"
+import { getTitleAndTTLFromFeed } from "lib/serverOnly/loadRSSHelpers"
 
 const GetFeed = z.object({
   url: z.string(),

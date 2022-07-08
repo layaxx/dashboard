@@ -72,6 +72,7 @@ const FeedsImportDataPage: BlitzPage = () => {
         "Feeds."
       )
     }
+    let failure = false
     const idLookup = new Map()
     const feeds = await Promise.all(
       parsedContent.feeds.map(async (feed: Feed) => {
@@ -84,7 +85,16 @@ const FeedsImportDataPage: BlitzPage = () => {
         idLookup.set(feed.id, result.id)
         return result
       })
-    )
+    ).catch((error) => {
+      console.error(error)
+      notify({ title: "Failed to Import Feeds.", status: "error" })
+      failure = true
+      return []
+    })
+
+    if (failure) {
+      return
+    }
 
     const feedEntries = await Promise.all(
       parsedContent.feedEntries.map(
@@ -115,7 +125,15 @@ const FeedsImportDataPage: BlitzPage = () => {
           return result
         }
       )
-    )
+    ).catch((error) => {
+      console.error(error)
+      notify({ title: "Failed to Import Feedentries.", status: "error" })
+      failure = true
+      return []
+    })
+    if (failure) {
+      return
+    }
 
     notify({
       title: "Success!",

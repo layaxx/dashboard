@@ -1,11 +1,11 @@
 import { Fragment } from "react"
 import { useQuery, useInfiniteQuery, ErrorComponent } from "blitz"
+import getFeedentries from "../queries/getFeedentries"
+import getRecentlyReadFeedentries from "../queries/getRecentlyReadFeedentries"
 import Item from "./items/Item"
 import Button from "app/core/components/Button"
 import Loader from "app/core/components/Loader"
 import { useSharedState } from "app/core/hooks/store"
-import getFeedentries from "app/feedentries/queries/getFeedentries"
-import getRecentlyReadFeedentries from "app/feedentries/queries/getRecentlyReadFeedentries"
 import getFeedoption from "app/feedoptions/queries/getFeedoption"
 import { ALL_FEEDS_ID, RECENTLY_READ_ID } from "lib/config/feeds/feedIDs"
 

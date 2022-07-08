@@ -1,11 +1,11 @@
-import { BlitzApiRequest, BlitzApiResponse, getSession } from "blitz"
+import { BlitzApiHandler, getSession } from "blitz"
 import dayjs from "dayjs"
 import { performance } from "perf_hooks"
 import db from "db"
-import { loadFeed } from "lib/feeds/loadRSSHelpers"
 import { LoadFeedStatus, Result } from "lib/feeds/types"
+import { loadFeed } from "lib/serverOnly/loadRSSHelpers"
 
-const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => {
+const handler: BlitzApiHandler = async (request, response) => {
   const session = await getSession(request, response)
 
   if (
@@ -15,12 +15,13 @@ const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => 
     console.log("denied Access")
     response.statusCode = 403
     response.statusMessage = "Please log in to use this API route"
-    return response.end()
+    response.end()
+    return
   }
 
-  const before = performance.now()
+  const timeStampBefore = performance.now()
 
-  const force: boolean = Boolean(request.query["force"])
+  const force = Boolean(request.query["force"])
 
   const feeds = await db.feed.findMany()
 
@@ -28,7 +29,7 @@ const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => 
     feeds.map(async (feed) => ({
       name: feed.name,
       id: feed.id,
-      ...(await loadFeed(feed, force)),
+      ...(await loadFeed(feed, force, { req: request, res: response })),
     }))
   )
 
@@ -44,7 +45,7 @@ const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => 
       { updated: 0, created: 0 }
     )
 
-  const after = performance.now()
+  const timeStampAfter = performance.now()
 
   const errors = results
     .map((result) => (result.status === LoadFeedStatus.ERROR && result.statusMessage) ?? false)
@@ -53,7 +54,7 @@ const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => 
   await db.status.create({
     data: {
       loadTime: dayjs().toISOString(),
-      loadDuration: after - before,
+      loadDuration: timeStampAfter - timeStampBefore,
       errors,
       updateCount: updated,
       insertCount: created,
@@ -62,6 +63,7 @@ const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => 
 
   response.statusCode = 200
   response.setHeader("Content-Type", "application/json")
-  response.end(JSON.stringify({ results, timeElapsed: after - before, errors }, undefined, 2))
+  response.json({ results, timeElapsed: timeStampAfter - timeStampBefore, errors })
+  response.end()
 }
 export default handler

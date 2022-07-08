@@ -14,3 +14,5 @@ export type Result = LoadFeedResult & {
   name: string
   id: number
 }
+
+export type HandleItemResult = { updated: number; created: number; ignored: number }

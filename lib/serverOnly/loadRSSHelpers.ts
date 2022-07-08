@@ -1,66 +1,54 @@
+import { invokeWithMiddleware, NextApiRequest, NextApiResponse } from "blitz"
+import { Prisma } from "@prisma/client"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import Parser from "rss-to-js"
 import xss, { whiteList } from "xss"
-import { LoadFeedResult, LoadFeedStatus } from "./types"
+import { LoadFeedResult, LoadFeedStatus } from "../feeds/types"
+import createManyFeedEntries from "app/feeds/mutations/createManyFeedEntries"
+import updateFeedentry from "app/feeds/mutations/updateFeedentry"
 import db, { Feed } from "db"
-import summaryLength from "lib/config/feeds/summaryLength"
+import {
+  getContentFromParsedItem,
+  getLinkFromParsedItem,
+  getSummaryFromParsedItem,
+} from "lib/feeds/feedHelpers"
 
 dayjs.extend(utc)
 
-export function idAsLinkIfSensible(id: string | undefined): string | undefined {
-  try {
-    new URL(id ?? "not a valid url")
-    return id
-  } catch {
-    return undefined
-  }
-}
-
-type HandleItemResult = { updated: number; created: number; ignored: number }
-
-export const handleItem = async (item: Parser.Item, feed: Feed): Promise<HandleItemResult> => {
+export const handleItem = (item: Parser.Item, feed: Feed): Prisma.FeedentryUncheckedCreateInput => {
   const id = item.guid ?? item.id ?? item.link
   if (!id) {
     console.error("No ID was provided", item)
   }
-  const databaseResponse = await db.feedentry.findUnique({ where: { id } })
-  if (!databaseResponse) {
-    const XSSOptions = {
-      whiteList: {
-        a: ["href", "title", "target"],
-        picture: [],
-        source: ["type", "srcset", "sizes"],
-        ...whiteList,
-      },
-    }
-    await db.feedentry.create({
-      data: {
-        id,
-        text: xss(getContentFromParsedItem(item), XSSOptions),
-        title: xss(item.title ?? "No Title provided", XSSOptions),
-        link: getLinkFromParsedItem(item, feed.url),
-        summary: xss(getSummaryFromParsedItem(item), XSSOptions),
-        feedId: feed.id,
-        createdAt: dayjs(item.pubDate).toISOString(),
-      },
-    })
 
-    return { created: 1, updated: 0, ignored: 0 }
-  } else if (item.description && !(item.description === databaseResponse.text)) {
-    await db.feedentry.update({
-      data: { text: item.description },
-      where: { id: item.id },
-    })
-
-    return { updated: 1, created: 0, ignored: 0 }
-  } else {
-    return { updated: 0, created: 0, ignored: 1 }
+  const XSSOptions = {
+    whiteList: {
+      a: ["href", "title", "target"],
+      picture: [],
+      source: ["type", "srcset", "sizes"],
+      ...whiteList,
+    },
+  }
+  return {
+    id,
+    text: xss(getContentFromParsedItem(item), XSSOptions),
+    title: xss(item.title ?? "No Title provided", XSSOptions),
+    link: getLinkFromParsedItem(item, feed.url),
+    summary: xss(getSummaryFromParsedItem(item), XSSOptions),
+    feedId: feed.id,
+    createdAt: dayjs(item.pubDate).toISOString(),
   }
 }
 
-export const loadFeed = async (feed: Feed, forceReload: boolean): Promise<LoadFeedResult> => {
-  const defaultReturnValue = { updated: 0, created: 0, ignored: 0, error: undefined }
+export const loadFeed = async (
+  feed: Feed,
+  forceReload: boolean,
+  { req, res }: { req: NextApiRequest; res: NextApiResponse }
+): Promise<LoadFeedResult> => {
+  if (!req || !res) {
+    throw new Error("Missing ctx info")
+  }
 
   const minutesSinceLastLoad = dayjs().diff(dayjs(feed.lastLoad), "minutes")
   console.log("Minutes since last load", minutesSinceLastLoad)
@@ -84,7 +72,7 @@ export const loadFeed = async (feed: Feed, forceReload: boolean): Promise<LoadFe
     return { status: LoadFeedStatus.ERROR, statusMessage: "Failed to fetch from url " + feed.url }
   }
 
-  let results: HandleItemResult[] = []
+  let items: Prisma.FeedentryUncheckedCreateInput[] = []
   if (!content) {
     console.warn("Received no content from " + feed.url, statusCode)
   } else {
@@ -97,7 +85,7 @@ export const loadFeed = async (feed: Feed, forceReload: boolean): Promise<LoadFe
     }
 
     try {
-      results = await Promise.all(parsedFeed?.items?.map((item) => handleItem(item, feed)) ?? [])
+      items = parsedFeed.items?.map((item) => handleItem(item, feed)) ?? []
     } catch {
       console.error("Encountered an error while processing items for " + feed.url)
       return {
@@ -107,52 +95,65 @@ export const loadFeed = async (feed: Feed, forceReload: boolean): Promise<LoadFe
     }
   }
 
+  const alreadyExistingEntries = await db.feedentry.findMany({
+    where: { id: { in: items.map((item) => item.id) } },
+    select: { id: true, text: true },
+    /* TODO: probably should hash? */
+  })
+
+  const existingEntryIds = new Set(alreadyExistingEntries.map((entry) => entry.id))
+
+  const itemsToBeCreated: Prisma.FeedentryUncheckedCreateInput[] = items.filter(
+    (item) => !existingEntryIds.has(item.id)
+  )
+
+  const { count: countCreated } = await invokeWithMiddleware(
+    createManyFeedEntries,
+    {
+      skipDuplicates: true,
+      data: itemsToBeCreated,
+    },
+    { req, res }
+  )
+
+  const itemsToBeUpdated = items
+    .filter((item) => existingEntryIds.has(item.id))
+    .map((item): Prisma.FeedentryUncheckedUpdateInput | undefined => {
+      const oldItem = alreadyExistingEntries.find((oldItem) => item.id === oldItem.id)
+      if (oldItem && item.text && oldItem.text !== item.text) {
+        return { ...oldItem, text: item.text, isArchived: false, updatedAt: dayjs().toISOString() }
+      }
+    })
+    .filter(
+      (value): value is Prisma.FeedentryUncheckedUpdateInput =>
+        !!value && !!value.id && !!value.text && !!value.updatedAt
+    )
+
+  const updatedFeedEntries = await Promise.all(
+    itemsToBeUpdated.map(async (input) => {
+      return await invokeWithMiddleware(
+        updateFeedentry,
+        { input, select: { id: true } },
+        { req, res }
+      )
+    })
+  )
+
   await db.feed.update({
     data: { lastLoad: dayjs().toISOString(), etag: headers.get("etag") },
     where: { id: feed.id },
   })
 
+  const countUpdated = updatedFeedEntries.length
+
   return {
-    changes: results.reduce(
-      (previous, current) => ({
-        updated: previous.updated + current.updated,
-        created: previous.created + current.created,
-        ignored: previous.ignored + current.ignored,
-      }),
-      defaultReturnValue
-    ),
+    changes: {
+      updated: countUpdated,
+      ignored: items.length - (countCreated + countUpdated),
+      created: countCreated,
+    },
     status: LoadFeedStatus.UPDATED,
   }
-}
-
-function getContentFromParsedItem(item: Parser.Item): string {
-  if (item["content:encoded"]) {
-    return item["content:encoded"]
-  }
-  if (item.content) {
-    return item.content
-  }
-  if (item.title) {
-    return item.title
-  }
-  return "Neither Title nor content provided"
-}
-
-function getLinkFromParsedItem(item: Parser.Item, fallback: string): string {
-  if (item.link) {
-    return item.link
-  } else if (item.guid && idAsLinkIfSensible(item.guid)) {
-    return item.guid
-  }
-  return fallback
-}
-
-function getSummaryFromParsedItem(item: Parser.Item): string {
-  if (item.contentSnippet) {
-    return item.contentSnippet
-  }
-
-  return getContentFromParsedItem(item).slice(0, summaryLength) + "..." // TODO: content could be html
 }
 
 async function fetchFromURL(
@@ -179,8 +180,7 @@ async function fetchFromURL(
     headers: headersRequest,
   })
   const content = await response.text()
-  const { headers } = response
-  const { status: statusCode, ok } = response
+  const { headers, status: statusCode, ok } = response
   return { content, headers, statusCode, ok }
 }
 

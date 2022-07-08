@@ -1,4 +1,4 @@
-import { Routes, useMutation, useQuery, useRouter } from "blitz"
+import { invoke, Routes, useMutation, useQuery, useRouter } from "blitz"
 import clsx from "clsx"
 import { FormApi } from "final-form"
 import { useNotifications } from "reapop"
@@ -7,9 +7,9 @@ import FormField from "app/core/components/FormField"
 import Loader from "app/core/components/Loader"
 import createFeedMutation from "app/feeds/mutations/createFeed"
 import removeFeedMutation from "app/feeds/mutations/deleteFeed"
-import getTitleAndTTLMutation from "app/feeds/mutations/getInfoFromFeedURL"
 import updateFeedMutation from "app/feeds/mutations/updateFeed"
 import getFeed from "app/feeds/queries/getFeed"
+import getTitleAndTTLQuery from "app/feeds/queries/getInfoFromFeedURL"
 
 type Props = { id?: number; isCreate?: boolean }
 
@@ -23,8 +23,6 @@ const SettingsForm = ({ id, isCreate }: Props) => {
       enabled: !isCreate,
     }
   )
-
-  const [getTitleAndTTL] = useMutation(getTitleAndTTLMutation)
 
   const [createFeed] = useMutation(createFeedMutation)
   const [updateFeed] = useMutation(updateFeedMutation)
@@ -54,7 +52,7 @@ const SettingsForm = ({ id, isCreate }: Props) => {
       const shouldGetNameFromFeed: boolean = form.getFieldState("name")?.pristine ?? true
       if (shouldGetNameFromFeed) {
         let hasError = false
-        const [title, ttl] = await getTitleAndTTL({ url: values.url }).catch(() => {
+        const [title, ttl] = await invoke(getTitleAndTTLQuery, { url: values.url }).catch(() => {
           notify({ title: "Failed to fetch from url.", status: "error" })
           hasError = true
           return [undefined, undefined]
