@@ -5,14 +5,15 @@ import db from "db"
 const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => {
   const session = await getSession(request, response)
 
-  if (
-    !session.userId &&
-    (!request.query.token || !(process.env["API_TOKEN"] === request.query.token))
-  ) {
-    console.log("denied Access")
-    response.statusCode = 403
-    response.statusMessage = "Please log in to use this API route"
-    return response.end()
+  if (!session.userId) {
+    if (process.env.API_TOKEN && request.headers["api-token"] === process.env.API_TOKEN) {
+      console.log("Access to /api/clean granted due to valid api token")
+    } else {
+      console.log("denied Access")
+      response.statusCode = 403
+      response.statusMessage = "Please log in to use this API route"
+      return response.end()
+    }
   }
 
   // Delete all but 25 most recent status entries
@@ -30,6 +31,8 @@ const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => 
   const { count: countEntriesDeleted } = await db.feedentry.deleteMany({
     where: { id: { in: entriesToBeDeleted.map((entry) => entry.id) } },
   })
+
+  // TODO: This may lead to entries being reimported after deletion if they still are present in the RSS feed
 
   response.statusCode = 200
   response.setHeader("Content-Type", "application/json")

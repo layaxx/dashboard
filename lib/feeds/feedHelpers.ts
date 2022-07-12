@@ -1,5 +1,7 @@
+import dayjs from "dayjs"
 import Parser from "rss-to-js"
 import xss, { whiteList } from "xss"
+import { Feed, Prisma } from "db"
 import summaryLength from "lib/config/feeds/summaryLength"
 
 export function idAsLinkIfSensible(id: string | undefined): string | undefined {
@@ -52,4 +54,23 @@ const XSSOptions = {
 
 export function cleanXSS(string: string) {
   return xss(string, XSSOptions)
+}
+
+export const convertItem = (
+  item: Parser.Item,
+  feed: Feed
+): Prisma.FeedentryUncheckedCreateInput => {
+  const id = item.guid ?? item.id ?? item.link
+  if (!id) {
+    console.error("No ID was provided", item)
+  }
+  return {
+    id,
+    text: getContentFromParsedItem(item),
+    title: item.title ?? "No Title provided",
+    link: getLinkFromParsedItem(item, feed.url),
+    summary: getSummaryFromParsedItem(item),
+    feedId: feed.id,
+    createdAt: dayjs(item.pubDate).toISOString(),
+  }
 }

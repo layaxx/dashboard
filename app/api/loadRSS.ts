@@ -1,22 +1,30 @@
-import { BlitzApiHandler, getSession } from "blitz"
+import { BlitzApiHandler, getSession, NextApiResponse } from "blitz"
 import dayjs from "dayjs"
 import { performance } from "perf_hooks"
 import db from "db"
 import { LoadFeedStatus, Result } from "lib/feeds/types"
 import { loadFeed } from "lib/serverOnly/loadRSSHelpers"
 
-const handler: BlitzApiHandler = async (request, response) => {
+export interface ResponseWithSession extends NextApiResponse<any> {
+  blitzCtx?: { session: { $authorize: Function; $isAuthorized: Function } }
+}
+
+const handler: BlitzApiHandler = async (request, response: ResponseWithSession) => {
   const session = await getSession(request, response)
 
-  if (
-    !session.userId &&
-    (!request.query.token || !(process.env["API_TOKEN"] === request.query.token))
-  ) {
-    console.log("denied Access")
-    response.statusCode = 403
-    response.statusMessage = "Please log in to use this API route"
-    response.end()
-    return
+  if (!session.userId) {
+    if (process.env.API_TOKEN && request.headers["api-token"] === process.env.API_TOKEN) {
+      console.log("Access to /api/clean granted due to valid api token")
+      response.blitzCtx = {
+        session: { $authorize: () => {}, $isAuthorized: () => true },
+      }
+    } else {
+      console.log("denied Access")
+      response.statusCode = 403
+      response.statusMessage = "Please log in to use this API route"
+      response.end()
+      return
+    }
   }
 
   const timeStampBefore = performance.now()
@@ -29,7 +37,10 @@ const handler: BlitzApiHandler = async (request, response) => {
     feeds.map(async (feed) => ({
       name: feed.name,
       id: feed.id,
-      ...(await loadFeed(feed, force, { req: request, res: response })),
+      ...(await loadFeed(feed, force, {
+        req: request,
+        res: response,
+      })),
     }))
   )
 

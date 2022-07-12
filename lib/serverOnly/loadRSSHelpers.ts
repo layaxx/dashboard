@@ -1,41 +1,22 @@
-import { invokeWithMiddleware, NextApiRequest, NextApiResponse } from "blitz"
+import { invokeWithMiddleware, NextApiRequest } from "blitz"
 import { Prisma } from "@prisma/client"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import Parser from "rss-to-js"
 import { createHash } from "crypto"
 import { LoadFeedResult, LoadFeedStatus } from "../feeds/types"
+import { ResponseWithSession } from "app/api/loadRSS"
 import createManyFeedEntries from "app/feeds/mutations/createManyFeedEntries"
 import updateFeedentry from "app/feeds/mutations/updateFeedentry"
 import db, { Feed } from "db"
-import {
-  getContentFromParsedItem,
-  getLinkFromParsedItem,
-  getSummaryFromParsedItem,
-} from "lib/feeds/feedHelpers"
+import { convertItem } from "lib/feeds/feedHelpers"
 
 dayjs.extend(utc)
-
-export const handleItem = (item: Parser.Item, feed: Feed): Prisma.FeedentryUncheckedCreateInput => {
-  const id = item.guid ?? item.id ?? item.link
-  if (!id) {
-    console.error("No ID was provided", item)
-  }
-  return {
-    id,
-    text: getContentFromParsedItem(item),
-    title: item.title ?? "No Title provided",
-    link: getLinkFromParsedItem(item, feed.url),
-    summary: getSummaryFromParsedItem(item),
-    feedId: feed.id,
-    createdAt: dayjs(item.pubDate).toISOString(),
-  }
-}
 
 export const loadFeed = async (
   feed: Feed,
   forceReload: boolean,
-  { req, res }: { req: NextApiRequest; res: NextApiResponse }
+  { req, res }: { req: NextApiRequest; res: ResponseWithSession }
 ): Promise<LoadFeedResult> => {
   if (!req || !res) {
     throw new Error("Missing ctx info")
@@ -76,7 +57,7 @@ export const loadFeed = async (
     }
 
     try {
-      items = parsedFeed.items?.map((item) => handleItem(item, feed)) ?? []
+      items = parsedFeed.items?.map((item) => convertItem(item, feed)) ?? []
     } catch {
       console.error("Encountered an error while processing items for " + feed.url)
       return {
