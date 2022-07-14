@@ -37,10 +37,6 @@ const WarningsIcon = ({ result, isLoading, isError }: Props) => {
     return (
       <>
         <ExclamationCircleIcon className="text-warning" />
-        {isAverageLoadTimeTooLong &&
-          "Average Load time is " + result.averageLoadTimeInMilliSeconds + "ms"}
-        {isTooMuchTimeBetweenLoads &&
-          "Average Minutes between Loads was " + result.averageMinutesBetweenLoads}
       </>
     )
   }
@@ -68,7 +64,7 @@ const Warnings = () => {
           const { errors } = JSON.parse(await result.text())
           invalidateQuery(getFeeds)
           notify({
-            title: "Loaded Feeds" + (errors ? " (with Errors)" : ""),
+            title: "Loaded Feeds" + (errors && errors.length > 0 ? " (with Errors)" : ""),
             status: "success",
             message: errors,
           })
