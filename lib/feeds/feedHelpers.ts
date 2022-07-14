@@ -63,6 +63,7 @@ export const convertItem = (
   const id = item.guid ?? item.id ?? item.link
   if (!id) {
     console.error("No ID was provided", item)
+    throw new Error("Cannot convert Item without ID")
   }
   return {
     id,

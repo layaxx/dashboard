@@ -1,7 +1,8 @@
-import { invokeWithMiddleware, NextApiRequest } from "blitz"
+import { invokeWithMiddleware, InvokeWithMiddlewareConfig, NextApiRequest } from "blitz"
 import { Prisma } from "@prisma/client"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
+import fetch, { Headers } from "node-fetch"
 import Parser from "rss-to-js"
 import { createHash } from "crypto"
 import { LoadFeedResult, LoadFeedStatus } from "../feeds/types"
@@ -67,6 +68,30 @@ export const loadFeed = async (
     }
   }
 
+  const { countUpdated, countCreated } = await updateDB(items, { req, res })
+
+  await db.feed.update({
+    data: { lastLoad: dayjs().toISOString(), etag: headers.get("etag") },
+    where: { id: feed.id },
+  })
+
+  return {
+    changes: {
+      updated: countUpdated,
+      ignored: items.length - (countCreated + countUpdated),
+      created: countCreated,
+    },
+    status: LoadFeedStatus.UPDATED,
+  }
+}
+
+export async function updateDB(
+  items: Prisma.FeedentryUncheckedCreateInput[],
+  context: InvokeWithMiddlewareConfig
+): Promise<{
+  countUpdated: number
+  countCreated: number
+}> {
   const alreadyExistingEntries = await db.feedentry.findMany({
     where: { id: { in: items.map((item) => item.id) } },
     select: { id: true, preXSSHash: true },
@@ -84,7 +109,7 @@ export const loadFeed = async (
       skipDuplicates: true,
       data: itemsToBeCreated,
     },
-    { req, res }
+    context
   )
 
   const itemsToBeUpdated = items
@@ -96,7 +121,7 @@ export const loadFeed = async (
           .update(item.text + item.summary)
           .digest("hex")
 
-        if (oldItem.preXSSHash !== item.preXSSHash) {
+        if (oldItem.preXSSHash !== preXSSHash) {
           return {
             id: oldItem.id,
             text: item.text,
@@ -115,32 +140,14 @@ export const loadFeed = async (
 
   const updatedFeedEntries = await Promise.all(
     itemsToBeUpdated.map(async (input) => {
-      return await invokeWithMiddleware(
-        updateFeedentry,
-        { input, select: { id: true } },
-        { req, res }
-      )
+      return await invokeWithMiddleware(updateFeedentry, { input, select: { id: true } }, context)
     })
   )
 
-  await db.feed.update({
-    data: { lastLoad: dayjs().toISOString(), etag: headers.get("etag") },
-    where: { id: feed.id },
-  })
-
-  const countUpdated = updatedFeedEntries.length
-
-  return {
-    changes: {
-      updated: countUpdated,
-      ignored: items.length - (countCreated + countUpdated),
-      created: countCreated,
-    },
-    status: LoadFeedStatus.UPDATED,
-  }
+  return { countCreated, countUpdated: updatedFeedEntries.length }
 }
 
-async function fetchFromURL(
+export async function fetchFromURL(
   url: string,
   force: boolean,
   feed?: Feed
@@ -170,7 +177,7 @@ async function fetchFromURL(
 
 export async function getTitleAndTTLFromFeed(
   url: string
-): Promise<[string | undefined, string | undefined]> {
+): Promise<[string | undefined, number | undefined]> {
   let content: string | undefined, ok: boolean, headers: Headers
   try {
     ;({ content, ok, headers } = await fetchFromURL(url, true))
@@ -182,13 +189,23 @@ export async function getTitleAndTTLFromFeed(
     throw new Error("Failed to fetch feed.")
   }
 
-  let parsedFeed
+  let parsedFeed: Parser.Item | undefined
   try {
     parsedFeed = await new Parser().parseString(content)
+    if (!parsedFeed) {
+      throw new Error("Failed to parse feed.")
+    }
   } catch (error) {
     console.error(error)
     throw new Error("Failed to parse feed.")
   }
 
-  return [parsedFeed.title, parsedFeed.ttl ?? headers.get("expires") ?? undefined]
+  let ttl: number | undefined
+  if (parsedFeed.ttl) {
+    ttl = +parsedFeed.ttl
+  } else if (headers && headers.get("expires")) {
+    ttl = Math.abs(dayjs(headers.get("expires")).diff(dayjs(), "minutes"))
+  }
+
+  return [parsedFeed.title, ttl]
 }

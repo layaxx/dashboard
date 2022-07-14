@@ -63,7 +63,7 @@ const SettingsForm = ({ id, isCreate }: Props) => {
         if (title) {
           values.name = title
         }
-        if (ttl && Number.parseInt(ttl, 10)) {
+        if (ttl && (typeof ttl === "number" || Number.parseInt(ttl, 10))) {
           values.loadIntervall = ttl
         }
       }
