@@ -1,0 +1,277 @@
+/* eslint-disable max-lines */
+import { NextApiRequest, NextApiResponse } from "blitz"
+import { faker } from "@faker-js/faker"
+import dayjs from "dayjs"
+import httpMocks from "node-mocks-http"
+import { fetchFromURL, getTitleAndTTLFromFeed, loadFeed } from "./loadRSSHelpers"
+import { Feed } from "db"
+import { LoadFeedStatus } from "lib/feeds/types"
+
+const mockFetch = jest.fn()
+
+jest.mock("node-fetch", () => ({
+  __esModule: true,
+  default: (...props: any) => mockFetch(...props),
+  Headers: class Headers {
+    headers = new Map()
+
+    append(key: string, value: string) {
+      this.headers.set(key, value)
+    }
+
+    constructor(map: Record<string, string>) {
+      Object.keys(map).forEach((key) => this.append(key, map[key] as string))
+    }
+  },
+}))
+
+beforeEach(() => {
+  mockFetch.mockImplementation(async () => {
+    const status = 200
+    const ok = true
+    // eslint-disable-next-line unicorn/consistent-function-scoping
+    const text = async () => "text"
+
+    const responseHeaders = new Map()
+    responseHeaders.set("expires", faker.date.future().toISOString())
+    return {
+      headers: responseHeaders,
+      status,
+      ok,
+      text,
+    }
+  })
+})
+
+describe("loadRSSHelpers#fetchFromURL works as expected", () => {
+  test("use node-fetch", async () => {
+    const url = "https://example.com"
+    const response = await fetchFromURL(url, false)
+
+    expect(response.ok).toBeTruthy()
+    expect(response.content).toBeDefined()
+
+    expect(mockFetch).toHaveBeenCalled()
+    const [[urlReceived, arguments_]] = mockFetch.mock.calls
+
+    expect(urlReceived).toBe(url)
+    expect(arguments_.headers).toBeDefined()
+    expect(arguments_.headers.headers.get("user-agent")).toBeDefined()
+    expect(arguments_.headers.headers.get("If-None-Match")).toBeUndefined()
+  })
+
+  test("use etag header if possible", async () => {
+    const url = "https://exampleDomain.com"
+    const etag = "SomeRandomValue=="
+
+    const response = await fetchFromURL(url, false, { etag } as Feed)
+
+    expect(response.ok).toBeTruthy()
+    expect(response.content).toBeDefined()
+
+    expect(mockFetch).toHaveBeenCalled()
+    const [[urlReceived, arguments_]] = mockFetch.mock.calls
+
+    expect(urlReceived).toBe(url)
+    expect(arguments_.headers).toBeDefined()
+    expect(arguments_.headers.headers.get("If-None-Match")).toBe(etag)
+  })
+
+  test("use lastLoad header if no etag available", async () => {
+    const url = "https://exampleDomain.com/feed.xml"
+
+    const response = await fetchFromURL(url, false, {
+      etag: undefined,
+      lastLoad: "2022-07-13T18:17:18.304Z",
+    } as unknown as Feed)
+
+    expect(response.ok).toBeTruthy()
+    expect(response.content).toBeDefined()
+
+    expect(mockFetch).toHaveBeenCalled()
+    const [[urlReceived, arguments_]] = mockFetch.mock.calls
+
+    expect(urlReceived).toBe(url)
+    expect(arguments_.headers).toBeDefined()
+    expect(arguments_.headers.headers.get("If-None-Match")).toBeUndefined()
+    expect(arguments_.headers.headers.get("If-Modified-Since")).toBe("Wed, 13 07 2022 18:17:18 GMT")
+  })
+
+  test("use no cache headers for force refresh", async () => {
+    const url = "https://sub.exampleDomain.com/feed.xml"
+
+    const response = await fetchFromURL(url, true, {
+      etag: "ValidEtagIGuess=",
+      lastLoad: "2022-07-13T18:17:18.304Z",
+    } as unknown as Feed)
+
+    expect(response.ok).toBeTruthy()
+    expect(response.content).toBeDefined()
+
+    expect(mockFetch).toHaveBeenCalled()
+    const [[urlReceived, arguments_]] = mockFetch.mock.calls
+
+    expect(urlReceived).toBe(url)
+    expect(arguments_.headers).toBeDefined()
+    expect(arguments_.headers.headers.get("If-None-Match")).toBeUndefined()
+    expect(arguments_.headers.headers.get("If-Modified-Since")).toBeUndefined()
+  })
+})
+
+const mockParser = jest.fn()
+
+jest.mock("rss-to-js", () => ({
+  __esModule: true,
+  default: class Parser {
+    parseString(input: string) {
+      return mockParser(input)
+    }
+  },
+}))
+
+describe("loadRSSHelpers#getTitleAndTTLFromFeed works as expected", () => {
+  test("works for both values present", async () => {
+    mockParser.mockReturnValue({ title: "title", ttl: "40" })
+
+    const [receivedTitle, receivedTTL] = await getTitleAndTTLFromFeed("url")
+
+    expect(receivedTTL).toBe(40)
+    expect(receivedTitle).toBe("title")
+  })
+
+  test("works for expires header", async () => {
+    mockParser.mockReturnValue({ title: "title" })
+
+    const [receivedTitle, receivedTTL] = await getTitleAndTTLFromFeed("url")
+
+    expect(receivedTTL).toBeGreaterThanOrEqual(0)
+    expect(receivedTitle).toBe("title")
+  })
+
+  test("works for no title", async () => {
+    mockParser.mockReturnValue({})
+
+    const [receivedTitle, receivedTTL] = await getTitleAndTTLFromFeed("url")
+
+    expect(receivedTTL).toBeGreaterThanOrEqual(0)
+    expect(receivedTitle).toBeUndefined()
+  })
+})
+
+describe("loadRRSHelpers#loadFeed works as expected", () => {
+  const mocks = httpMocks.createMocks<any, any>()
+  const mockRequest = mocks.req
+  const mockResponse = mocks.res
+
+  test("throws error for missing request", () => {
+    return expect(
+      loadFeed({} as Feed, false, {
+        req: undefined as unknown as NextApiRequest,
+        res: mockResponse,
+      })
+    ).rejects.toEqual(new Error("Missing ctx info"))
+  })
+
+  test("throws error for missing response", () => {
+    return expect(
+      loadFeed({} as Feed, false, {
+        req: mockRequest,
+        res: undefined as unknown as NextApiResponse,
+      })
+    ).rejects.toEqual(new Error("Missing ctx info"))
+  })
+
+  test("returns status error for failed request", () => {
+    mockFetch.mockImplementation(async () => {
+      const status = 666
+      const ok = false
+      // eslint-disable-next-line unicorn/consistent-function-scoping
+      const text = async () => "text"
+
+      const responseHeaders = new Map()
+      responseHeaders.set("expires", faker.date.future().toISOString())
+      return {
+        headers: responseHeaders,
+        status,
+        ok,
+        text,
+      }
+    })
+
+    return expect(
+      loadFeed({} as Feed, false, {
+        req: mockRequest,
+        res: mockResponse,
+      })
+    ).resolves.toMatchObject({ status: LoadFeedStatus.ERROR })
+  })
+
+  test("returns skipped status for 304 responses", () => {
+    mockFetch.mockImplementation(async () => {
+      const status = 304
+      const ok = true
+      // eslint-disable-next-line unicorn/consistent-function-scoping
+      const text = async () => "text"
+
+      const responseHeaders = new Map()
+      responseHeaders.set("expires", faker.date.future().toISOString())
+      return {
+        headers: responseHeaders,
+        status,
+        ok,
+        text,
+      }
+    })
+
+    return expect(
+      loadFeed({} as Feed, false, {
+        req: mockRequest,
+        res: mockResponse,
+      })
+    ).resolves.toMatchObject({ status: LoadFeedStatus.SKIPPED })
+  })
+
+  test("returns skipped status for recently updated feeds", () => {
+    return expect(
+      loadFeed(
+        { lastLoad: dayjs().subtract(1, "min").toDate(), loadIntervall: 1000 } as Feed,
+        false,
+        {
+          req: mockRequest,
+          res: mockResponse,
+        }
+      )
+    ).resolves.toMatchObject({ status: LoadFeedStatus.SKIPPED })
+  })
+
+  test("returns status error for failed parsing", () => {
+    mockParser.mockImplementation(async () => {
+      return new Promise((_, reject) => reject())
+    })
+
+    return expect(
+      loadFeed({} as Feed, false, {
+        req: mockRequest,
+        res: mockResponse,
+      })
+    ).resolves.toMatchObject({ status: LoadFeedStatus.ERROR })
+  })
+
+  test("returns status error for items without id", () => {
+    mockParser.mockImplementation(async () => ({
+      items: [
+        {
+          content: faker.lorem.paragraph(),
+          title: faker.lorem.word(),
+        },
+      ],
+    }))
+
+    return expect(
+      loadFeed({} as Feed, false, {
+        req: mockRequest,
+        res: mockResponse,
+      })
+    ).resolves.toMatchObject({ status: LoadFeedStatus.ERROR })
+  })
+})
