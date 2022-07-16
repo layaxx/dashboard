@@ -31,13 +31,13 @@ export const ItemsList = () => {
   const [pages, { fetchNextPage, hasNextPage, isFetchingNextPage }] = useInfiniteQuery(
     getFeedentries,
     (fetchNextPageVariable) => {
-      return (
-        fetchNextPageVariable ?? {
-          take: baseBatchSize,
-          skip: 0,
-          where: { feedId: activeFeedID === ALL_FEEDS_ID ? undefined : activeFeedID },
-        }
-      )
+      return {
+        take: fetchNextPageVariable?.take ?? baseBatchSize,
+        skip: fetchNextPageVariable?.skip ?? 0,
+        where: {
+          feedId: activeFeedID === ALL_FEEDS_ID ? undefined : activeFeedID,
+        },
+      }
     },
     {
       refetchInterval: false,
@@ -53,7 +53,11 @@ export const ItemsList = () => {
   const [recentlyReadResult] = useQuery(
     getRecentlyReadFeedentries,
     {},
-    { enabled: activeFeedID === RECENTLY_READ_ID }
+    {
+      enabled: activeFeedID === RECENTLY_READ_ID,
+      useErrorBoundary: true,
+      notifyOnChangeProps: "tracked",
+    }
   )
 
   if (activeFeedID === RECENTLY_READ_ID && recentlyReadResult && recentlyReadResult.feedentries) {

@@ -15,7 +15,7 @@ const seed = async () => {
   })
 
   const numberOfFeeds = 5
-  const numberOfEntriesPerFeed = 10
+  const numberOfEntriesPerFeed = 30
 
   for (let index = 0; index < numberOfFeeds; index++) {
     const { id } = await db.feed.create({
@@ -34,7 +34,7 @@ const seed = async () => {
           id: faker.unique(faker.datatype.string),
           link: faker.internet.url(),
           summary: faker.lorem.paragraph(),
-          title: faker.lorem.sentence(),
+          title: "Feed " + index + ": " + faker.lorem.words(2),
           text: faker.lorem.paragraphs(3),
           feedId: id,
         },
