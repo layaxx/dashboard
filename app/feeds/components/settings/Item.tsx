@@ -1,12 +1,56 @@
-import { Link, Routes } from "blitz"
+import { FC } from "react"
+import { Link, Routes, useMutation } from "blitz"
 import { Feed } from "@prisma/client"
 import clsx from "clsx"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
+import { useNotifications } from "reapop"
+import Button from "app/core/components/Button"
+import removeFeedMutation from "app/feeds/mutations/deleteFeed"
+import readAllItemsInFeedMutation from "app/feeds/mutations/readAllItemsInFeed"
 
 dayjs.extend(relativeTime)
 
-const SettingsItem = (feed: Feed) => {
+interface IProps extends Feed {
+  refetch: () => Promise<any | void>
+}
+
+const SettingsItem: FC<IProps> = ({ id, url, name, lastLoad, loadIntervall, refetch }) => {
+  const classNameTH = "text-left font-bold text-slate-600 md:w-64 table-cell"
+  const classNameTD = "pl-4 text-left table-cell"
+  const classNameTableRow = "table-row"
+
+  const [removeFeed] = useMutation(removeFeedMutation)
+  const [readAllItemsInFeed] = useMutation(readAllItemsInFeedMutation)
+
+  const { notify } = useNotifications()
+
+  const handleDeleteFeed = () =>
+    removeFeed({ id, removeEntries: true }).then(
+      () => refetch().then(() => notify({ title: "Successfully removed feed", status: "success" })),
+      (error) => {
+        console.error(error)
+        notify({ title: "Failed removed feed", status: "error" })
+      }
+    )
+  const handleMarkAllAsRead = () =>
+    readAllItemsInFeed({ feedId: id }).then(
+      () =>
+        notify({
+          title: "Success!",
+          message: `Marked all entries of ${url} as read`,
+          status: "success",
+        }),
+      (error) => {
+        console.error(error)
+        notify({
+          title: "Failure",
+          message: `Marked all entries of ${url} as read`,
+          status: "error",
+        })
+      }
+    )
+
   return (
     <div
       className={clsx(
@@ -23,15 +67,38 @@ const SettingsItem = (feed: Feed) => {
       )}
     >
       <div>
-        <Link href={Routes.FeedsSettingsPage({ id: feed.id })}>
-          <a className={clsx("font-semibold", "text-gray-800", "text-xl")}>{feed.name}</a>
+        <Link href={Routes.FeedsSettingsPage({ id })}>
+          <a className={clsx("font-semibold", "text-gray-800", "text-xl")}>{name}</a>
         </Link>
-        <div className={clsx("flex", "justify-between")}>
-          <h3 className={clsx("text-left", "w-1/2")} style={{ overflowWrap: "anywhere" }}>
-            {feed.url}
-          </h3>
-          <h3 className={clsx("text-center", "w-1/4")}>{feed.loadIntervall} min</h3>
-          <h3 className={clsx("text-right", "w-1/4")}>{dayjs(feed.lastLoad).fromNow()}</h3>
+
+        <div className={clsx("flex", "flex-row", "flex-wrap")}>
+          <div className={clsx("table", "md:w-3/4")}>
+            <div className={classNameTableRow}>
+              <span className={classNameTH}>URL</span>
+              <span className={classNameTD}>
+                <h3 style={{ overflowWrap: "anywhere" }}>{url}</h3>
+              </span>
+            </div>
+            <div className={classNameTableRow}>
+              <span className={classNameTH}>Load Intervall</span>
+              <span className={classNameTD}>
+                <h3>{loadIntervall} min</h3>
+              </span>
+            </div>
+            <div className={classNameTableRow}>
+              <span className={classNameTH}>Last Load</span>
+              <span className={classNameTD}>
+                <h3>{dayjs(lastLoad).fromNow()}</h3>
+              </span>
+            </div>
+          </div>
+
+          <div className={clsx("flex", "md:flex-col", "flex-row", "md:flex-wrap", "md:w-1/4")}>
+            <Button onClick={handleMarkAllAsRead}>Mark all as read</Button>
+            <Button variant="danger" onClick={handleDeleteFeed}>
+              Delete Feed
+            </Button>
+          </div>
         </div>
       </div>
     </div>

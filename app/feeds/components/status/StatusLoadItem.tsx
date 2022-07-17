@@ -3,7 +3,7 @@ import { ExclamationIcon } from "@heroicons/react/solid"
 import clsx from "clsx"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
-import { formatToTwoDigits, StatusWithWarningsAndErrors } from "app/feeds/lib/status"
+import { formatToTwoDigits, StatusWithWarningsAndErrors } from "lib/status"
 
 dayjs.extend(relativeTime)
 
@@ -16,7 +16,7 @@ const ListElement = ({ text, isError }: { text: string; isError?: boolean }) => 
   )
 }
 
-const StatusItem: FC<StatusWithWarningsAndErrors> = ({
+const StatusLoadItem: FC<StatusWithWarningsAndErrors> = ({
   errors,
   loadTime,
   loadDuration,
@@ -103,4 +103,4 @@ const StatusItem: FC<StatusWithWarningsAndErrors> = ({
     </div>
   )
 }
-export default StatusItem
+export default StatusLoadItem

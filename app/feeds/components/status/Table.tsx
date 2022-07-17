@@ -1,5 +1,5 @@
 import dayjs from "dayjs"
-import { formatToTwoDigits, Statistics } from "app/feeds/lib/status"
+import { formatToTwoDigits, Statistics } from "lib/status"
 
 const StatusTable = (statistics: Statistics) => {
   return (

@@ -3,19 +3,16 @@ import { useQuery } from "blitz"
 import { ExclamationCircleIcon } from "@heroicons/react/solid"
 import clsx from "clsx"
 import StatusChart from "./StatusChart"
-import StatusItem from "./StatusItem"
+import StatusCleanItem from "./StatusLoadClean"
+import StatusLoadItem from "./StatusLoadItem"
 import StatusTable from "./Table"
 import Loader from "app/core/components/Loader"
-import { calculateErrorsAndWarnings, computeStatistics } from "app/feeds/lib/status"
 import getStatusDetailed from "app/feeds/queries/getStatusDetailed"
-import { Status } from "db"
+import { calculateErrorsAndWarnings, computeStatistics } from "lib/status"
 import tailwindConfig from "tailwind.config"
 
 const StatusOverview: FC = () => {
-  const [{ status }, { isLoading, isError }]: [
-    { status: Status[] },
-    { isLoading: boolean; isError: boolean }
-  ] = useQuery(getStatusDetailed, {})
+  const [result, { isLoading, isError }] = useQuery(getStatusDetailed, {})
 
   if (isLoading) {
     return <Loader />
@@ -29,14 +26,14 @@ const StatusOverview: FC = () => {
     )
   }
 
-  const statusWithWarnings = status.map((stat, index, array) =>
+  const statusWithWarnings = result.statusLoad.map((stat, index, array) =>
     calculateErrorsAndWarnings(stat, array[index + 1]?.loadTime)
   )
 
   const statistics = computeStatistics(statusWithWarnings)
 
   return (
-    <>
+    <div className="w-full">
       <StatusChart
         data={statusWithWarnings.map(
           ({ insertCount, updateCount, loadTime, hasErrors, hasWarnings }) => ({
@@ -50,11 +47,21 @@ const StatusOverview: FC = () => {
           })
         )}
       />
-      <StatusTable {...statistics} />
-      {statusWithWarnings.map((status) => (
-        <StatusItem {...status} key={status.id} />
-      ))}
-    </>
+      <div className={clsx("flex", "flex-row", "flex-wrap", "justify-around")}>
+        <StatusTable {...statistics} />
+        {statusWithWarnings.map((status) => (
+          <StatusLoadItem {...status} key={status.id} />
+        ))}
+      </div>
+
+      <hr />
+
+      <div className={clsx("flex", "flex-row", "flex-wrap", "justify-around")}>
+        {result.statusClean.map((status) => (
+          <StatusCleanItem {...status} key={status.id} />
+        ))}
+      </div>
+    </div>
   )
 }
 

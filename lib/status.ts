@@ -1,12 +1,12 @@
 import dayjs from "dayjs"
-import { Status } from "db"
+import { StatusLoad } from "db"
 import {
   maxAcceptableAverageLoadTime,
   targetTimeBetweenLoads,
   maxAcceptableTimeBetweenLoads,
 } from "lib/config/feeds/status"
 
-export type StatusWithWarningsAndErrors = Status & {
+export type StatusWithWarningsAndErrors = StatusLoad & {
   hasErrors: boolean
   hasWarnings: boolean
   loadDurationTooHigh: boolean
@@ -28,7 +28,7 @@ export type Statistics = {
 }
 
 export const calculateErrorsAndWarnings = (
-  status: Status,
+  status: StatusLoad,
   previousLoad: Date | undefined
 ): StatusWithWarningsAndErrors => {
   const minutesSinceLastLoad = dayjs(status.loadTime).diff(dayjs(previousLoad), "minutes")

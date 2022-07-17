@@ -62,7 +62,7 @@ const handler: BlitzApiHandler = async (request, response: ResponseWithSession) 
     .map((result) => (result.status === LoadFeedStatus.ERROR && result.statusMessage) ?? false)
     .filter(Boolean) as string[]
 
-  await db.status.create({
+  await db.statusLoad.create({
     data: {
       loadTime: dayjs().toISOString(),
       loadDuration: timeStampAfter - timeStampBefore,

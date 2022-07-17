@@ -17,20 +17,30 @@ export default function App({ Component, pageProps }: AppProps) {
   const getLayout = Component.getLayout || ((page) => page)
 
   return (
-    <ErrorBoundary
-      FallbackComponent={RootErrorFallback}
-      onReset={useQueryErrorResetBoundary().reset}
-    >
-      <NotificationsProvider>
+    <NotificationsProvider>
+      <ErrorBoundary
+        fallbackRender={({ error, resetErrorBoundary }) => (
+          <RootErrorFallback
+            error={error}
+            getLayout={getLayout}
+            resetErrorBoundary={resetErrorBoundary}
+          />
+        )}
+        onReset={useQueryErrorResetBoundary().reset}
+      >
         <SharedStateProvider>{getLayout(<Component {...pageProps} />)}</SharedStateProvider>
-      </NotificationsProvider>
-    </ErrorBoundary>
+      </ErrorBoundary>
+    </NotificationsProvider>
   )
 }
 
-function RootErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
+interface ICustomErrorFallbackProps extends ErrorFallbackProps {
+  getLayout: (component: JSX.Element) => JSX.Element
+}
+
+function RootErrorFallback({ error, resetErrorBoundary, getLayout }: ICustomErrorFallbackProps) {
   if (error instanceof AuthenticationError) {
-    return <LoginForm onSuccess={resetErrorBoundary} />
+    return getLayout(<LoginForm onSuccess={resetErrorBoundary} />)
   } else if (error instanceof AuthorizationError) {
     return (
       <ErrorComponent

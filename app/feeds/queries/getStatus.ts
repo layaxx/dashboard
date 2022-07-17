@@ -11,7 +11,7 @@ export interface IStatusResult {
 }
 
 export default resolver.pipe(resolver.authorize(), async () => {
-  const status = await db.status.aggregate({
+  const status = await db.statusLoad.aggregate({
     take: 10,
     orderBy: { createdAt: "desc" },
     _avg: { loadDuration: true },
@@ -20,7 +20,7 @@ export default resolver.pipe(resolver.authorize(), async () => {
     _max: { loadTime: true },
   })
 
-  const errors = await db.status.findMany({
+  const errors = await db.statusLoad.findMany({
     take: 10,
     orderBy: { createdAt: "desc" },
     select: { errors: true },

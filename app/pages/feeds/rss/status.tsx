@@ -10,15 +10,14 @@ const FeedsStatusPage: BlitzPage = () => {
       <Head>
         <title>Feeds - Status</title>
       </Head>
-      <Layout heading="RSS Status Page">
-        <Suspense fallback={<Loader />}>
-          <StatusOverview />
-        </Suspense>
-      </Layout>
+      <Suspense fallback={<Loader />}>
+        <StatusOverview />
+      </Suspense>
     </>
   )
 }
 
 FeedsStatusPage.authenticate = true
+FeedsStatusPage.getLayout = (page) => <Layout heading="RSS Status Page">{page}</Layout>
 
 export default FeedsStatusPage

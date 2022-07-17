@@ -1,5 +1,6 @@
 import { BlitzApiRequest, BlitzApiResponse, getSession } from "blitz"
 import dayjs from "dayjs"
+import { performance } from "perf_hooks"
 import db from "db"
 
 const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => {
@@ -16,15 +17,30 @@ const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => 
     }
   }
 
-  // Delete all but 25 most recent status entries
-  const statusToBeDeleted = await db.status.findMany({ orderBy: { createdAt: "desc" }, skip: 25 })
-  const { count: countStatusDeleted } = await db.status.deleteMany({
-    where: { id: { in: statusToBeDeleted.map((status) => status.id) } },
+  const timeStampBefore = performance.now()
+
+  // Delete all but 25 most recent statusLoad entries
+  const statusLoadToBeDeleted = await db.statusLoad.findMany({
+    orderBy: { createdAt: "desc" },
+    skip: 25,
+  })
+  const { count: countStatusLoadDeleted } = await db.statusLoad.deleteMany({
+    where: { id: { in: statusLoadToBeDeleted.map((status) => status.id) } },
+  })
+
+  // Delete all but 25 most recent statusClean entries
+  const statusCleanToBeDeleted = await db.statusClean.findMany({
+    orderBy: { createdAt: "desc" },
+    skip: 25,
+  })
+  const { count: countStatusCleanDeleted } = await db.statusClean.deleteMany({
+    where: { id: { in: statusCleanToBeDeleted.map((status) => status.id) } },
   })
 
   // delete all archived feedentries that have not been modified in the last 30 days
   const deleteEntriesOlderThanXDays = 30
   const timeThreshold = dayjs().subtract(deleteEntriesOlderThanXDays, "days").toISOString()
+
   const entriesToBeDeleted = await db.feedentry.findMany({
     where: { isArchived: true, updatedAt: { lt: timeThreshold } },
   })
@@ -34,8 +50,30 @@ const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => 
 
   // TODO: This may lead to entries being reimported after deletion if they still are present in the RSS feed
 
+  const timeStampAfter = performance.now()
+
+  const duration = timeStampAfter - timeStampBefore
+
+  await db.statusClean.create({
+    data: {
+      time: dayjs().toISOString(),
+      duration,
+    },
+  })
+
   response.statusCode = 200
   response.setHeader("Content-Type", "application/json")
-  response.end(JSON.stringify({ countEntriesDeleted, countStatusDeleted }, undefined, 2))
+  response.end(
+    JSON.stringify(
+      {
+        countEntriesDeleted,
+        countStatusLoadDeleted,
+        countStatusCleanDeleted,
+        duration,
+      },
+      undefined,
+      2
+    )
+  )
 }
 export default handler

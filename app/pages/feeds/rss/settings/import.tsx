@@ -146,64 +146,63 @@ const FeedsImportDataPage: BlitzPage = () => {
       <Head>
         <title>Feeds - Import Data</title>
       </Head>
-      <Layout heading="RSS Import Data">
-        <div className="w-full">
-          <Form
-            onSubmit={submitHandler}
-            initialValues={{ file: undefined, shouldDeleteBefore: false, fileContent: "" }}
-            submitText={"Import Data"}
-            className={clsx("mx-auto", "md:w-1/2", "w-full")}
-          >
-            <div className={clsx("flex", "flex-col", "w-full")}>
-              <h3 className={clsx("font-semibold", "text-2xl")}>Import Feeds / Feedentries</h3>
-              <label className={clsx("flex", "flex-row")}>
-                From File: <FileReaderComponent className="ml-auto" />
-              </label>
+      <div className="w-full">
+        <Form
+          onSubmit={submitHandler}
+          initialValues={{ file: undefined, shouldDeleteBefore: false, fileContent: "" }}
+          submitText={"Import Data"}
+          className={clsx("mx-auto", "md:w-1/2", "w-full")}
+        >
+          <div className={clsx("flex", "flex-col", "w-full")}>
+            <h3 className={clsx("font-semibold", "text-2xl")}>Import Feeds / Feedentries</h3>
+            <label className={clsx("flex", "flex-row")}>
+              From File: <FileReaderComponent className="ml-auto" />
+            </label>
 
-              <label className={clsx("flex", "flex-row")}>
-                FileContent:{" "}
-                <Field name="fileContent">
-                  {(props) => (
-                    <>
-                      <textarea
-                        {...props.input}
-                        className={clsx(
-                          "border-4",
-                          props.meta.submitError && "border-error",
-                          "ml-auto",
-                          "text-left"
-                        )}
-                        rows={4}
-                        cols={50}
-                      />
-                      <small className="text-error">{props.meta.submitError}</small>
-                    </>
-                  )}
-                </Field>
-              </label>
+            <label className={clsx("flex", "flex-row")}>
+              FileContent:{" "}
+              <Field name="fileContent">
+                {(props) => (
+                  <>
+                    <textarea
+                      {...props.input}
+                      className={clsx(
+                        "border-4",
+                        props.meta.submitError && "border-error",
+                        "ml-auto",
+                        "text-left"
+                      )}
+                      rows={4}
+                      cols={50}
+                    />
+                    <small className="text-error">{props.meta.submitError}</small>
+                  </>
+                )}
+              </Field>
+            </label>
 
-              <label className={clsx("flex", "flex-row")}>
-                Delete old data before entering new data:{" "}
-                <Field name="shouldDeleteBefore" type="checkbox">
-                  {(props) => <input {...props.input} className={clsx("ml-auto", "text-right")} />}
-                </Field>
-              </label>
-            </div>
-          </Form>
-          {backup && (
-            <div className="w-full">
-              <h3 className={clsx("font-bold", "text-lg")}>Pre-delete Backup: </h3>
-              <textarea rows={10} className="w-full">
-                {backup}
-              </textarea>
-            </div>
-          )}
-        </div>
-      </Layout>
+            <label className={clsx("flex", "flex-row")}>
+              Delete old data before entering new data:{" "}
+              <Field name="shouldDeleteBefore" type="checkbox">
+                {(props) => <input {...props.input} className={clsx("ml-auto", "text-right")} />}
+              </Field>
+            </label>
+          </div>
+        </Form>
+        {backup && (
+          <div className="w-full">
+            <h3 className={clsx("font-bold", "text-lg")}>Pre-delete Backup: </h3>
+            <textarea rows={10} className="w-full">
+              {backup}
+            </textarea>
+          </div>
+        )}
+      </div>
     </>
   )
 }
 
 FeedsImportDataPage.authenticate = true
+FeedsImportDataPage.getLayout = (page) => <Layout heading="RSS Import Data">{page}</Layout>
 
 export default FeedsImportDataPage

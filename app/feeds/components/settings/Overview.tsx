@@ -24,11 +24,16 @@ const SettingsOverview = () => {
   const anyNotInCorrectOrder = list.map((feed, index) => feed.position !== index).some(Boolean)
   const { notify } = useNotifications()
 
-  const saveCurrentOrder = async () => {
+  const saveCurrentOrder = async (deletedIndex?: number) => {
+    const hasDeletedIndex = typeof deletedIndex === "number"
+
     await Promise.all(
       list.map((feed, index) => {
-        if (feed.position !== index) {
-          return updateFeed({ position: index, id: feed.id })
+        if (feed.position !== index || (hasDeletedIndex && index > deletedIndex)) {
+          return updateFeed({
+            position: hasDeletedIndex && index > deletedIndex ? index - 1 : index,
+            id: feed.id,
+          })
         }
       })
     )
@@ -42,14 +47,14 @@ const SettingsOverview = () => {
     <>
       <div className="w-full">
         <ReactSortable list={list} setList={setList}>
-          {list.map((feed) => (
-            <SettingsItem {...feed} key={feed.id} />
+          {list.map((feed, index) => (
+            <SettingsItem {...feed} key={feed.id} refetch={async () => saveCurrentOrder(index)} />
           ))}
         </ReactSortable>
 
         {anyNotInCorrectOrder && (
           <div className={clsx("flex", "place-content-center")}>
-            <Button onClick={saveCurrentOrder} variant="primary">
+            <Button onClick={() => saveCurrentOrder()} variant="primary">
               Save new Order
             </Button>
           </div>

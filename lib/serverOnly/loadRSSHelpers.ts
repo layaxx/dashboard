@@ -94,10 +94,13 @@ export async function updateDB(
 }> {
   const alreadyExistingEntries = await db.feedentry.findMany({
     where: { id: { in: items.map((item) => item.id) } },
-    select: { id: true, preXSSHash: true },
+    select: { id: true, preXSSHash: true, isArchived: true },
   })
 
   const existingEntryIds = new Set(alreadyExistingEntries.map((entry) => entry.id))
+  const existingNonArchivedEntryIds = new Set(
+    alreadyExistingEntries.filter((entry) => !entry.isArchived).map((entry) => entry.id)
+  )
 
   const itemsToBeCreated: Prisma.FeedentryUncheckedCreateInput[] = items.filter(
     (item) => !existingEntryIds.has(item.id)
@@ -113,7 +116,7 @@ export async function updateDB(
   )
 
   const itemsToBeUpdated = items
-    .filter((item) => existingEntryIds.has(item.id))
+    .filter((item) => existingNonArchivedEntryIds.has(item.id))
     .map((item): Prisma.FeedentryUncheckedUpdateInput | undefined => {
       const oldItem = alreadyExistingEntries.find((oldItem) => item.id === oldItem.id)
       if (oldItem && item.text) {
@@ -126,7 +129,6 @@ export async function updateDB(
             id: oldItem.id,
             text: item.text,
             summary: item.summary,
-            isArchived: false,
             preXSSHash,
             updatedAt: dayjs().toISOString(),
           }
