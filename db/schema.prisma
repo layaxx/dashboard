@@ -1,30 +1,22 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-//"postgresql://blitz:abcdefg@host.docker.internal:3001/dashboard"
-
-generator client {
-  provider = "prisma-client-js"
-}
-
-// --------------------------------------
-
 model User {
-  id             Int      @id @default(autoincrement())
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id             Int       @id @default(autoincrement())
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
   name           String?
-  email          String   @unique
+  email          String    @unique
   hashedPassword String?
-  role           String   @default("USER")
-
-  tokens   Token[]
-  sessions Session[]
+  role           String    @default("USER")
+  sessions       Session[]
+  tokens         Token[]
 }
 
 model Session {
@@ -37,9 +29,8 @@ model Session {
   antiCSRFToken      String?
   publicData         String?
   privateData        String?
-
-  user   User? @relation(fields: [userId], references: [id])
-  userId Int?
+  userId             Int?
+  user               User?     @relation(fields: [userId], references: [id])
 }
 
 model Token {
@@ -47,22 +38,13 @@ model Token {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   hashedToken String
-  type        TokenType
   expiresAt   DateTime
   sentTo      String
-
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
+  userId      Int
+  type        TokenType
+  user        User      @relation(fields: [userId], references: [id])
 
   @@unique([hashedToken, type])
-}
-
-// NOTE: It's highly recommended to use an enum for the token type
-//       but enums only work in Postgres.
-//       See: https://blitzjs.com/docs/database-overview#switch-to-postgre-sql
-
-enum TokenType {
-  RESET_PASSWORD
 }
 
 model Feed {
@@ -71,9 +53,9 @@ model Feed {
   updatedAt     DateTime    @updatedAt
   position      Int
   name          String
-  url           String      @unique
   lastLoad      DateTime
   loadIntervall Int         @default(60)
+  url           String      @unique
   etag          String?
   Feedentry     Feedentry[]
 }
@@ -96,27 +78,27 @@ model Readlistentry {
 
 model Feedentry {
   id         String   @id
-  feed       Feed     @relation(fields: [feedId], references: [id])
   title      String
   text       String
-  preXSSHash String   @default("")
-  summary    String
-  link       String
   isArchived Boolean  @default(false)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   feedId     Int
+  link       String
+  summary    String
+  preXSSHash String   @default("")
+  feed       Feed     @relation(fields: [feedId], references: [id])
 }
 
 model StatusLoad {
   id           Int      @id @default(autoincrement())
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  loadTime     DateTime
-  loadDuration Float
   errors       String[]
-  updateCount  Int      @default(0)
+  loadDuration Float
+  loadTime     DateTime
   insertCount  Int      @default(0)
+  updateCount  Int      @default(0)
 }
 
 model StatusClean {
@@ -125,4 +107,8 @@ model StatusClean {
   updatedAt DateTime @updatedAt
   time      DateTime
   duration  Float
+}
+
+enum TokenType {
+  RESET_PASSWORD
 }
