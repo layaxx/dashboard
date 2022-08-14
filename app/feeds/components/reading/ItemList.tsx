@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useMutation, invalidateQuery, useInfiniteQuery } from "blitz"
 import { PlusIcon } from "@heroicons/react/solid"
 import { Readlistentry } from "@prisma/client"
+import clsx from "clsx"
 import createReadlistentry from "../../readlistentries/mutations/createReadlistentry"
 import getReadlistentries from "../../readlistentries/queries/getReadlistentries"
 import ReadlistItem from "./ReadlistItem"
@@ -35,9 +36,10 @@ export const ItemList = () => {
           onSubmit={({ url }) => {
             addRLE({ url }).then(() => invalidateQuery(getReadlistentries))
           }}
+          className={clsx("flex", "flex-wrap", "items-end")}
         >
           <LabeledTextField name="url" label="url" />
-          <Button icon={<PlusIcon />} submit>
+          <Button icon={<PlusIcon />} type="submit">
             Add a new item
           </Button>
         </Form>
