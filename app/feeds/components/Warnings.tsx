@@ -60,8 +60,13 @@ const Warnings = () => {
         },
       })
       .then(
-        async (result) => {
-          const { errors } = JSON.parse(await result.text())
+        async (response) => {
+          if (!response.ok) {
+            notify({ message: "Failed to load Feeds", status: "error" })
+            console.error(response)
+            return
+          }
+          const { errors } = JSON.parse(await response.text())
           invalidateQuery(getFeeds)
           notify({
             title: "Loaded Feeds" + (errors && errors.length > 0 ? " (with Errors)" : ""),

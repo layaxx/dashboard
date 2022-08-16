@@ -1,4 +1,4 @@
-import React, { ReactChild } from "react"
+import React, { ReactChild, ReactNode } from "react"
 import clsx from "clsx"
 import Button from "./Button"
 
@@ -13,6 +13,7 @@ interface IProps {
   confirmButton?: IButton
   icon?: ReactChild
   title: ReactChild
+  children: ReactNode
 }
 
 const GenericModal: React.FC<IProps> = ({ cancelButton, confirmButton, icon, title, children }) => {

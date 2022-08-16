@@ -1,10 +1,14 @@
-import { Fragment, useEffect } from "react"
+import React, { Fragment, useEffect } from "react"
 import { Head, BlitzLayout, Link, useRouter } from "blitz"
 import clsx from "clsx"
 import NotificationsSystem, { useNotifications, setUpNotifications, atalhoTheme } from "reapop"
 import Notification from "../Notification"
 
-const Layout: BlitzLayout<{ title?: string; heading: string }> = ({ title, children, heading }) => {
+const Layout: BlitzLayout<{ title?: string; heading: string; children: React.ReactNode }> = ({
+  title,
+  children,
+  heading,
+}) => {
   const { notifications, dismissNotification } = useNotifications()
 
   useEffect(() => {

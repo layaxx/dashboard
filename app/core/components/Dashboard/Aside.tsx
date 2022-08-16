@@ -1,9 +1,8 @@
-import { ReactChild, Suspense, useState } from "react"
+import { ReactChild, Suspense } from "react"
 import { Link, Routes } from "blitz"
 import { CogIcon } from "@heroicons/react/solid"
 import clsx from "clsx"
 import Loader from "../Loader"
-import SettingsModal from "./SettingsModal"
 import Zen from "./zen"
 import Warnings from "app/feeds/components/Warnings"
 import version from "lib/config/version"
@@ -15,7 +14,6 @@ type Props = {
   feeds: ReactChild
 }
 const Aside = ({ hideNavbar, setHideNavbar, title, feeds }: Props) => {
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   return (
     <aside
       className={clsx(
@@ -56,7 +54,6 @@ const Aside = ({ hideNavbar, setHideNavbar, title, feeds }: Props) => {
             <CogIcon className={clsx("active:animate-spin", "h-7", "ml-auto")} />
           </a>
         </Link>
-        {isSettingsOpen && <SettingsModal setIsSettingsOpen={setIsSettingsOpen} />}
       </section>
       <section className={clsx("flex", "flex-1", "flex-col", "w-full")}>
         <div className={clsx("border-b", "border-gray-600", "mt-6", "pb-5", "pl-4", "w-full")}>

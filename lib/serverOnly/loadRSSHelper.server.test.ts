@@ -120,13 +120,13 @@ describe("loadRSSHelpers#fetchFromURL works as expected", () => {
 
 const mockParser = jest.fn()
 
-jest.mock("rss-to-js", () => ({
+jest.mock("feed-reader", () => ({
   __esModule: true,
-  default: class Parser {
-    parseString(input: string) {
-      return mockParser(input)
-    }
+  parseString(input: string) {
+    return mockParser(input)
   },
+  setReaderOptions: jest.fn(),
+  setParserOptions: jest.fn(),
 }))
 
 describe("loadRSSHelpers#getTitleAndTTLFromFeed works as expected", () => {
@@ -245,9 +245,8 @@ describe("loadRRSHelpers#loadFeed works as expected", () => {
   })
 
   test("returns status error for failed parsing", () => {
-    mockParser.mockImplementation(async () => {
-      return new Promise((_, reject) => reject())
-    })
+    // eslint-disable-next-line unicorn/no-null
+    mockParser.mockImplementation(() => null)
 
     return expect(
       loadFeed({} as Feed, false, {
@@ -258,8 +257,8 @@ describe("loadRRSHelpers#loadFeed works as expected", () => {
   })
 
   test("returns status error for items without id", () => {
-    mockParser.mockImplementation(async () => ({
-      items: [
+    mockParser.mockImplementation(() => ({
+      entries: [
         {
           content: faker.lorem.paragraph(),
           title: faker.lorem.word(),

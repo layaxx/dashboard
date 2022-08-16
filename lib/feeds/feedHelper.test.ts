@@ -1,6 +1,7 @@
 /* eslint-disable no-magic-numbers */
 import { faker } from "@faker-js/faker"
 import { Feed } from "@prisma/client"
+import { FeedEntry } from "feed-reader"
 import {
   convertItem,
   getContentFromParsedItem,
@@ -42,20 +43,20 @@ describe("feedHelper#idAsLinkIfSensible works as expected", () => {
 
 describe("feedHelper#getLinkFromParsedItem works as expected", () => {
   const link = faker.internet.url()
-  const guid = faker.internet.url()
   const fallback = faker.internet.url()
 
   test("prefer item.link if available", () => {
-    expect(getLinkFromParsedItem({ link, guid }, fallback)).toBe(link)
+    expect(getLinkFromParsedItem({ link }, fallback)).toBe(link)
   })
 
+  /* TODO: look at this again
   test("use guid as fallback if valid", () => {
-    expect(getLinkFromParsedItem({ guid }, fallback)).toBe(guid)
-  })
+     expect(getLinkFromParsedItem({ guid }, fallback)).toBe(guid)
+   })
 
-  test("use fallback if guid invalid", () => {
-    expect(getLinkFromParsedItem({ guid: "not a valid url" }, fallback)).toBe(fallback)
-  })
+   test("use fallback if guid invalid", () => {
+     expect(getLinkFromParsedItem({ guid: "not a valid url" }, fallback)).toBe(fallback)
+   }) */
 
   test("use fallback otherwise", () => {
     expect(getLinkFromParsedItem({}, fallback)).toBe(fallback)
@@ -64,7 +65,7 @@ describe("feedHelper#getLinkFromParsedItem works as expected", () => {
 
 describe("feedHelper#getContentFromParsedItem works as expected", () => {
   const itemSharedProperties = {
-    categories: faker.datatype.array().map((cat) => "" + cat),
+    categories: faker.lorem.paragraph(),
     guid: faker.unique(faker.internet.url),
     creator: faker.internet.userName(),
     isoDate: new Date().toISOString(),
@@ -75,18 +76,6 @@ describe("feedHelper#getContentFromParsedItem works as expected", () => {
 
   const title = faker.lorem.words(3)
   const content = faker.lorem.paragraphs(3)
-  const contentEncoded = faker.lorem.paragraphs(2)
-
-  test("prefers encoded content if available", () => {
-    expect(
-      getContentFromParsedItem({
-        ...itemSharedProperties,
-        title,
-        content,
-        "content:encoded": contentEncoded,
-      })
-    ).toBe(contentEncoded)
-  })
 
   test("prefers content if encoded content unavailable", () => {
     expect(getContentFromParsedItem({ ...itemSharedProperties, title, content })).toBe(content)
@@ -105,7 +94,7 @@ describe("feedHelper#getContentFromParsedItem works as expected", () => {
 
 describe("feedHelper#getSummaryFromParsedItem works as expected", () => {
   const itemSharedProperties = {
-    categories: faker.datatype.array().map((cat) => "" + cat),
+    categories: faker.lorem.paragraph(),
     guid: faker.unique(faker.internet.url),
     creator: faker.internet.userName(),
     isoDate: new Date().toISOString(),
@@ -114,7 +103,7 @@ describe("feedHelper#getSummaryFromParsedItem works as expected", () => {
     title: faker.lorem.words(3),
   }
 
-  const contentSnippet = faker.lorem.paragraph()
+  const description = faker.lorem.paragraph()
   const content = faker.lorem.paragraphs(3)
 
   test("prefers encoded contentSnippet if available", () => {
@@ -122,9 +111,9 @@ describe("feedHelper#getSummaryFromParsedItem works as expected", () => {
       getSummaryFromParsedItem({
         ...itemSharedProperties,
         content,
-        contentSnippet,
+        description,
       })
-    ).toBe(contentSnippet)
+    ).toBe(description)
   })
 
   test("takes first part of content as fallback", () => {
@@ -136,19 +125,21 @@ describe("feedHelper#getSummaryFromParsedItem works as expected", () => {
 
 describe("feedHelper#convertItem works as expected", () => {
   const content = faker.lorem.paragraph(),
-    contentSnippet = faker.lorem.sentence(),
-    guid = faker.lorem.slug(),
+    description = faker.lorem.sentence(),
     link = faker.internet.url(),
-    pubDate = faker.date.past().toISOString()
+    published = faker.date.past().toISOString()
 
   const feed: Feed = { id: 77, url: faker.internet.url() } as Feed
 
   test("throws if neither guid nor id nor link are provided", () => {
-    expect(() => convertItem({ content, contentSnippet, pubDate }, feed)).toThrowError()
+    expect(() => convertItem({ content, description, published } as FeedEntry, feed)).toThrowError()
   })
 
   test("defines all required properties", () => {
-    const result = convertItem({ content, contentSnippet, guid, link, pubDate }, feed)
+    const result = convertItem(
+      { content, description, link, published, title: faker.lorem.words(2) },
+      feed
+    )
 
     expect(result).toBeDefined()
     expect(result.id).toBeDefined()

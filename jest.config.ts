@@ -13,6 +13,7 @@ const config: Config.InitialOptions = {
     "!**/vendor/**",
     "!**/*.test.{js,jsx,ts,tsx}",
   ],
+  testTimeout: 30_000,
 }
 
 export default config

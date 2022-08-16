@@ -2,14 +2,15 @@ import { invokeWithMiddleware, InvokeWithMiddlewareConfig, NextApiRequest } from
 import { Prisma } from "@prisma/client"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
+import { parseString, setReaderOptions, setParserOptions, FeedData } from "feed-reader"
 import fetch, { Headers } from "node-fetch"
-import Parser from "rss-to-js"
 import { createHash } from "crypto"
 import { LoadFeedResult, LoadFeedStatus } from "../feeds/types"
 import { ResponseWithSession } from "app/api/loadRSS"
 import createManyFeedEntries from "app/feeds/mutations/createManyFeedEntries"
 import updateFeedentry from "app/feeds/mutations/updateFeedentry"
 import db, { Feed } from "db"
+import summaryLength from "lib/config/feeds/summaryLength"
 import { convertItem } from "lib/feeds/feedHelpers"
 
 dayjs.extend(utc)
@@ -49,16 +50,15 @@ export const loadFeed = async (
   if (!content) {
     console.warn("Received no content from " + feed.url, statusCode)
   } else {
-    let parsedFeed
-    try {
-      parsedFeed = await new Parser().parseString(content)
-    } catch {
+    setReaderOptions({ includeFullContent: true, descriptionMaxLen: summaryLength })
+    const parsedFeed = parseString(content)
+    if (!parsedFeed) {
       console.error("Encountered an error while parsing " + feed.url, headers)
       return { status: LoadFeedStatus.ERROR, statusMessage: "Failed to parse " + feed.url }
     }
-
     try {
-      items = parsedFeed.items?.map((item) => convertItem(item, feed)) ?? []
+      items = parsedFeed.entries?.map((item) => convertItem(item, feed)) ?? []
+      console.log("item", items)
     } catch {
       console.error("Encountered an error while processing items for " + feed.url)
       return {
@@ -191,9 +191,13 @@ export async function getTitleAndTTLFromFeed(
     throw new Error("Failed to fetch feed.")
   }
 
-  let parsedFeed: Parser.Item | undefined
+  let parsedFeed: FeedData | undefined | null
   try {
-    parsedFeed = await new Parser().parseString(content)
+    setReaderOptions({ includeFullContent: true })
+    setParserOptions({ stopNodes: ["*.item", "*.entry"] })
+    parsedFeed = parseString(content)
+    console.log(parsedFeed)
+    setParserOptions({ stopNodes: undefined })
     if (!parsedFeed) {
       throw new Error("Failed to parse feed.")
     }
@@ -203,6 +207,7 @@ export async function getTitleAndTTLFromFeed(
   }
 
   let ttl: number | undefined
+
   if (parsedFeed.ttl) {
     ttl = +parsedFeed.ttl
   } else if (headers && headers.get("expires")) {
