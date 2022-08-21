@@ -1,5 +1,5 @@
 import { Suspense } from "react"
-import { BlitzPage } from "blitz"
+import { BlitzPage } from "@blitzjs/next"
 import clsx from "clsx"
 import UserInfo from "app/core/components/UserInfo"
 import Layout from "app/core/layouts/Layout"

@@ -1,5 +1,5 @@
 import { FC } from "react"
-import { useQuery } from "blitz"
+import { useQuery } from "@blitzjs/rpc"
 import { ExclamationCircleIcon } from "@heroicons/react/solid"
 import clsx from "clsx"
 import StatusChart from "./StatusChart"

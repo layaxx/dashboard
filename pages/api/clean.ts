@@ -1,9 +1,11 @@
-import { BlitzApiRequest, BlitzApiResponse, getSession } from "blitz"
+import { getSession } from "@blitzjs/auth"
 import dayjs from "dayjs"
+import { NextApiRequest, NextApiResponse } from "next"
 import { performance } from "perf_hooks"
+import { api } from "app/blitz-server"
 import db from "db"
 
-const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => {
+const handler = async (request: NextApiRequest, response: NextApiResponse) => {
   const session = await getSession(request, response)
 
   if (!session.userId) {
@@ -76,4 +78,4 @@ const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => 
     )
   )
 }
-export default handler
+export default api(handler)

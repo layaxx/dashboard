@@ -1,4 +1,4 @@
-import { useMutation } from "blitz"
+import { useMutation } from "@blitzjs/rpc"
 import { ExternalLinkIcon, XIcon } from "@heroicons/react/solid"
 import clsx from "clsx"
 import { useNotifications } from "reapop"

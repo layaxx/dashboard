@@ -1,15 +1,15 @@
 import { useState } from "react"
-import { useMutation, invalidateQuery, useInfiniteQuery } from "blitz"
+import { useMutation, invalidateQuery, useInfiniteQuery } from "@blitzjs/rpc"
 import { PlusIcon } from "@heroicons/react/solid"
 import { Readlistentry } from "@prisma/client"
 import clsx from "clsx"
-import createReadlistentry from "../../readlistentries/mutations/createReadlistentry"
-import getReadlistentries from "../../readlistentries/queries/getReadlistentries"
 import ReadlistItem from "./ReadlistItem"
 import Button from "app/core/components/Button"
 import Form from "app/core/components/Form"
 import LabeledTextField from "app/core/components/LabeledTextField"
 import Loader from "app/core/components/Loader"
+import createReadlistentry from "app/feeds/readlistentries/mutations/createReadlistentry"
+import getReadlistentries from "app/feeds/readlistentries/queries/getReadlistentries"
 
 export const ItemList = () => {
   const pageSize = 20

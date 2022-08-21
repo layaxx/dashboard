@@ -1,10 +1,7 @@
 import React, { ReactChild, useEffect, useState } from "react"
 import clsx from "clsx"
-import NotificationsSystem, { atalhoTheme, useNotifications, setUpNotifications } from "reapop"
-
 import Aside from "../components/Dashboard/Aside"
 import Header from "../components/Dashboard/Header"
-import Notification from "app/core/Notification"
 
 type Props = { items: ReactChild; feeds: ReactChild }
 
@@ -17,20 +14,8 @@ const DashboardLayout = ({ items, feeds }: Props) => {
 
   const [hideNavbar, setHideNavbar] = useState<boolean>(false)
 
-  const { notifications, dismissNotification } = useNotifications()
-
   useEffect(() => {
     setHideNavbar(loadFromLocalStorage())
-    setUpNotifications({
-      defaultProps: {
-        position: "top-right",
-        dismissible: true,
-        dismissAfter: 5000,
-        status: "info",
-        allowHTML: false,
-        showDismissButton: false,
-      },
-    })
   }, [])
 
   const setHideNavbarHandler = (input: boolean | ((argument0: boolean) => boolean)) => {
@@ -44,14 +29,6 @@ const DashboardLayout = ({ items, feeds }: Props) => {
 
   return (
     <>
-      <NotificationsSystem
-        notifications={notifications}
-        dismissNotification={(id) => dismissNotification(id)}
-        theme={atalhoTheme}
-        components={{
-          Notification,
-        }}
-      />
       <div className={clsx("flex", "flex-row", "h-screen", "overflow-hidden", "w-full")}>
         <Aside
           hideNavbar={hideNavbar}

@@ -1,29 +1,15 @@
-import React, { Fragment, useEffect } from "react"
-import { Head, BlitzLayout, Link, useRouter } from "blitz"
+import React, { Fragment } from "react"
+import { BlitzLayout } from "@blitzjs/next"
 import clsx from "clsx"
-import NotificationsSystem, { useNotifications, setUpNotifications, atalhoTheme } from "reapop"
-import Notification from "../Notification"
+import Head from "next/head"
+import Link from "next/link"
+import { useRouter } from "next/router"
 
 const Layout: BlitzLayout<{ title?: string; heading: string; children: React.ReactNode }> = ({
   title,
   children,
   heading,
 }) => {
-  const { notifications, dismissNotification } = useNotifications()
-
-  useEffect(() => {
-    setUpNotifications({
-      defaultProps: {
-        position: "top-right",
-        dismissible: true,
-        dismissAfter: 5000,
-        status: "info",
-        allowHTML: false,
-        showDismissButton: false,
-      },
-    })
-  }, [])
-
   const router = useRouter()
 
   return (
@@ -32,15 +18,6 @@ const Layout: BlitzLayout<{ title?: string; heading: string; children: React.Rea
         <title>{title || "dashboard"}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <NotificationsSystem
-        notifications={notifications}
-        dismissNotification={(id) => dismissNotification(id)}
-        theme={atalhoTheme}
-        components={{
-          Notification,
-        }}
-      />
 
       <header className={clsx("bg-slate-600", "p-12", "text-gray-200")}>
         <h1

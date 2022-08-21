@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { setQueryData, useMutation } from "blitz"
+import { setQueryData, useMutation } from "@blitzjs/rpc"
 import { Feedentry, Feedoption } from "@prisma/client"
 import clsx from "clsx"
 import parse, { HTMLReactParserOptions, Element } from "html-react-parser"

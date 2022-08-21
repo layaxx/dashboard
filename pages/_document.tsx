@@ -1,4 +1,4 @@
-import { Document, Html, DocumentHead, Main, BlitzScript /*DocumentContext*/ } from "blitz"
+import Document, { Html, Head, Main, NextScript } from "next/document"
 
 class MyDocument extends Document {
   // Only uncomment if you need to customize this behaviour
@@ -10,11 +10,11 @@ class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
-        <DocumentHead />
+        <Head />
         <link rel="preload" as="font" crossOrigin="" href="/serif.ttf" />
         <body>
           <Main />
-          <BlitzScript />
+          <NextScript />
         </body>
       </Html>
     )

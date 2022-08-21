@@ -19,8 +19,9 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "tsBuildInfoFile": ".tsbuildinfo"
+    "tsBuildInfoFile": ".tsbuildinfo",
+    "types": ["jest", "node"]
   },
-  "exclude": ["node_modules", "**/*.e2e.ts", "cypress"],
+  "exclude": ["node_modules", "**/*.e2e.ts", "cypress", "jest.config.js"],
   "include": ["blitz-env.d.ts", "**/*.ts", "**/*.tsx"]
 }

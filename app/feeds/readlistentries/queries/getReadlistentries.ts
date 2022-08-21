@@ -1,4 +1,5 @@
-import { paginate, resolver } from "blitz"
+import { paginate } from "blitz"
+import { resolver } from "@blitzjs/rpc"
 import db, { Prisma } from "db"
 
 interface GetReadlistentriesInput

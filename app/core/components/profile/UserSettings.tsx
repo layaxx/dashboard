@@ -1,4 +1,4 @@
-import { useMutation } from "blitz"
+import { useMutation } from "@blitzjs/rpc"
 import { FORM_ERROR } from "final-form"
 import { useNotifications } from "reapop"
 import Form from "../Form"

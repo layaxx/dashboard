@@ -1,4 +1,5 @@
-import { NotFoundError, resolver } from "blitz"
+import { NotFoundError } from "blitz"
+import { resolver } from "@blitzjs/rpc"
 import { z } from "zod"
 import { email, username } from "../validations"
 import db from "db"

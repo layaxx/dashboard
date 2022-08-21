@@ -1,4 +1,4 @@
-import { SecurePassword } from "blitz"
+import { SecurePassword } from "@blitzjs/auth"
 import { faker } from "@faker-js/faker"
 import db from "db"
 

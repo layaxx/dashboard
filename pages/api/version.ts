@@ -1,7 +1,9 @@
-import { BlitzApiRequest, BlitzApiResponse, getSession } from "blitz"
-import db from "db"
+import { getSession } from "@blitzjs/auth"
+import { NextApiRequest, NextApiResponse } from "next"
+import { api } from "app/blitz-server"
+import version from "lib/config/version"
 
-const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => {
+const handler = async (request: NextApiRequest, response: NextApiResponse) => {
   const session = await getSession(request, response)
 
   if (
@@ -14,11 +16,8 @@ const handler = async (request: BlitzApiRequest, response: BlitzApiResponse) => 
     return response.end()
   }
 
-  const feeds = await db.feed.findMany()
-  const feedEntries = await db.feedentry.findMany({ where: { isArchived: false } })
-
   response.statusCode = 200
   response.setHeader("Content-Type", "application/json")
-  response.end(JSON.stringify({ feeds, feedEntries }, undefined, 2))
+  response.end(JSON.stringify({ version }, undefined, 2))
 }
-export default handler
+export default api(handler)

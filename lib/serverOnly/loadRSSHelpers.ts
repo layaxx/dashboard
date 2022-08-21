@@ -1,4 +1,4 @@
-import { invokeWithMiddleware, InvokeWithMiddlewareConfig, NextApiRequest } from "blitz"
+import { invokeWithCtx, AuthenticatedMiddlewareCtx } from "@blitzjs/rpc"
 import { Prisma } from "@prisma/client"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
@@ -6,7 +6,6 @@ import { parseString, setReaderOptions, setParserOptions, FeedData } from "feed-
 import fetch, { Headers } from "node-fetch"
 import { createHash } from "crypto"
 import { LoadFeedResult, LoadFeedStatus } from "../feeds/types"
-import { ResponseWithSession } from "app/api/loadRSS"
 import createManyFeedEntries from "app/feeds/mutations/createManyFeedEntries"
 import updateFeedentry from "app/feeds/mutations/updateFeedentry"
 import db, { Feed } from "db"
@@ -18,9 +17,9 @@ dayjs.extend(utc)
 export const loadFeed = async (
   feed: Feed,
   forceReload: boolean,
-  { req, res }: { req: NextApiRequest; res: ResponseWithSession }
+  context: AuthenticatedMiddlewareCtx
 ): Promise<LoadFeedResult> => {
-  if (!req || !res) {
+  if (!context) {
     throw new Error("Missing ctx info")
   }
 
@@ -68,7 +67,7 @@ export const loadFeed = async (
     }
   }
 
-  const { countUpdated, countCreated } = await updateDB(items, { req, res })
+  const { countUpdated, countCreated } = await updateDB(items, context)
 
   await db.feed.update({
     data: { lastLoad: dayjs().toISOString(), etag: headers.get("etag") },
@@ -87,7 +86,7 @@ export const loadFeed = async (
 
 export async function updateDB(
   items: Prisma.FeedentryUncheckedCreateInput[],
-  context: InvokeWithMiddlewareConfig
+  context: AuthenticatedMiddlewareCtx
 ): Promise<{
   countUpdated: number
   countCreated: number
@@ -106,7 +105,7 @@ export async function updateDB(
     (item) => !existingEntryIds.has(item.id)
   )
 
-  const { count: countCreated } = await invokeWithMiddleware(
+  const { count: countCreated } = await invokeWithCtx(
     createManyFeedEntries,
     {
       skipDuplicates: true,
@@ -142,7 +141,7 @@ export async function updateDB(
 
   const updatedFeedEntries = await Promise.all(
     itemsToBeUpdated.map(async (input) => {
-      return await invokeWithMiddleware(updateFeedentry, { input, select: { id: true } }, context)
+      return await invokeWithCtx(updateFeedentry, { input, select: { id: true } }, context)
     })
   )
 

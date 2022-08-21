@@ -1,8 +1,7 @@
 /* eslint-disable max-lines */
-import { NextApiRequest, NextApiResponse } from "blitz"
+import { AuthenticatedMiddlewareCtx } from "@blitzjs/rpc"
 import { faker } from "@faker-js/faker"
 import dayjs from "dayjs"
-import httpMocks from "node-mocks-http"
 import { fetchFromURL, getTitleAndTTLFromFeed, loadFeed } from "./loadRSSHelpers"
 import { Feed } from "db"
 import { LoadFeedStatus } from "lib/feeds/types"
@@ -159,25 +158,9 @@ describe("loadRSSHelpers#getTitleAndTTLFromFeed works as expected", () => {
 })
 
 describe("loadRRSHelpers#loadFeed works as expected", () => {
-  const mocks = httpMocks.createMocks<any, any>()
-  const mockRequest = mocks.req
-  const mockResponse = mocks.res
-
-  test("throws error for missing request", () => {
+  test("throws error for missing ctx", () => {
     return expect(
-      loadFeed({} as Feed, false, {
-        req: undefined as unknown as NextApiRequest,
-        res: mockResponse,
-      })
-    ).rejects.toEqual(new Error("Missing ctx info"))
-  })
-
-  test("throws error for missing response", () => {
-    return expect(
-      loadFeed({} as Feed, false, {
-        req: mockRequest,
-        res: undefined as unknown as NextApiResponse,
-      })
+      loadFeed({} as Feed, false, undefined as unknown as AuthenticatedMiddlewareCtx)
     ).rejects.toEqual(new Error("Missing ctx info"))
   })
 
@@ -200,9 +183,8 @@ describe("loadRRSHelpers#loadFeed works as expected", () => {
 
     return expect(
       loadFeed({} as Feed, false, {
-        req: mockRequest,
-        res: mockResponse,
-      })
+        session: { $authorize: () => true, $isAuthorized: () => true },
+      } as unknown as AuthenticatedMiddlewareCtx)
     ).resolves.toMatchObject({ status: LoadFeedStatus.ERROR })
   })
 
@@ -225,9 +207,8 @@ describe("loadRRSHelpers#loadFeed works as expected", () => {
 
     return expect(
       loadFeed({} as Feed, false, {
-        req: mockRequest,
-        res: mockResponse,
-      })
+        session: { $authorize: () => true, $isAuthorized: () => true },
+      } as unknown as AuthenticatedMiddlewareCtx)
     ).resolves.toMatchObject({ status: LoadFeedStatus.SKIPPED })
   })
 
@@ -237,9 +218,8 @@ describe("loadRRSHelpers#loadFeed works as expected", () => {
         { lastLoad: dayjs().subtract(1, "min").toDate(), loadIntervall: 1000 } as Feed,
         false,
         {
-          req: mockRequest,
-          res: mockResponse,
-        }
+          session: { $authorize: () => true, $isAuthorized: () => true },
+        } as unknown as AuthenticatedMiddlewareCtx
       )
     ).resolves.toMatchObject({ status: LoadFeedStatus.SKIPPED })
   })
@@ -250,9 +230,8 @@ describe("loadRRSHelpers#loadFeed works as expected", () => {
 
     return expect(
       loadFeed({} as Feed, false, {
-        req: mockRequest,
-        res: mockResponse,
-      })
+        session: { $authorize: () => true, $isAuthorized: () => true },
+      } as unknown as AuthenticatedMiddlewareCtx)
     ).resolves.toMatchObject({ status: LoadFeedStatus.ERROR })
   })
 
@@ -268,9 +247,8 @@ describe("loadRRSHelpers#loadFeed works as expected", () => {
 
     return expect(
       loadFeed({} as Feed, false, {
-        req: mockRequest,
-        res: mockResponse,
-      })
+        session: { $authorize: () => true, $isAuthorized: () => true },
+      } as unknown as AuthenticatedMiddlewareCtx)
     ).resolves.toMatchObject({ status: LoadFeedStatus.ERROR })
   })
 })

@@ -1,10 +1,10 @@
-import { Image } from "blitz"
 import {
   CheckCircleIcon,
   ExclamationCircleIcon,
   InformationCircleIcon,
 } from "@heroicons/react/outline"
 import clsx from "clsx"
+import Image from "next/image"
 import { Notification as NotificationType, Status } from "reapop"
 import { DismissNotification } from "reapop/dist/components/NotificationsSystem"
 

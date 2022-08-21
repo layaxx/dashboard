@@ -1,6 +1,8 @@
-import { invoke, Routes, useMutation, useQuery, useRouter } from "blitz"
+import { Routes } from "@blitzjs/next"
+import { invoke, useMutation, useQuery } from "@blitzjs/rpc"
 import clsx from "clsx"
 import { FormApi } from "final-form"
+import { useRouter } from "next/router"
 import { useNotifications } from "reapop"
 import Form from "app/core/components/Form"
 import FormField from "app/core/components/FormField"
@@ -14,7 +16,7 @@ import getTitleAndTTLQuery from "app/feeds/queries/getInfoFromFeedURL"
 type Props = { id?: number; isCreate?: boolean }
 
 const SettingsForm = ({ id, isCreate }: Props) => {
-  const [feed, { isLoading }] = useQuery(
+  const [feed, { isFetching }] = useQuery(
     getFeed,
     { id },
     {
@@ -31,7 +33,7 @@ const SettingsForm = ({ id, isCreate }: Props) => {
   const router = useRouter()
   const { notify } = useNotifications()
 
-  if (isLoading) {
+  if (isFetching) {
     return <Loader />
   }
   if (!feed && !isCreate) {

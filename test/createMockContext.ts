@@ -1,9 +1,5 @@
-import {
-  Ctx,
-  getSession,
-  MiddlewareRequest as Request,
-  MiddlewareResponse as Response,
-} from "blitz"
+import { Ctx, RequestMiddleware as Request, MiddlewareResponse as Response } from "blitz"
+import { ApiHandlerIncomingMessage, getSession } from "@blitzjs/auth"
 import httpMocks from "node-mocks-http"
 import { User } from "db"
 
@@ -34,7 +30,7 @@ export default async function createMockContext<C extends Ctx>({
 
   // Ensures the response has the blitzCtx object which is required for
   // authorization checks
-  await getSession(mockRequest, mockResponse)
+  await getSession(mockRequest as unknown as ApiHandlerIncomingMessage, mockResponse)
 
   // Simulate login by saving public session data
   if (user) {

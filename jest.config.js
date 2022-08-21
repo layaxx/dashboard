@@ -1,8 +1,11 @@
-import type { Config } from "@jest/types"
+const nextJest = require("@blitzjs/next/jest")
 
-const config: Config.InitialOptions = {
-  preset: "blitz",
-  globalSetup: "./test/globalSetup.ts",
+const createJestConfig = nextJest({
+  dir: "./",
+})
+
+const customJestConfig = {
+  setupFilesAfterEnv: ["./test/globalSetup.ts"],
   collectCoverageFrom: [
     "lib/**/*.{js,jsx,ts,tsx}",
     "!lib/config/**/*",
@@ -16,4 +19,4 @@ const config: Config.InitialOptions = {
   testTimeout: 30_000,
 }
 
-export default config
+module.exports = createJestConfig(customJestConfig)

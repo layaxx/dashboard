@@ -1,4 +1,4 @@
-import { useMutation } from "blitz"
+import { useMutation } from "@blitzjs/rpc"
 import signup from "app/auth/mutations/signup"
 import { Signup } from "app/auth/validations"
 import { Form, FORM_ERROR } from "app/core/components/Form"

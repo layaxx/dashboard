@@ -1,5 +1,6 @@
 import { Fragment } from "react"
-import { useQuery, useInfiniteQuery, ErrorComponent } from "blitz"
+import { ErrorComponent } from "@blitzjs/next"
+import { useQuery, useInfiniteQuery } from "@blitzjs/rpc"
 import getFeedentries from "../queries/getFeedentries"
 import getRecentlyReadFeedentries from "../queries/getRecentlyReadFeedentries"
 import Item from "./items/Item"
@@ -44,7 +45,6 @@ export const ItemsList = () => {
       refetchOnReconnect: false,
       refetchOnWindowFocus: false,
       useErrorBoundary: true,
-      notifyOnChangeProps: "tracked",
       getNextPageParam: ({ nextPage }) => nextPage,
       enabled: activeFeedID !== RECENTLY_READ_ID,
     }
@@ -56,7 +56,6 @@ export const ItemsList = () => {
     {
       enabled: activeFeedID === RECENTLY_READ_ID,
       useErrorBoundary: true,
-      notifyOnChangeProps: "tracked",
     }
   )
 

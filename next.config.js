@@ -1,13 +1,8 @@
-import { BlitzConfig, sessionMiddleware, simpleRolesIsAuthorized } from "blitz"
+const { withBlitz } = require("@blitzjs/next")
 
-const config: BlitzConfig = {
-  middleware: [
-    sessionMiddleware({
-      cookiePrefix: "dashboard",
-      isAuthorized: simpleRolesIsAuthorized,
-    }),
-  ],
+const config = {
   reactStrictMode: true,
+
   async redirects() {
     return [
       {
@@ -26,4 +21,4 @@ const config: BlitzConfig = {
   },
   */
 }
-module.exports = config
+module.exports = withBlitz(config)

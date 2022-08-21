@@ -1,6 +1,9 @@
-import { BlitzApiHandler, getSession, NextApiResponse } from "blitz"
+import { AuthenticatedSessionContext, getSession } from "@blitzjs/auth"
+import { AuthenticatedMiddlewareCtx } from "@blitzjs/rpc"
 import dayjs from "dayjs"
+import { NextApiResponse, NextApiHandler } from "next"
 import { performance } from "perf_hooks"
+import { api } from "app/blitz-server"
 import db from "db"
 import { LoadFeedStatus, Result } from "lib/feeds/types"
 import { loadFeed } from "lib/serverOnly/loadRSSHelpers"
@@ -9,15 +12,18 @@ export interface ResponseWithSession extends NextApiResponse<any> {
   blitzCtx?: { session: { $authorize: Function; $isAuthorized: Function } }
 }
 
-const handler: BlitzApiHandler = async (request, response: ResponseWithSession) => {
-  const session = await getSession(request, response)
+const handler: NextApiHandler = async (request, response: ResponseWithSession) => {
+  let session = await getSession(request, response)
 
   if (!session.userId) {
     if (process.env.API_TOKEN && request.headers["api-token"] === process.env.API_TOKEN) {
       console.log("Access to /api/clean granted due to valid api token")
-      response.blitzCtx = {
-        session: { $authorize: () => {}, $isAuthorized: () => true },
-      }
+
+      session = {
+        $authorize: () => {},
+        $thisIsAuthorized: () => true,
+        $isAuthorized: () => true,
+      } as AuthenticatedSessionContext
     } else {
       console.log("denied Access")
       response.statusCode = 403
@@ -38,9 +44,8 @@ const handler: BlitzApiHandler = async (request, response: ResponseWithSession) 
       name: feed.name,
       id: feed.id,
       ...(await loadFeed(feed, force, {
-        req: request,
-        res: response,
-      })),
+        session,
+      } as AuthenticatedMiddlewareCtx)),
     }))
   )
 
@@ -77,4 +82,4 @@ const handler: BlitzApiHandler = async (request, response: ResponseWithSession) 
   response.json({ results, timeElapsed: timeStampAfter - timeStampBefore, errors })
   response.end()
 }
-export default handler
+export default api(handler)

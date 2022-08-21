@@ -1,5 +1,6 @@
 import { Suspense } from "react"
-import { Head, BlitzPage } from "blitz"
+import { BlitzPage } from "@blitzjs/next"
+import Head from "next/head"
 import ChangePasswordForm from "app/core/components/profile/ChangePasswordForm"
 import UserSettings from "app/core/components/profile/UserSettings"
 import Layout from "app/core/layouts/Layout"

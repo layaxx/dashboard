@@ -1,5 +1,6 @@
 import { Suspense } from "react"
-import { Head, BlitzPage } from "blitz"
+import { BlitzPage } from "@blitzjs/next"
+import Head from "next/head"
 import Loader from "app/core/components/Loader"
 import Layout from "app/core/layouts/Layout"
 import StatusOverview from "app/feeds/components/status/Overview"

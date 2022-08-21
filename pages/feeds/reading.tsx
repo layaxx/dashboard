@@ -1,22 +1,23 @@
 import { Suspense } from "react"
-import { Head, BlitzPage } from "blitz"
+import { BlitzPage } from "@blitzjs/next"
+import Head from "next/head"
 import Loader from "app/core/components/Loader"
 import DashboardLayout from "app/core/layouts/DashboardLayout"
 import { FeedListContainer } from "app/feeds/components/FeedListContainer"
-import { ItemsList } from "app/feeds/components/ItemsList"
+import { ItemList } from "app/feeds/components/reading/ItemList"
 import { FEED_MODE } from "types"
 
-const FeedsRSSPage: BlitzPage = () => {
+const FeedsReadingPage: BlitzPage = () => {
   return (
     <>
       <Head>
-        <title>Feeds - RSS</title>
+        <title>Feeds - Reading</title>
       </Head>
       <DashboardLayout
-        feeds={<FeedListContainer mode={FEED_MODE.RSS} />}
+        feeds={<FeedListContainer mode={FEED_MODE.BOOKMARKS} />}
         items={
           <Suspense fallback={<Loader />}>
-            <ItemsList />
+            <ItemList />
           </Suspense>
         }
       />
@@ -24,6 +25,6 @@ const FeedsRSSPage: BlitzPage = () => {
   )
 }
 
-FeedsRSSPage.authenticate = true
+FeedsReadingPage.authenticate = true
 
-export default FeedsRSSPage
+export default FeedsReadingPage

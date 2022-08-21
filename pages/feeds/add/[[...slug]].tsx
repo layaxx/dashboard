@@ -1,5 +1,7 @@
 import { useEffect } from "react"
-import { BlitzPage, Routes, useMutation, useParam, useRouter } from "blitz"
+import { BlitzPage, Routes, useParam } from "@blitzjs/next"
+import { useMutation } from "@blitzjs/rpc"
+import { useRouter } from "next/router"
 import createReadlistentry from "app/feeds/readlistentries/mutations/createReadlistentry"
 
 function getURLFromSlug(slug: string[]) {
