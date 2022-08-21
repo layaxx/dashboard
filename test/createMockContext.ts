@@ -5,7 +5,7 @@ import { User } from "db"
 
 // This import is crucial, as it modifies global state by calling sessionMiddleware
 // Most importantly, this sets the isAuthorized method in global.sessionConfig
-import "../blitz.config"
+import "../next.config"
 
 interface CreateMockContextOptions {
   user?: User

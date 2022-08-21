@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+  dashboard-staging-app:
+    build:
+      context: ../../
+      dockerfile: docker/staging/Dockerfile
+    image: dashboard-staging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "healthcheck.js"]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    depends_on:
+      dashboard-staging-db:
+        condition: service_healthy
+    networks:
+      - public
+      - backend
+
+  dashboard-staging-db:
+    image: postgres:12.4-alpine
+    env_file: .env.staging.local
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "${POSTGRES_DB}", "-U", "${POSTGRES_USER}"]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    volumes:
+      - psql:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - backend
+
+volumes:
+  psql:
+
+networks:
+  public:
+    name: proxy
+    external: true
+  backend:

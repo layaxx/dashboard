@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+  dashboard-production-app:
+    build:
+      context: ../../
+      dockerfile: docker/production/Dockerfile
+    image: dashboard-production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "healthcheck.js"]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    depends_on:
+      dashboard-production-db:
+        condition: service_healthy
+    networks:
+      - public
+      - backend
+
+  dashboard-production-db:
+    image: postgres:12.4-alpine
+    env_file: ../../.env.production.local
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "${POSTGRES_DB}", "-U", "${POSTGRES_USER}"]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    volumes:
+      - psql:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - backend
+
+volumes:
+  psql:
+
+networks:
+  public:
+    name: proxy
+    external: true
+  backend:

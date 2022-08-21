@@ -26,8 +26,8 @@ describe("feedHelper#idAsLinkIfSensible works as expected", () => {
 
   test.each(["invalidurl", "invalidurl.com", "./feed.xml"])(
     "returns undefined for invalid URLs",
-    (inavlidUrl) => {
-      expect(idAsLinkIfSensible(inavlidUrl)).toBeUndefined()
+    (invalidURL) => {
+      expect(idAsLinkIfSensible(invalidURL)).toBeUndefined()
     }
   )
 
@@ -155,7 +155,6 @@ describe("feedHelper#convertItem works as expected", () => {
 test("renders blitz documentation link", async () => {
   if (!global.ctx || !global.ctx.authorized) {
     fail("No Authorized Ctx found.")
-    return
   }
 
   const { feeds } = await getFeeds({}, global.ctx.authorized!)
