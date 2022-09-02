@@ -40,8 +40,9 @@ export const loadFeed = async (
     if (!ok) {
       throw new Error("Response was not ok")
     }
-  } catch {
+  } catch (error) {
     console.error("Encountered an error while fetching " + feed.url)
+    console.error(error)
     return { status: LoadFeedStatus.ERROR, statusMessage: "Failed to fetch from url " + feed.url }
   }
 
@@ -57,9 +58,9 @@ export const loadFeed = async (
     }
     try {
       items = parsedFeed.entries?.map((item) => convertItem(item, feed)) ?? []
-      console.log("item", items)
-    } catch {
+    } catch (error) {
       console.error("Encountered an error while processing items for " + feed.url)
+      console.error(error)
       return {
         status: LoadFeedStatus.ERROR,
         statusMessage: "Failed to process items for url " + feed.url,

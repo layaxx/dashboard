@@ -21,7 +21,7 @@ services:
 
   dashboard-staging-db:
     image: postgres:12.4-alpine
-    env_file: .env.staging.local
+    env_file: ../../.env.staging.local
     healthcheck:
       test: ["CMD", "pg_isready", "-q", "-d", "${POSTGRES_DB}", "-U", "${POSTGRES_USER}"]
       timeout: 45s

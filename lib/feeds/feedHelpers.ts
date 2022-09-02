@@ -56,18 +56,22 @@ export function cleanXSS(string: string) {
 
 export const convertItem = (item: FeedEntry, feed: Feed): Prisma.FeedentryUncheckedCreateInput => {
   const id = item.guid || item.id || item.link
-  console.log("id", id)
+
   if (!id) {
     console.error("No ID was provided", item)
     throw new Error("Cannot convert Item without ID")
   }
+  const text = getContentFromParsedItem(item)
+  const link = getLinkFromParsedItem(item, feed.url)
+  const summary = getSummaryFromParsedItem(item)
+  const createdAt = dayjs(item.published || undefined).toISOString()
   return {
     id,
-    text: getContentFromParsedItem(item),
+    text,
     title: item.title ?? "No Title provided",
-    link: getLinkFromParsedItem(item, feed.url),
-    summary: getSummaryFromParsedItem(item),
+    link,
+    summary,
     feedId: feed.id,
-    createdAt: dayjs(item.published).toISOString(),
+    createdAt,
   }
 }
