@@ -4,6 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { performance } from "perf_hooks"
 import { api } from "app/blitz-server"
 import db from "db"
+import { getIDSFromFeeds } from "lib/serverOnly/loadRSSHelpers"
 
 const handler = async (request: NextApiRequest, response: NextApiResponse) => {
   const session = await getSession(request, response)
@@ -12,7 +13,7 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
     if (process.env.API_TOKEN && request.headers["api-token"] === process.env.API_TOKEN) {
       console.log("Access to /api/clean granted due to valid api token")
     } else {
-      console.log("denied Access")
+      console.log("Access to /api/clean denied")
       response.statusCode = 403
       response.statusMessage = "Please log in to use this API route"
       return response.end()
@@ -45,12 +46,27 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
 
   const entriesToBeDeleted = await db.feedentry.findMany({
     where: { isArchived: true, updatedAt: { lt: timeThreshold } },
-  })
-  const { count: countEntriesDeleted } = await db.feedentry.deleteMany({
-    where: { id: { in: entriesToBeDeleted.map((entry) => entry.id) } },
+    include: { feed: { select: { url: true } } },
   })
 
-  // TODO: This may lead to entries being reimported after deletion if they still are present in the RSS feed
+  const urlsToBeChecked = new Set(entriesToBeDeleted.map(({ feed }) => feed.url))
+
+  // eslint-disable-next-line unicorn/prefer-spread
+  const stillOnlineIDs = await getIDSFromFeeds(Array.from(urlsToBeChecked))
+
+  const { count: countEntriesDeleted } = await db.feedentry.deleteMany({
+    where: {
+      id: {
+        in: entriesToBeDeleted
+          .filter(
+            (entry) =>
+              !stillOnlineIDs.get(entry.feed.url) ||
+              !stillOnlineIDs.get(entry.feed.url)!.has(entry.id)
+          )
+          .map((entry) => entry.id),
+      },
+    },
+  })
 
   const timeStampAfter = performance.now()
 

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { invokeWithCtx, AuthenticatedMiddlewareCtx } from "@blitzjs/rpc"
 import { Prisma } from "@prisma/client"
 import dayjs from "dayjs"
@@ -215,4 +216,38 @@ export async function getTitleAndTTLFromFeed(
   }
 
   return [parsedFeed.title, ttl]
+}
+
+export async function getIDSFromFeeds(feedUrls: string[]): Promise<Map<string, Set<string>>> {
+  const result = new Map()
+
+  for (const url of feedUrls) {
+    const response = await fetchFromURL(url, true).catch((error) => {
+      console.error("Encountered an error while fetching " + url)
+      console.error(error)
+    })
+
+    if (!response) {
+      continue
+    }
+
+    const { content, headers, statusCode } = response
+
+    if (!content) {
+      console.warn("Received no content from " + url, statusCode)
+    } else {
+      setReaderOptions({ includeFullContent: false, descriptionMaxLen: 0 })
+      const parsedFeed = parseString(content)
+      if (!parsedFeed) {
+        console.error("Encountered an error while parsing " + url, headers)
+        continue
+      }
+      result.set(
+        url,
+        new Set(parsedFeed.entries?.map((item) => item.guid || item.id || item.link) ?? [])
+      )
+    }
+  }
+
+  return result
 }
