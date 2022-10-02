@@ -22,7 +22,7 @@ export const FeedList: FC<Props> = ({ mode }) => {
 
   const showAllFeeds = false
 
-  const [{ activeFeedID }, setState] = useSharedState()
+  const [{ activeFeedID, refetchItems }, setState] = useSharedState()
 
   const router = useRouter()
   return (
@@ -64,14 +64,15 @@ export const FeedList: FC<Props> = ({ mode }) => {
                   title={name}
                   unreadCount={unreadCount}
                   onClick={() => {
-                    if (mode === FEED_MODE.BOOKMARKS) {
+                    if (mode !== FEED_MODE.RSS) {
                       router.push("/feeds/rss")
                     }
                     if (isActive) {
-                      // TODO: console.log("should invalidate")
+                      refetchItems()
+                    } else {
+                      localStorage.setItem(LOCALSTORAGE_FEEDID, JSON.stringify(id))
+                      setState((previous) => ({ ...previous, activeFeedID: id }))
                     }
-                    localStorage.setItem(LOCALSTORAGE_FEEDID, JSON.stringify(id))
-                    setState((previous) => ({ ...previous, activeFeedID: id }))
                   }}
                   key={id}
                   isActive={isActive}

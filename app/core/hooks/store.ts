@@ -11,6 +11,7 @@ const activeFeedID =
 
 const initialState = {
   activeFeedID,
+  refetchItems: () => console.warn("Cannot refetch items as no handler is attached"),
 }
 
 const useCustomState = () => useState(initialState)

@@ -1,4 +1,4 @@
-import { Fragment } from "react"
+import { Fragment, useEffect } from "react"
 import { ErrorComponent } from "@blitzjs/next"
 import { useQuery, useInfiniteQuery } from "@blitzjs/rpc"
 import getRecentlyReadEntries from "../queries/getRecentlyReadEntries"
@@ -23,13 +23,15 @@ export const ItemsList = () => {
     updatedAt: new Date(),
   }
 
+  const [_, setState] = useSharedState()
+
   const [settings] = useQuery(
     getFeedoption,
     { id: activeFeedID! },
     { enabled: !!activeFeedID, placeholderData: defaultOptions }
   )
 
-  const [pages, { fetchNextPage, hasNextPage, isFetchingNextPage }] = useInfiniteQuery(
+  const [pages, { fetchNextPage, hasNextPage, isFetchingNextPage, refetch }] = useInfiniteQuery(
     getFeedentries,
     (fetchNextPageVariable) => {
       return {
@@ -58,6 +60,12 @@ export const ItemsList = () => {
       useErrorBoundary: true,
     }
   )
+
+  useEffect(() => {
+    if (activeFeedID !== RECENTLY_READ_ID) {
+      setState((previous) => ({ ...previous, refetchItems: refetch }))
+    }
+  }, [activeFeedID, refetch, setState])
 
   if (activeFeedID === RECENTLY_READ_ID && recentlyReadResult && recentlyReadResult.feedentries) {
     return (
