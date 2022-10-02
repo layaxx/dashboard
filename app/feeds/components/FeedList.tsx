@@ -14,7 +14,7 @@ type Props = {
 export const FeedList: FC<Props> = ({ mode }) => {
   const secondsInMinute = 60
   const milliSecondsInSecond = 1000
-  const [{ feeds, recentlyReadCount }] = useQuery(getFeeds, undefined, {
+  const [{ feeds }] = useQuery(getFeeds, undefined, {
     refetchInterval: milliSecondsInSecond * secondsInMinute,
     refetchOnReconnect: true,
     refetchOnWindowFocus: true,
@@ -30,6 +30,17 @@ export const FeedList: FC<Props> = ({ mode }) => {
       {feeds && (
         <>
           <FeedListItem
+            title={"Recently Read"}
+            isActive={mode === FEED_MODE.RSS && activeFeedID === RECENTLY_READ_ID}
+            onClick={() => {
+              if (mode === FEED_MODE.BOOKMARKS) {
+                router.push("/feeds/rss")
+              }
+              setState((previous) => ({ ...previous, activeFeedID: RECENTLY_READ_ID }))
+            }}
+          />
+
+          <FeedListItem
             title={"All Feeds"}
             unreadCount={feeds.reduce(
               (accumulator: number, current) => accumulator + current.unreadCount,
@@ -41,18 +52,6 @@ export const FeedList: FC<Props> = ({ mode }) => {
                 router.push("/feeds/rss")
               }
               setState((previous) => ({ ...previous, activeFeedID: ALL_FEEDS_ID }))
-            }}
-          />
-
-          <FeedListItem
-            title={"Recently Read"}
-            unreadCount={recentlyReadCount}
-            isActive={mode === FEED_MODE.RSS && activeFeedID === RECENTLY_READ_ID}
-            onClick={() => {
-              if (mode === FEED_MODE.BOOKMARKS) {
-                router.push("/feeds/rss")
-              }
-              setState((previous) => ({ ...previous, activeFeedID: RECENTLY_READ_ID }))
             }}
           />
 

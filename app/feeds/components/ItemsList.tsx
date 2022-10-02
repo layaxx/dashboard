@@ -1,13 +1,13 @@
 import { Fragment } from "react"
 import { ErrorComponent } from "@blitzjs/next"
 import { useQuery, useInfiniteQuery } from "@blitzjs/rpc"
-import getFeedentries from "../queries/getFeedentries"
-import getRecentlyReadFeedentries from "../queries/getRecentlyReadFeedentries"
+import getRecentlyReadEntries from "../queries/getRecentlyReadEntries"
 import Item from "./items/Item"
 import Button from "app/core/components/Button"
 import Loader from "app/core/components/Loader"
 import { useSharedState } from "app/core/hooks/store"
 import getFeedoption from "app/feedoptions/queries/getFeedoption"
+import getFeedentries from "app/feeds/queries/getFeedentries"
 import { ALL_FEEDS_ID, RECENTLY_READ_ID } from "lib/config/feeds/feedIDs"
 
 export const ItemsList = () => {
@@ -51,7 +51,7 @@ export const ItemsList = () => {
   )
 
   const [recentlyReadResult] = useQuery(
-    getRecentlyReadFeedentries,
+    getRecentlyReadEntries,
     {},
     {
       enabled: activeFeedID === RECENTLY_READ_ID,
