@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useMutation, invalidateQuery, useInfiniteQuery } from "@blitzjs/rpc"
+import { useMutation, useInfiniteQuery } from "@blitzjs/rpc"
 import { PlusIcon } from "@heroicons/react/solid"
 import { Readlistentry } from "@prisma/client"
 import clsx from "clsx"
@@ -14,14 +14,17 @@ import getReadlistentries from "app/feeds/readlistentries/queries/getReadlistent
 export const ItemList = () => {
   const pageSize = 20
 
-  const [pages, { hasNextPage, fetchNextPage, isFetchingNextPage }] = useInfiniteQuery(
+  const [pages, { hasNextPage, fetchNextPage, isFetchingNextPage, refetch }] = useInfiniteQuery(
     getReadlistentries,
     (input) => {
-      const { take, skip } = input ?? { take: pageSize, skip: 0 }
-      return { take, skip, where: { isArchived: { equals: false } } }
+      return {
+        take: input.take ?? pageSize,
+        skip: input.skip ?? 0,
+        where: { isArchived: { equals: false } },
+      }
     },
     {
-      getNextPageParam: (lastPage) => lastPage.nextPage,
+      getNextPageParam: ({ nextPage }) => nextPage,
     }
   )
 
@@ -34,7 +37,7 @@ export const ItemList = () => {
       <div>
         <Form
           onSubmit={({ url }) => {
-            addRLE({ url }).then(() => invalidateQuery(getReadlistentries))
+            addRLE({ url }).then(() => refetch())
           }}
           className={clsx("flex", "flex-wrap", "items-end")}
         >

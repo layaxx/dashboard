@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Routes } from "@blitzjs/next"
-import { invalidateQuery, useMutation, useQuery } from "@blitzjs/rpc"
+import { useMutation, useQuery } from "@blitzjs/rpc"
 import { PlusIcon } from "@heroicons/react/solid"
 import { Feed } from "@prisma/client"
 import clsx from "clsx"
@@ -13,7 +13,7 @@ import updateFeedMutation from "app/feeds/mutations/updateFeed"
 import getFeeds from "app/feeds/queries/getFeeds"
 
 const SettingsOverview = () => {
-  const [{ feeds }] = useQuery(getFeeds, undefined, {
+  const [{ feeds }, { refetch }] = useQuery(getFeeds, undefined, {
     refetchOnReconnect: true,
     refetchOnWindowFocus: true,
     refetchOnMount: true,
@@ -39,7 +39,7 @@ const SettingsOverview = () => {
         }
       })
     )
-    invalidateQuery(getFeeds)
+    await refetch()
     notify({ title: "Successfully reordered feeds", status: "success" })
   }
 
@@ -47,10 +47,42 @@ const SettingsOverview = () => {
 
   return (
     <>
+      <Link href={Routes.FeedsAddPage()}>
+        <a>
+          <Button icon={<PlusIcon />}>Add new Feed</Button>
+        </a>
+      </Link>
+
       <div className="w-full">
+        {(feeds as Feed[]).map((feed, index) => (
+          <SettingsItem {...feed} key={feed.id} refetch={async () => saveCurrentOrder(index)} />
+        ))}
+      </div>
+      <div>
+        <h2 className={clsx("font-bold", "text-2xl", "tracking-tight")}>Order of feeds:</h2>
         <ReactSortable list={list} setList={setList}>
-          {list.map((feed, index) => (
-            <SettingsItem {...feed} key={feed.id} refetch={async () => saveCurrentOrder(index)} />
+          {list.map((feed) => (
+            <div
+              className={clsx(
+                "bg-white",
+                "border-purple-700",
+                "border-solid",
+                "border-t-4",
+                "my-4",
+                "px-8",
+                "py-4",
+                "rounded-lg",
+                "shadow-lg",
+                "w-full"
+              )}
+              key={feed.id}
+            >
+              <div>
+                <Link href={Routes.FeedsSettingsPage({ id: feed.id })}>
+                  <a className={clsx("font-semibold", "text-gray-800", "text-xl")}>{feed.name}</a>
+                </Link>
+              </div>
+            </div>
           ))}
         </ReactSortable>
 
@@ -61,28 +93,6 @@ const SettingsOverview = () => {
             </Button>
           </div>
         )}
-      </div>
-
-      <div
-        className={clsx(
-          "bg-white",
-          "border-purple-700",
-          "border-solid",
-          "border-t-4",
-          "flex",
-          "my-8",
-          "place-content-center",
-          "px-8",
-          "py-4",
-          "rounded-lg",
-          "shadow-lg"
-        )}
-      >
-        <Link href={Routes.FeedsAddPage()}>
-          <a>
-            <Button icon={<PlusIcon />}>Add new Feed</Button>
-          </a>
-        </Link>
       </div>
     </>
   )
