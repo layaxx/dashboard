@@ -6,8 +6,8 @@ import clsx from "clsx"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 import Link from "next/link"
-import { useNotifications } from "reapop"
 import Button from "app/core/components/Button"
+import notify from "app/core/hooks/notify"
 import removeFeedMutation from "app/feeds/mutations/deleteFeed"
 import readAllItemsInFeedMutation from "app/feeds/mutations/readAllItemsInFeed"
 
@@ -25,29 +25,25 @@ const SettingsItem: FC<IProps> = ({ id, url, name, lastLoad, loadIntervall, refe
   const [removeFeed] = useMutation(removeFeedMutation)
   const [readAllItemsInFeed] = useMutation(readAllItemsInFeedMutation)
 
-  const { notify } = useNotifications()
-
   const handleDeleteFeed = () =>
     removeFeed({ id, removeEntries: true }).then(
-      () => refetch().then(() => notify({ title: "Successfully removed feed", status: "success" })),
+      () => refetch().then(() => notify("Successfully removed feed", { status: "success" })),
       (error) => {
         console.error(error)
-        notify({ title: "Failed removed feed", status: "error" })
+        notify("Failed removed feed", { status: "error" })
       }
     )
   const handleMarkAllAsRead = () =>
     readAllItemsInFeed({ feedId: id }).then(
       () =>
-        notify({
-          title: "Success!",
+        notify("Success!", {
           message: `Marked all entries of ${url} as read`,
           status: "success",
         }),
       (error) => {
         console.error(error)
-        notify({
-          title: "Failure",
-          message: `Marked all entries of ${url} as read`,
+        notify("Failure", {
+          message: `Failed to mark all entries of ${url} as read`,
           status: "error",
         })
       }

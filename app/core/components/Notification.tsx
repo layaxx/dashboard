@@ -5,19 +5,56 @@ import {
 } from "@heroicons/react/outline"
 import clsx from "clsx"
 import Image from "next/image"
-import { Notification as NotificationType, Status } from "reapop"
-import { DismissNotification } from "reapop/dist/components/NotificationsSystem"
+import { toast } from "react-toastify"
+
+export declare const STATUSES: {
+  none: "none"
+  info: "info"
+  success: "success"
+  loading: "loading"
+  warning: "warning"
+  error: "error"
+}
+export type Status = typeof STATUSES[keyof typeof STATUSES]
+
+export declare const POSITIONS: {
+  topCenter: "top-center"
+  topLeft: "top-left"
+  topRight: "top-right"
+  bottomCenter: "bottom-center"
+  bottomLeft: "bottom-left"
+  bottomRight: "bottom-right"
+}
+type Position = typeof POSITIONS[keyof typeof POSITIONS]
+
+export interface NotificationType {
+  id: string
+  title?: string
+  message?: string
+  status: Status
+  position: Position
+  buttons: ButtonProps[]
+  image?: string
+  dismissAfter?: number
+  dismissible?: boolean
+  onAdd?: (...arguments_: any[]) => void
+  onDismiss?: (...arguments_: any[]) => void
+  showDismissButton?: boolean
+  allowHTML?: boolean
+  [index: string]: any
+}
 
 type Props = {
   notification: NotificationType
-  dismissNotification: DismissNotification
+  closeToast?: () => void
 }
 
 type ButtonProps = {
-  text: string
+  name: string
   onClick: React.MouseEventHandler<HTMLButtonElement>
 }
-const Button = ({ text, onClick }: ButtonProps) => (
+
+const Button = ({ name: text, onClick }: ButtonProps) => (
   <button
     onClick={onClick}
     className={clsx(
@@ -60,7 +97,9 @@ const getIcon = (status: Status) => {
   }
 }
 
-const Notification = ({ notification, dismissNotification }: Props) => {
+const Notification = ({ notification, closeToast }: Props) => {
+  closeToast = closeToast ?? (() => toast.dismiss(notification.id))
+
   return (
     <div
       className={clsx(
@@ -70,7 +109,7 @@ const Notification = ({ notification, dismissNotification }: Props) => {
         "pointer-events-auto",
         "ring-1",
         "ring-black/5",
-        "rounded-lg",
+        notification.dismissible === false ? "rounded-lg" : "rounded-t-lg",
         "shadow-lg",
         "w-96"
       )}
@@ -101,14 +140,12 @@ const Notification = ({ notification, dismissNotification }: Props) => {
       </div>
 
       <div className={clsx("border-gray-200", "border-l", "flex")}>
-        {notification.showDismissButton && (
-          <Button text="" onClick={() => dismissNotification(notification.id)} />
-        )}
+        {notification.showDismissButton && <Button name="X" onClick={closeToast} />}
         {notification.buttons.map((button) => (
           <button
-            onClick={() => {
-              button.onClick?.call(this)
-              dismissNotification(notification.id)
+            onClick={(event) => {
+              button.onClick(event)
+              closeToast?.call(this)
             }}
             className={clsx(
               "border",

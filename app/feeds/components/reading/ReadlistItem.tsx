@@ -1,7 +1,7 @@
 import { useMutation } from "@blitzjs/rpc"
 import { ExternalLinkIcon, XIcon } from "@heroicons/react/solid"
 import clsx from "clsx"
-import { useNotifications } from "reapop"
+import notify from "app/core/hooks/notify"
 import updateReadlistentry from "app/feeds/readlistentries/mutations/updateReadlistentry"
 
 type Props = {
@@ -15,8 +15,6 @@ const ReadlistItem = ({ url, id, hide, unhide }: Props) => {
   const sharedClassName = "hover:text-primary px-1 w-8"
 
   const [updateEntry] = useMutation(updateReadlistentry)
-
-  const { notify } = useNotifications()
 
   return (
     <div key={id} className="last:mb-80">
@@ -40,7 +38,7 @@ const ReadlistItem = ({ url, id, hide, unhide }: Props) => {
               onClick={() => {
                 hide()
                 updateEntry({ id, isArchived: true })
-                notify({
+                notify("You deleted an item", {
                   buttons: [
                     {
                       name: "undo",
@@ -50,10 +48,6 @@ const ReadlistItem = ({ url, id, hide, unhide }: Props) => {
                       },
                     },
                   ],
-
-                  title: "You deleted an item",
-                  dismissAfter: 5000,
-                  dismissible: true,
                 })
               }}
             />

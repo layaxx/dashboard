@@ -1,16 +1,15 @@
 import { useMutation } from "@blitzjs/rpc"
 import { FORM_ERROR } from "final-form"
-import { useNotifications } from "reapop"
 import Form from "../Form"
 import LabeledTextField from "../LabeledTextField"
 import changeProfileMutation from "app/auth/mutations/changeProfile"
+import notify from "app/core/hooks/notify"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 
 const UserSettings = () => {
   const user = useCurrentUser()
 
   const [changeProfile] = useMutation(changeProfileMutation)
-  const { notify } = useNotifications()
 
   return (
     <Form
@@ -20,11 +19,7 @@ const UserSettings = () => {
         if (!pristine && valid) {
           try {
             form.initialize(await changeProfile({ name, email }))
-            notify({
-              title: "Successfully changed Profile Settings",
-              dismissAfter: 5000,
-              dismissible: true,
-            })
+            notify("Successfully changed Profile Settings", { status: "success" })
           } catch (error) {
             if (error instanceof Error) {
               try {

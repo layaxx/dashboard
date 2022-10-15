@@ -16,7 +16,13 @@ const FeedsRSSPage: BlitzPage = () => {
       <DashboardLayout
         feeds={<FeedListContainer mode={FEED_MODE.RSS} />}
         items={
-          <Suspense fallback={<Loader />}>
+          <Suspense
+            fallback={
+              <div className="mt-2">
+                <Loader />
+              </div>
+            }
+          >
             <ItemsList />
           </Suspense>
         }

@@ -5,11 +5,11 @@ import { invalidateQuery, useQuery } from "@blitzjs/rpc"
 import { CheckCircleIcon, ExclamationCircleIcon, PlusCircleIcon } from "@heroicons/react/solid"
 import clsx from "clsx"
 import Link from "next/link"
-import { useNotifications } from "reapop"
 import getFeeds from "../queries/getFeeds"
 import getStatus, { IStatusResult } from "../queries/getStatus"
 import Button from "app/core/components/Button"
 import Loader from "app/core/components/Loader"
+import notify from "app/core/hooks/notify"
 import {
   maxAcceptableAverageLoadTime,
   maxAcceptableTimeBetweenLoads,
@@ -52,8 +52,6 @@ const Warnings = () => {
 
   const [isLoadingRSS, setIsLoadingRSS] = useState(false)
 
-  const { notify } = useNotifications()
-
   const handleOnForceReload = async (force: boolean) => {
     window
       .fetch("/api/loadRSS" + (force ? "?force=true" : ""), {
@@ -65,20 +63,19 @@ const Warnings = () => {
       .then(
         async (response) => {
           if (!response.ok) {
-            notify({ message: "Failed to load Feeds", status: "error" })
+            notify("Failed to load Feeds", { status: "error" })
             console.error(response)
             return
           }
           const { errors } = JSON.parse(await response.text())
           invalidateQuery(getFeeds)
-          notify({
-            title: "Loaded Feeds" + (errors && errors.length > 0 ? " (with Errors)" : ""),
+          notify("Loaded Feeds" + (errors && errors.length > 0 ? " (with Errors)" : ""), {
             status: "success",
             message: errors,
           })
         },
         (error) => {
-          notify({ message: "Failed to load Feeds", status: "error" })
+          notify("Failed to load Feeds", { status: "error" })
           console.error(error)
         }
       )

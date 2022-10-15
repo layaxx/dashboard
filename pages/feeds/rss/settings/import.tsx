@@ -7,8 +7,8 @@ import dayjs from "dayjs"
 import { SubmissionErrors } from "final-form"
 import Head from "next/head"
 import { Field } from "react-final-form"
-import { useNotifications } from "reapop"
 import Form from "app/core/components/Form"
+import notify from "app/core/hooks/notify"
 import Layout from "app/core/layouts/Layout"
 import FileReaderComponent from "app/feeds/components/settings/FileReader"
 import createFeed from "app/feeds/mutations/createFeed"
@@ -27,8 +27,6 @@ const FeedsImportDataPage: BlitzPage = () => {
   const [deleteFeedEntryFunction] = useMutation(deleteAllFeedEntries)
   const [createFeedFunction] = useMutation(createFeed)
   const [createFeedEntryFunction] = useMutation(createFeedEntry)
-
-  const { notify } = useNotifications()
 
   const [backup, setBackup] = useState("")
 
@@ -58,7 +56,7 @@ const FeedsImportDataPage: BlitzPage = () => {
       // make Backup for safety
       const exportResponse = await fetch("/api/export")
       if (!exportResponse.ok) {
-        notify({ status: "warning", title: "Failed to get backup" })
+        notify("Failed to get backup", { status: "warning" })
         return
       }
       setBackup(await exportResponse.text())
@@ -89,7 +87,7 @@ const FeedsImportDataPage: BlitzPage = () => {
       })
     ).catch((error) => {
       console.error(error)
-      notify({ title: "Failed to Import Feeds.", status: "error" })
+      notify("Failed to Import Feeds.", { status: "error" })
       failure = true
       return []
     })
@@ -129,7 +127,7 @@ const FeedsImportDataPage: BlitzPage = () => {
       )
     ).catch((error) => {
       console.error(error)
-      notify({ title: "Failed to Import Feedentries.", status: "error" })
+      notify("Failed to Import Feedentries.", { status: "error" })
       failure = true
       return []
     })
@@ -137,8 +135,7 @@ const FeedsImportDataPage: BlitzPage = () => {
       return
     }
 
-    notify({
-      title: "Success!",
+    notify("Success!", {
       message: `Added ${feedEntries.length} Entries in ${feeds.length} Feeds.`,
     })
   }

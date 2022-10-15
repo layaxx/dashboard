@@ -6,9 +6,9 @@ import { Feed } from "@prisma/client"
 import clsx from "clsx"
 import Link from "next/link"
 import { ReactSortable } from "react-sortablejs"
-import { useNotifications } from "reapop"
 import SettingsItem from "./Item"
 import Button from "app/core/components/Button"
+import notify from "app/core/hooks/notify"
 import updateFeedMutation from "app/feeds/mutations/updateFeed"
 import getFeeds from "app/feeds/queries/getFeeds"
 
@@ -24,8 +24,6 @@ const SettingsOverview = () => {
   const [updateFeed] = useMutation(updateFeedMutation)
 
   const anyNotInCorrectOrder = list.map((feed, index) => feed.position !== index).some(Boolean)
-  const { notify } = useNotifications()
-
   const saveCurrentOrder = async (deletedIndex?: number) => {
     const hasDeletedIndex = typeof deletedIndex === "number"
 
@@ -40,7 +38,7 @@ const SettingsOverview = () => {
       })
     )
     await refetch()
-    notify({ title: "Successfully reordered feeds", status: "success" })
+    notify("Successfully reordered feeds", { status: "success" })
   }
 
   useEffect(() => setList(feeds), [feeds])
@@ -52,6 +50,18 @@ const SettingsOverview = () => {
           <Button icon={<PlusIcon />}>Add new Feed</Button>
         </a>
       </Link>
+
+      <Button
+        onClick={() =>
+          notify("default", {
+            dismissAfter: 5555,
+            status: "loading",
+            message: "A bit longer of a message that shall be displayed",
+          })
+        }
+      >
+        TEST {/* TODO: DELETE ME */}
+      </Button>
 
       <div className="w-full">
         {(feeds as Feed[]).map((feed, index) => (
