@@ -2,7 +2,8 @@ import {
   CheckCircleIcon,
   ExclamationCircleIcon,
   InformationCircleIcon,
-} from "@heroicons/react/outline"
+  ArrowPathIcon,
+} from "@heroicons/react/24/outline"
 import clsx from "clsx"
 import Image from "next/image"
 import { toast } from "react-toastify"
@@ -25,7 +26,7 @@ export declare const POSITIONS: {
   bottomLeft: "bottom-left"
   bottomRight: "bottom-right"
 }
-type Position = typeof POSITIONS[keyof typeof POSITIONS]
+export type Position = typeof POSITIONS[keyof typeof POSITIONS]
 
 export interface NotificationType {
   id: string
@@ -91,6 +92,8 @@ const getIcon = (status: Status) => {
     case "warning":
       return <ExclamationCircleIcon className="text-warning" />
     case "loading":
+      return <ArrowPathIcon className="animate-spin" />
+
     case "none":
     default:
       return <></>

@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useMutation, useInfiniteQuery } from "@blitzjs/rpc"
-import { PlusIcon } from "@heroicons/react/solid"
+import { PlusIcon } from "@heroicons/react/24/solid"
 import { Readlistentry } from "@prisma/client"
 import clsx from "clsx"
 import ReadlistItem from "./ReadlistItem"
@@ -18,8 +18,8 @@ export const ItemList = () => {
     getReadlistentries,
     (input) => {
       return {
-        take: input.take ?? pageSize,
-        skip: input.skip ?? 0,
+        take: input?.take ?? pageSize,
+        skip: input?.skip ?? 0,
         where: { isArchived: { equals: false } },
       }
     },

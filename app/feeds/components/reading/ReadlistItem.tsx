@@ -1,7 +1,7 @@
 import { useMutation } from "@blitzjs/rpc"
-import { ExternalLinkIcon, XIcon } from "@heroicons/react/solid"
+import { ArrowTopRightOnSquareIcon, XMarkIcon } from "@heroicons/react/24/solid"
 import clsx from "clsx"
-import notify from "app/core/hooks/notify"
+import { notifyPromise } from "app/core/hooks/notify"
 import updateReadlistentry from "app/feeds/readlistentries/mutations/updateReadlistentry"
 
 type Props = {
@@ -34,20 +34,24 @@ const ReadlistItem = ({ url, id, hide, unhide }: Props) => {
         </span>
         <span className={clsx("border-l-2", "flex", "py-4", "shrink-0", "text-gray-400")}>
           <span className={sharedClassName}>
-            <XIcon
+            <XMarkIcon
               onClick={() => {
                 hide()
-                updateEntry({ id, isArchived: true })
-                notify("You deleted an item", {
-                  buttons: [
-                    {
-                      name: "undo",
-                      onClick: () => {
-                        unhide()
-                        updateEntry({ id, isArchived: false })
+                notifyPromise(updateEntry({ id, isArchived: true }), {
+                  pending: { title: "Deleting entry" },
+                  success: { title: "Deleted Entry" },
+                  error: { title: "Failed to delete Entry" },
+                  all: {
+                    buttons: [
+                      {
+                        name: "undo",
+                        onClick: () => {
+                          unhide()
+                          updateEntry({ id, isArchived: false })
+                        },
                       },
-                    },
-                  ],
+                    ],
+                  },
                 })
               }}
             />
@@ -60,7 +64,7 @@ const ReadlistItem = ({ url, id, hide, unhide }: Props) => {
             target="_blank"
             className={sharedClassName}
           >
-            <ExternalLinkIcon />
+            <ArrowTopRightOnSquareIcon />
           </a>
         </span>
       </div>

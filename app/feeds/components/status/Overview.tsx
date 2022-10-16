@@ -1,6 +1,6 @@
 import { FC } from "react"
 import { useQuery } from "@blitzjs/rpc"
-import { ExclamationCircleIcon } from "@heroicons/react/solid"
+import { ExclamationCircleIcon } from "@heroicons/react/24/solid"
 import clsx from "clsx"
 import StatusChart from "./StatusChart"
 import StatusCleanItem from "./StatusLoadClean"

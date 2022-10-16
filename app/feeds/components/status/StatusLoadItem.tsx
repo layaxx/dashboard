@@ -1,5 +1,5 @@
 import { FC } from "react"
-import { ExclamationIcon } from "@heroicons/react/solid"
+import { ExclamationTriangleIcon } from "@heroicons/react/24/solid"
 import clsx from "clsx"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
@@ -10,7 +10,9 @@ dayjs.extend(relativeTime)
 const ListElement = ({ text, isError }: { text: string; isError?: boolean }) => {
   return (
     <li className="flex">
-      <ExclamationIcon className={clsx("h-6", isError ? "text-error" : "text-warning", "w-6")} />{" "}
+      <ExclamationTriangleIcon
+        className={clsx("h-6", isError ? "text-error" : "text-warning", "w-6")}
+      />{" "}
       {text}
     </li>
   )

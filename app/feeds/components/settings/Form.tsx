@@ -6,7 +6,7 @@ import { useRouter } from "next/router"
 import Form from "app/core/components/Form"
 import FormField from "app/core/components/FormField"
 import Loader from "app/core/components/Loader"
-import notify from "app/core/hooks/notify"
+import notify, { notifyPromise } from "app/core/hooks/notify"
 import createFeedMutation from "app/feeds/mutations/createFeed"
 import removeFeedMutation from "app/feeds/mutations/deleteFeed"
 import updateFeedMutation from "app/feeds/mutations/updateFeed"
@@ -73,15 +73,11 @@ const SettingsForm = ({ id, isCreate }: Props) => {
         loadIntervall: Number.parseInt("" + values.loadIntervall, 10),
       }).then(
         () => {
-          fetch("/api/loadRSS?force=true")
-            .then(
-              () => notify("Successfully created Feed.", { status: "success" }),
-              () =>
-                notify("Successfully created Feed but failed initial Load.", {
-                  status: "warning",
-                })
-            )
-            .finally(() => router.push(Routes.FeedsSettingsOverviewPage()))
+          notifyPromise(fetch("/api/loadRSS?force=true"), {
+            pending: { title: "Fetching Entries" },
+            success: { title: "Created Entry" },
+            error: { title: "Created Entry", message: "Failed initial fetch" },
+          }).finally(() => router.push(Routes.FeedsSettingsOverviewPage()))
         },
         (error) => {
           notify("Failed to create Feed", {
@@ -92,19 +88,17 @@ const SettingsForm = ({ id, isCreate }: Props) => {
         }
       )
     } else {
-      updateFeed({
-        id: feed!.id,
-        name: values.name,
-        loadIntervall: Number.parseInt("" + values.loadIntervall, 10),
-        url: values.url,
-      }).then(
-        () => notify("Successfully updated Feed.", { status: "success" }),
-        (error) => {
-          notify("Failed to update Feed", {
-            message: "View console for additional information.",
-            status: "error",
-          })
-          console.error(error)
+      notifyPromise(
+        updateFeed({
+          id: feed!.id,
+          name: values.name,
+          loadIntervall: Number.parseInt("" + values.loadIntervall, 10),
+          url: values.url,
+        }),
+        {
+          pending: { title: "Updating Feed" },
+          success: { title: "Updated Feed" },
+          error: { title: "Failed to update FeedEntry" },
         }
       )
     }

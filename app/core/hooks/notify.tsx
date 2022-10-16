@@ -1,7 +1,7 @@
 import { ReactEventHandler } from "react"
 import dayjs from "dayjs"
 import { toast } from "react-toastify"
-import Notification, { NotificationType, Status } from "../components/Notification"
+import Notification, { NotificationType, Position, Status } from "../components/Notification"
 
 type NotifyButton = {
   name: string
@@ -42,6 +42,102 @@ export default function notify(title: string, options?: NotifyOptions) {
       className: "test",
       closeButton: false,
       toastId: id,
+    }
+  )
+}
+
+type NotifyPromiseSharedOptions = {
+  title?: string
+  message?: string
+  id?: string
+  showDismissButton?: boolean
+  image?: string
+  buttons?: NotifyButton[]
+  dismissible?: false
+  dismissAfter?: number
+}
+
+type NotifyPromiseOptions = {
+  title?: string
+  message?: string
+}
+
+export function notifyPromise(
+  promise: Promise<unknown> | (() => Promise<unknown>),
+  options: {
+    all?: NotifyPromiseSharedOptions
+    pending?: NotifyPromiseOptions
+    success?: NotifyPromiseOptions
+    error?: NotifyPromiseOptions
+  }
+) {
+  const id = options?.all?.id ?? dayjs().toISOString()
+  const sharedProps = {
+    showDismissButton: options.all?.showDismissButton ?? true,
+    image: options.all?.image ?? undefined,
+    id,
+    buttons: options.all?.buttons ?? [],
+    position: "top-right" as Position,
+  }
+
+  return toast.promise(
+    promise,
+    {
+      pending: {
+        render({ closeToast }) {
+          return (
+            <Notification
+              notification={{
+                ...sharedProps,
+                title: options.all?.title ?? options.pending?.title ?? "Information",
+                message: options.all?.message ?? options.pending?.message,
+                status: "loading",
+                dismissible: false,
+              }}
+              closeToast={closeToast}
+            />
+          )
+        },
+      },
+      success: {
+        render({ closeToast }) {
+          return (
+            <Notification
+              notification={{
+                ...sharedProps,
+                title: options.all?.title ?? options.success?.title ?? "Information",
+                message: options.all?.message ?? options.success?.message,
+                status: "success",
+              }}
+              closeToast={closeToast}
+            />
+          )
+        },
+      },
+      error: {
+        render({ closeToast }) {
+          return (
+            <Notification
+              notification={{
+                ...sharedProps,
+                title: options.all?.title ?? options.error?.title ?? "Information",
+                message: options.all?.message ?? options.error?.message,
+                status: "error",
+              }}
+              closeToast={closeToast}
+            />
+          )
+        },
+      },
+    },
+    {
+      closeOnClick: false,
+      theme: "light",
+      autoClose: options.all?.dismissible === false ? false : options?.all?.dismissAfter,
+      className: "test",
+      closeButton: false,
+      toastId: id,
+      icon: false,
     }
   )
 }

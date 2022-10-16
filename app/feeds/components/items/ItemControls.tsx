@@ -1,4 +1,9 @@
-import { StarIcon, EyeIcon, EyeOffIcon, ExternalLinkIcon } from "@heroicons/react/solid"
+import {
+  StarIcon,
+  EyeIcon,
+  EyeSlashIcon,
+  ArrowTopRightOnSquareIcon,
+} from "@heroicons/react/24/solid"
 import { Feedentry } from "@prisma/client"
 
 type ItemControlProps = {
@@ -25,7 +30,7 @@ const ItemControls = ({ item, read, unread, hasBeenRead }: ItemControlProps) => 
         }}
       >
         {hasBeenRead && <EyeIcon />}
-        {!hasBeenRead && <EyeOffIcon />}
+        {!hasBeenRead && <EyeSlashIcon />}
       </span>
       <a
         href={item.link}
@@ -36,7 +41,7 @@ const ItemControls = ({ item, read, unread, hasBeenRead }: ItemControlProps) => 
         className={sharedClassName}
         onClick={() => read()}
       >
-        <ExternalLinkIcon />
+        <ArrowTopRightOnSquareIcon />
       </a>
     </>
   )

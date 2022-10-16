@@ -1,6 +1,6 @@
 import { ReactChild, Suspense } from "react"
 import { Routes } from "@blitzjs/next"
-import { CogIcon } from "@heroicons/react/solid"
+import { CogIcon } from "@heroicons/react/24/solid"
 import clsx from "clsx"
 import Link from "next/link"
 import Loader from "../Loader"

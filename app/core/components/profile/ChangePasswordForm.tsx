@@ -4,7 +4,7 @@ import Form from "../Form"
 import LabeledTextField from "../LabeledTextField"
 import changePasswordMutation from "app/auth/mutations/changePassword"
 import { ChangePassword as schema } from "app/auth/validations"
-import notify from "app/core/hooks/notify"
+import { notifyPromise } from "app/core/hooks/notify"
 
 const ChangePasswordForm = () => {
   const [changePassword] = useMutation(changePasswordMutation)
@@ -17,8 +17,11 @@ const ChangePasswordForm = () => {
         const { valid, pristine } = form.getState()
         if (!pristine && valid) {
           try {
-            await changePassword({ currentPassword, newPassword, newPasswordConfirm })
-            notify("Successfully changed Password", { status: "success" })
+            notifyPromise(changePassword({ currentPassword, newPassword, newPasswordConfirm }), {
+              pending: { title: "Changing Password" },
+              success: { title: "Changed Password" },
+              error: { title: "Failed to change Password" },
+            })
           } catch (error) {
             if (error instanceof Error) {
               try {
@@ -39,8 +42,8 @@ const ChangePasswordForm = () => {
       submitText="change password"
       resetText="reset form"
     >
-      <LabeledTextField label="old password" type="password" name={"currentPassword"} required />
-      <LabeledTextField label="new password" type="password" name={"newPassword"} required />
+      <LabeledTextField label="old password" type="password" name="currentPassword" required />
+      <LabeledTextField label="new password" type="password" name="newPassword" required />
       <LabeledTextField
         label="confirm new password"
         type="password"

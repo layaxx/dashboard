@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Routes } from "@blitzjs/next"
 import { useMutation, useQuery } from "@blitzjs/rpc"
-import { PlusIcon } from "@heroicons/react/solid"
+import { PlusIcon } from "@heroicons/react/24/outline"
 import { Feed } from "@prisma/client"
 import clsx from "clsx"
 import Link from "next/link"
@@ -38,7 +38,7 @@ const SettingsOverview = () => {
       })
     )
     await refetch()
-    notify("Successfully reordered feeds", { status: "success" })
+    if (deletedIndex === undefined) notify("Successfully reordered feeds", { status: "success" })
   }
 
   useEffect(() => setList(feeds), [feeds])
@@ -50,18 +50,6 @@ const SettingsOverview = () => {
           <Button icon={<PlusIcon />}>Add new Feed</Button>
         </a>
       </Link>
-
-      <Button
-        onClick={() =>
-          notify("default", {
-            dismissAfter: 5555,
-            status: "loading",
-            message: "A bit longer of a message that shall be displayed",
-          })
-        }
-      >
-        TEST {/* TODO: DELETE ME */}
-      </Button>
 
       <div className="w-full">
         {(feeds as Feed[]).map((feed, index) => (

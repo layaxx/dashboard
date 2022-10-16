@@ -1,5 +1,5 @@
 import { Suspense } from "react"
-import { MenuIcon, MenuAlt1Icon } from "@heroicons/react/solid"
+import { Bars3Icon, Bars3CenterLeftIcon } from "@heroicons/react/24/solid"
 import clsx from "clsx"
 import Loader from "../Loader"
 import DashboardGreeting from "./Greeting"
@@ -33,7 +33,7 @@ const Header = ({ hideNavbar, setHideNavbar }: HeaderProps) => (
         onClick={() => setHideNavbar((previous) => !previous)}
         className={clsx("focus:outline-none", "focus:ring-2")}
       >
-        {hideNavbar ? <MenuIcon className="w-6" /> : <MenuAlt1Icon className="w-6" />}
+        {hideNavbar ? <Bars3Icon className="w-6" /> : <Bars3CenterLeftIcon className="w-6" />}
       </button>
     </div>
   </header>
