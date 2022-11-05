@@ -36,9 +36,12 @@ export const ItemList = () => {
     <>
       <div>
         <Form
-          onSubmit={({ url }) => {
-            addRLE({ url }).then(() => refetch())
-          }}
+          onSubmit={({ url }, form) =>
+            addRLE({ url }).then(() => {
+              refetch()
+              form.reset()
+            })
+          }
           className={clsx("flex", "flex-wrap", "items-end")}
         >
           <LabeledTextField name="url" label="url" />
