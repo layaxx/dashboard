@@ -52,6 +52,7 @@ export const loadFeed = async (
     console.warn("Received no content from " + feed.url, statusCode)
   } else {
     setReaderOptions({ includeFullContent: true, descriptionMaxLen: summaryLength })
+    setParserOptions({ trimValues: false })
     const parsedFeed = parseString(content)
     if (!parsedFeed) {
       console.error("Encountered an error while parsing " + feed.url, headers)
