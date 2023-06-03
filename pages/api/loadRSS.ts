@@ -64,7 +64,15 @@ const handler: NextApiHandler = async (request, response: ResponseWithSession) =
   const timeStampAfter = performance.now()
 
   const errors = results
-    .map((result) => (result.status === LoadFeedStatus.ERROR && result.statusMessage) ?? false)
+    .map(
+      (result) =>
+        (result.status === LoadFeedStatus.ERROR &&
+          JSON.stringify({
+            errorMessage: result.errorMessage,
+            statusMessage: result.statusMessage,
+          })) ??
+        false
+    )
     .filter(Boolean) as string[]
 
   await db.statusLoad.create({
@@ -76,6 +84,8 @@ const handler: NextApiHandler = async (request, response: ResponseWithSession) =
       insertCount: created,
     },
   })
+
+  console.log("finished RSS reload:", { timeElapsed: timeStampAfter - timeStampBefore, errors })
 
   response.statusCode = 200
   response.setHeader("Content-Type", "application/json")

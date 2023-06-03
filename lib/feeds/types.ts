@@ -7,6 +7,7 @@ export enum LoadFeedStatus {
 export type LoadFeedResult = {
   status: LoadFeedStatus
   statusMessage?: string
+  errorMessage?: string
   changes?: { updated: number; created: number; ignored: number }
 }
 

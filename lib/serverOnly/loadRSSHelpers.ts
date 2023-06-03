@@ -25,9 +25,7 @@ export const loadFeed = async (
   }
 
   const minutesSinceLastLoad = dayjs().diff(dayjs(feed.lastLoad), "minutes")
-  console.log("Minutes since last load", minutesSinceLastLoad)
   if (!forceReload && feed.loadIntervall > minutesSinceLastLoad) {
-    console.log("Skipping due to loadIntervall", feed.name)
     return { status: LoadFeedStatus.SKIPPED, statusMessage: "Skipped due to feed.loadIntervall." }
   }
 
@@ -44,7 +42,11 @@ export const loadFeed = async (
   } catch (error) {
     console.error("Encountered an error while fetching " + feed.url)
     console.error(error)
-    return { status: LoadFeedStatus.ERROR, statusMessage: "Failed to fetch from url " + feed.url }
+    return {
+      status: LoadFeedStatus.ERROR,
+      statusMessage: "Failed to fetch from url " + feed.url,
+      errorMessage: formatErrorMessage(error),
+    }
   }
 
   let items: Prisma.FeedentryUncheckedCreateInput[] = []
@@ -56,7 +58,10 @@ export const loadFeed = async (
     const parsedFeed = parseString(content)
     if (!parsedFeed) {
       console.error("Encountered an error while parsing " + feed.url, headers)
-      return { status: LoadFeedStatus.ERROR, statusMessage: "Failed to parse " + feed.url }
+      return {
+        status: LoadFeedStatus.ERROR,
+        statusMessage: "Failed to parse " + feed.url,
+      }
     }
     try {
       items = parsedFeed.entries?.map((item) => convertItem(item, feed)) ?? []
@@ -66,6 +71,7 @@ export const loadFeed = async (
       return {
         status: LoadFeedStatus.ERROR,
         statusMessage: "Failed to process items for url " + feed.url,
+        errorMessage: formatErrorMessage(error),
       }
     }
   }
@@ -198,7 +204,6 @@ export async function getTitleAndTTLFromFeed(
     setReaderOptions({ includeFullContent: true })
     setParserOptions({ stopNodes: ["*.item", "*.entry"] })
     parsedFeed = parseString(content)
-    console.log(parsedFeed)
     setParserOptions({ stopNodes: undefined })
     if (!parsedFeed) {
       throw new Error("Failed to parse feed.")
@@ -251,4 +256,28 @@ export async function getIDSFromFeeds(feedUrls: string[]): Promise<Map<string, S
   }
 
   return result
+}
+
+/**
+ * Adapted from: https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
+ *
+ * @param error
+ * @returns string containing the error message
+ */
+function formatErrorMessage(error: unknown): string {
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "message" in error &&
+    typeof (error as Record<string, unknown>).message === "string"
+  )
+    return (error as { message: string }).message as string
+
+  try {
+    return new Error(JSON.stringify(error)).message
+  } catch {
+    // fallback in case there's an error stringifying the maybeError
+    // like with circular references for example.
+    return new Error(String(error)).message
+  }
 }
