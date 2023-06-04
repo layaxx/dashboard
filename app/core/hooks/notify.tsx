@@ -1,6 +1,6 @@
 import { ReactEventHandler } from "react"
 import dayjs from "dayjs"
-import { toast } from "react-toastify"
+import { ToastOptions, toast } from "react-toastify"
 import Notification, { NotificationType, Position, Status } from "../components/Notification"
 
 type NotifyButton = {
@@ -16,22 +16,29 @@ type NotifyOptions = {
   image?: string
   buttons?: NotifyButton[]
   id?: string
+  toastOptions?: ToastOptions
+}
+
+function getNotificationProps(
+  options: { title: string; id: string } & NotifyOptions
+): NotificationType {
+  return {
+    title: options.title ?? "Information",
+    message: options?.message ?? "",
+    status: options?.status ?? "info",
+    showDismissButton: options?.showDismissButton ?? true,
+    image: options?.image ?? undefined,
+    id: options.id,
+    buttons: options?.buttons ?? [],
+    position: "top-right",
+    dismissible: options?.dismissible,
+  }
 }
 
 export default function notify(title: string, options?: NotifyOptions) {
   const id = options?.id ?? dayjs().toISOString()
 
-  const notification: NotificationType = {
-    title: title ?? "Information",
-    message: options?.message ?? "",
-    status: options?.status ?? "info",
-    showDismissButton: options?.showDismissButton ?? true,
-    image: options?.image ?? undefined,
-    id,
-    buttons: options?.buttons ?? [],
-    position: "top-right",
-    dismissible: options?.dismissible,
-  }
+  const notification: NotificationType = getNotificationProps({ title, id, ...options })
 
   return toast(
     ({ closeToast }) => <Notification notification={notification} closeToast={closeToast} />,
@@ -42,6 +49,7 @@ export default function notify(title: string, options?: NotifyOptions) {
       className: "test",
       closeButton: false,
       toastId: id,
+      ...options?.toastOptions,
     }
   )
 }
@@ -140,4 +148,60 @@ export function notifyPromise(
       icon: false,
     }
   )
+}
+
+export function notifyPromiseAdvanced<T>(
+  promise: Promise<T> | (() => Promise<T>),
+  options: {
+    all?: NotifyPromiseSharedOptions
+    pending?: NotifyPromiseOptions
+    success?: (argument0: T) => Promise<NotifyPromiseOptions>
+    error?: (argument0: T) => Promise<NotifyPromiseOptions>
+  }
+) {
+  const id = notify(options.all?.title ?? options.pending?.title ?? "Information", {
+    status: "loading",
+    dismissible: false,
+    ...options.pending,
+  })
+
+  return (typeof promise === "function" ? promise() : promise)
+    .then(async (resolved) => {
+      const successOptions =
+        typeof options.success === "function" ? await options.success(resolved) : options.all
+
+      const notificationProps = getNotificationProps({
+        status: "success",
+        title: "Success!",
+        id: String(id),
+        dismissible: undefined,
+        ...successOptions,
+      })
+
+      toast.update(id, {
+        render({ closeToast }) {
+          return <Notification notification={notificationProps} closeToast={closeToast} />
+        },
+        autoClose: 3000,
+      })
+    })
+    .catch(async (error) => {
+      const errorOptions =
+        typeof options.error === "function" ? await options.error(error) : options.all
+
+      const notificationProps = getNotificationProps({
+        status: "error",
+        title: "Error.",
+        id: String(id),
+        dismissible: undefined,
+        ...errorOptions,
+      })
+
+      toast.update(id, {
+        render({ closeToast }) {
+          return <Notification notification={notificationProps} closeToast={closeToast} />
+        },
+        autoClose: 5000,
+      })
+    })
 }

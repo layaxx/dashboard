@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { getAntiCSRFToken } from "@blitzjs/auth"
 import { Routes } from "@blitzjs/next"
 import { invalidateQuery, useQuery } from "@blitzjs/rpc"
@@ -9,7 +9,7 @@ import getFeeds from "../queries/getFeeds"
 import getStatus, { IStatusResult } from "../queries/getStatus"
 import Button from "app/core/components/Button"
 import Loader from "app/core/components/Loader"
-import notify from "app/core/hooks/notify"
+import { notifyPromiseAdvanced } from "app/core/hooks/notify"
 import {
   maxAcceptableAverageLoadTime,
   maxAcceptableTimeBetweenLoads,
@@ -37,60 +37,66 @@ const WarningsIcon = ({ result, isLoading, isError }: Props) => {
     result.averageMinutesBetweenLoads > maxAcceptableTimeBetweenLoads
 
   if (isAverageLoadTimeTooLong || isTooMuchTimeBetweenLoads) {
-    return (
-      <>
-        <ExclamationCircleIcon className="text-warning" />
-      </>
-    )
+    return <ExclamationCircleIcon className="text-warning" />
   }
 
   return <CheckCircleIcon className="text-success" />
 }
 
 const Warnings = () => {
-  const [result, { isLoading, isError, refetch }] = useQuery(getStatus, {})
+  const [result, { isLoading, isError, refetch }] = useQuery(
+    getStatus,
+    {},
+    {
+      onSuccess: (data) => {
+        if (data.minutesSinceLastLoad > targetTimeBetweenLoads) {
+          setIsLoadingRSS(true)
+          console.log(
+            `Reloading due to ${JSON.stringify({
+              targetTimeBetweenLoads,
+              minutesSinceLastLoad: data.minutesSinceLastLoad,
+            })}`
+          )
+          handleOnForceReload(false).finally(() => refetch())
+        }
+      },
+    }
+  )
 
   const [isLoadingRSS, setIsLoadingRSS] = useState(false)
 
   const handleOnForceReload = async (force: boolean) => {
-    window
-      .fetch("/api/loadRSS" + (force ? "?force=true" : ""), {
-        credentials: "include",
-        headers: {
-          "anti-csrf": getAntiCSRFToken(),
-        },
-      })
-      .then(
-        async (response) => {
+    setIsLoadingRSS(true)
+
+    notifyPromiseAdvanced(
+      () =>
+        window.fetch("/api/loadRSS" + (force ? "?force=true" : ""), {
+          credentials: "include",
+          headers: {
+            "anti-csrf": getAntiCSRFToken(),
+          },
+        }),
+      {
+        pending: { title: "Loading Feeds" },
+        error: async () => ({ title: "Failed to load Feeds" }),
+        success: async (response) => {
           if (!response.ok) {
-            notify("Failed to load Feeds", { status: "error" })
             console.error(response)
-            return
+            return { title: "Failed to load Feeds", status: "error" }
           }
+
           const { errors } = JSON.parse(await response.text())
           invalidateQuery(getFeeds)
-          notify("Loaded Feeds" + (errors && errors.length > 0 ? " (with Errors)" : ""), {
-            status: "success",
+          const hasErrors = errors && errors.length > 0
+          return {
+            title: "Loaded Feeds" + (hasErrors ? " (with Errors)" : ""),
+            status: hasErrors ? "warning" : "success",
             message: errors,
-          })
+          }
         },
-        (error) => {
-          notify("Failed to load Feeds", { status: "error" })
-          console.error(error)
-        }
-      )
-      .finally(() => setIsLoadingRSS(false))
+      }
+    ).finally(() => setIsLoadingRSS(false))
   }
-
-  useEffect(() => {
-    if (result.minutesSinceLastLoad > targetTimeBetweenLoads) {
-      setIsLoadingRSS(true)
-      handleOnForceReload(false).then(() => {
-        setIsLoadingRSS(false)
-        refetch()
-      })
-    }
-  }, [result, refetch])
 
   return (
     <div className={clsx("flex", "items-center", "w-full")}>
@@ -101,11 +107,10 @@ const Warnings = () => {
           </Button>
         </a>
       </Link>
-      {isLoadingRSS ? (
-        <Loader />
-      ) : (
-        <Button onClick={() => handleOnForceReload(true)}>Force Reload</Button>
-      )}
+
+      <Button onClick={() => handleOnForceReload(true)} disabled={isLoadingRSS}>
+        Force Reload
+      </Button>
 
       <Link href={Routes.FeedsAddPage()}>
         <a>

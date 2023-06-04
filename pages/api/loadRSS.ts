@@ -85,7 +85,11 @@ const handler: NextApiHandler = async (request, response: ResponseWithSession) =
     },
   })
 
-  console.log("finished RSS reload:", { timeElapsed: timeStampAfter - timeStampBefore, errors })
+  console.log("finished RSS reload:", {
+    timeElapsed: timeStampAfter - timeStampBefore,
+    errors,
+    results,
+  })
 
   response.statusCode = 200
   response.setHeader("Content-Type", "application/json")
