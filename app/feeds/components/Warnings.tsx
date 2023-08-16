@@ -50,7 +50,6 @@ const Warnings = () => {
     {
       onSuccess: (data) => {
         if (data.minutesSinceLastLoad > targetTimeBetweenLoads) {
-          setIsLoadingRSS(true)
           console.log(
             `Reloading due to ${JSON.stringify({
               targetTimeBetweenLoads,
