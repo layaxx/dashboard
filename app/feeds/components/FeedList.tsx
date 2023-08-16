@@ -57,17 +57,18 @@ export const FeedList: FC<Props> = ({ mode }) => {
 
           {feeds
             .filter((feed) => feed.unreadCount || feed.id === activeFeedID || showAllFeeds)
-            .map(({ id, unreadCount, name }) => {
-              const isActive = mode === FEED_MODE.RSS && activeFeedID === id
+            .map(({ id, unreadCount, name, isActive }) => {
+              const isSelected = mode === FEED_MODE.RSS && activeFeedID === id
+              const title = isActive ? name : "[inactive] " + name
               return (
                 <FeedListItem
-                  title={name}
+                  title={title}
                   unreadCount={unreadCount}
                   onClick={() => {
                     if (mode !== FEED_MODE.RSS) {
                       router.push("/feeds/rss")
                     }
-                    if (isActive) {
+                    if (isSelected) {
                       refetchItems()
                     } else {
                       localStorage.setItem(LOCALSTORAGE_FEEDID, JSON.stringify(id))
@@ -75,7 +76,7 @@ export const FeedList: FC<Props> = ({ mode }) => {
                     }
                   }}
                   key={id}
-                  isActive={isActive}
+                  isActive={isSelected}
                 />
               )
             })}

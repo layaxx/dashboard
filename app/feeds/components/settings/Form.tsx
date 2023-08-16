@@ -40,7 +40,7 @@ const SettingsForm = ({ id, isCreate }: Props) => {
   }
 
   const submitHandler = async (
-    values: { name: string; url: string; loadIntervall: number | string },
+    values: { name: string; url: string; loadIntervall: number | string; isActive: boolean },
     form: FormApi
   ) => {
     try {
@@ -94,6 +94,7 @@ const SettingsForm = ({ id, isCreate }: Props) => {
           name: values.name,
           loadIntervall: Number.parseInt("" + values.loadIntervall, 10),
           url: values.url,
+          isActive: values.isActive,
         }),
         {
           pending: { title: "Updating Feed" },
@@ -158,6 +159,16 @@ const SettingsForm = ({ id, isCreate }: Props) => {
             label="Load Intervall: "
             labelProps={{ style: { whiteSpace: "pre" } }}
           />
+
+          {!isCreate && (
+            <FormField
+              name="isActive"
+              label="isActive"
+              type="checkbox"
+              labelProps={{ className: "justify-between" }}
+              inputProps={{ className: "w-4" }}
+            />
+          )}
         </div>
       </Form>
     </div>

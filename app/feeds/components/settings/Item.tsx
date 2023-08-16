@@ -10,6 +10,7 @@ import Button from "app/core/components/Button"
 import notify from "app/core/hooks/notify"
 import removeFeedMutation from "app/feeds/mutations/deleteFeed"
 import readAllItemsInFeedMutation from "app/feeds/mutations/readAllItemsInFeed"
+import updateFeedMutation from "app/feeds/mutations/updateFeed"
 
 dayjs.extend(relativeTime)
 
@@ -17,13 +18,22 @@ interface IProps extends Feed {
   refetch: () => Promise<any | void>
 }
 
-const SettingsItem: FC<IProps> = ({ id, url, name, lastLoad, loadIntervall, refetch }) => {
+const SettingsItem: FC<IProps> = ({
+  id,
+  url,
+  name,
+  lastLoad,
+  loadIntervall,
+  isActive,
+  refetch,
+}) => {
   const classNameTH = "text-left font-bold text-slate-600 md:w-64 table-cell"
   const classNameTD = "pl-4 text-left table-cell"
   const classNameTableRow = "table-row"
 
   const [removeFeed] = useMutation(removeFeedMutation)
   const [readAllItemsInFeed] = useMutation(readAllItemsInFeedMutation)
+  const [updateFeed] = useMutation(updateFeedMutation)
 
   const handleDeleteFeed = () =>
     removeFeed({ id, removeEntries: true }).then(
@@ -65,9 +75,23 @@ const SettingsItem: FC<IProps> = ({ id, url, name, lastLoad, loadIntervall, refe
       )}
     >
       <div>
-        <Link href={Routes.FeedsSettingsPage({ id })}>
-          <a className={clsx("font-semibold", "text-gray-800", "text-xl")}>{name}</a>
-        </Link>
+        <div className={clsx("flex", "flex-row", "flex-wrap")}>
+          <Link href={Routes.FeedsSettingsPage({ id })}>
+            <a className={clsx("font-semibold", "text-gray-800", "text-xl")}>{name}</a>
+          </Link>
+          {!isActive && (
+            <Button
+              onClick={() =>
+                updateFeed({ id, isActive: true }).then(() => {
+                  notify("Successfully reactivated Feed", { status: "success" })
+                  refetch()
+                })
+              }
+            >
+              Reactivate
+            </Button>
+          )}
+        </div>
 
         <div className={clsx("flex", "flex-row", "flex-wrap")}>
           <div className={clsx("table", "md:w-3/4")}>

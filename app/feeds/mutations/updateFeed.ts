@@ -10,6 +10,7 @@ const UpdateFeed = z.object({
   loadIntervall: z.number().optional(),
   etag: z.string().optional(),
   lastLoad: z.string().optional(),
+  isActive: z.boolean().optional(),
 })
 
 export default resolver.pipe(

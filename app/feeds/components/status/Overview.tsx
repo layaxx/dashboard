@@ -34,29 +34,32 @@ const StatusOverview: FC = () => {
 
   return (
     <div className="w-full">
-      <StatusChart
-        data={statusWithWarnings.map(
-          ({ insertCount, updateCount, loadTime, hasErrors, hasWarnings }) => ({
-            x: loadTime,
-            insertCount,
-            updateCount,
-            color:
-              (hasErrors && tailwindConfig.theme.extend.colors.error) ||
-              (hasWarnings && tailwindConfig.theme.extend.colors.warning) ||
-              tailwindConfig.theme.extend.colors.primary,
-          })
-        )}
-      />
-      <div className={clsx("flex", "flex-row", "flex-wrap", "justify-around")}>
+      <div
+        className={clsx("flex", "flex-row", "flex-wrap", "justify-around", "max-w-4xl", "mx-auto")}
+      >
+        <StatusChart
+          data={statusWithWarnings.map(
+            ({ insertCount, updateCount, loadTime, hasErrors, hasWarnings }) => ({
+              x: loadTime,
+              insertCount,
+              updateCount,
+              color:
+                (hasErrors && tailwindConfig.theme.extend.colors.error) ||
+                (hasWarnings && tailwindConfig.theme.extend.colors.warning) ||
+                tailwindConfig.theme.extend.colors.primary,
+            })
+          )}
+        />
         <StatusTable {...statistics} />
+      </div>
+
+      <div
+        className={clsx("flex", "flex-row", "flex-wrap", "justify-around", "max-w-7xl", "mx-auto")}
+      >
         {statusWithWarnings.map((status) => (
           <StatusLoadItem {...status} key={status.id} />
         ))}
-      </div>
-
-      <hr />
-
-      <div className={clsx("flex", "flex-row", "flex-wrap", "justify-around")}>
+        <hr />
         {result.statusClean.map((status) => (
           <StatusCleanItem {...status} key={status.id} />
         ))}

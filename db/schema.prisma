@@ -58,6 +58,7 @@ model Feed {
   url           String      @unique
   etag          String?
   Feedentry     Feedentry[]
+  isActive      Boolean     @default(true)
 }
 
 model Feedoption {

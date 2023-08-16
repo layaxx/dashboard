@@ -37,7 +37,7 @@ const handler: NextApiHandler = async (request, response: ResponseWithSession) =
 
   const force = Boolean(request.query["force"])
 
-  const feeds = await db.feed.findMany()
+  const feeds = await db.feed.findMany(force ? undefined : { where: { isActive: true } })
 
   const results: Result[] = await Promise.all(
     feeds.map(async (feed) => ({

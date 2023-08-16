@@ -81,7 +81,7 @@ const Warnings = () => {
   }
 
   const lastReload = useRef<number>(-1)
-  const [result, { isLoading, isError, refetch }] = useQuery(
+  const [result, { isLoading, isError }] = useQuery(
     getStatus,
     {},
     {
@@ -97,7 +97,7 @@ const Warnings = () => {
             })}`
           )
           lastReload.current = Date.now()
-          handleOnForceReload(false).finally(() => refetch())
+          handleOnForceReload(false).finally(() => invalidateQuery(getStatus))
         }
       },
     }
