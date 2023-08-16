@@ -28,11 +28,15 @@ export default resolver.pipe(resolver.authorize(), async () => {
 
   const allErrors = errors.flatMap((object) => object.errors)
 
+  const minutesSinceLastLoad = dayjs().diff(dayjs(status._max.loadTime), "minutes")
+
   const results: IStatusResult = {
     averageLoadTimeInMilliSeconds: status._avg.loadDuration ?? Number.MAX_VALUE,
     averageMinutesBetweenLoads:
       dayjs(status._max.loadTime).diff(dayjs(status._min.loadTime), "minutes") / status._count.id,
-    minutesSinceLastLoad: dayjs().diff(dayjs(status._max.loadTime), "minutes"),
+    minutesSinceLastLoad: Number.isNaN(minutesSinceLastLoad)
+      ? Number.MAX_SAFE_INTEGER
+      : minutesSinceLastLoad,
     count: status._count.id,
     errors: allErrors,
   } as const

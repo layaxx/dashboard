@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { getAntiCSRFToken } from "@blitzjs/auth"
 import { Routes } from "@blitzjs/next"
 import { invalidateQuery, useQuery } from "@blitzjs/rpc"
@@ -44,24 +44,6 @@ const WarningsIcon = ({ result, isLoading, isError }: Props) => {
 }
 
 const Warnings = () => {
-  const [result, { isLoading, isError, refetch }] = useQuery(
-    getStatus,
-    {},
-    {
-      onSuccess: (data) => {
-        if (data.minutesSinceLastLoad > targetTimeBetweenLoads) {
-          console.log(
-            `Reloading due to ${JSON.stringify({
-              targetTimeBetweenLoads,
-              minutesSinceLastLoad: data.minutesSinceLastLoad,
-            })}`
-          )
-          handleOnForceReload(false).finally(() => refetch())
-        }
-      },
-    }
-  )
-
   const [isLoadingRSS, setIsLoadingRSS] = useState(false)
 
   const handleOnForceReload = async (force: boolean) => {
@@ -84,8 +66,9 @@ const Warnings = () => {
             return { title: "Failed to load Feeds", status: "error" }
           }
 
-          const { errors } = JSON.parse(await response.text())
           invalidateQuery(getFeeds)
+
+          const { errors } = JSON.parse(await response.text())
           const hasErrors = errors && errors.length > 0
           return {
             title: "Loaded Feeds" + (hasErrors ? " (with Errors)" : ""),
@@ -96,6 +79,29 @@ const Warnings = () => {
       }
     ).finally(() => setIsLoadingRSS(false))
   }
+
+  const lastReload = useRef<number>(-1)
+  const [result, { isLoading, isError, refetch }] = useQuery(
+    getStatus,
+    {},
+    {
+      onSuccess: (data) => {
+        if (
+          (lastReload.current === -1 || Date.now() - lastReload.current > 30 * 1000) &&
+          data.minutesSinceLastLoad > targetTimeBetweenLoads
+        ) {
+          console.log(
+            `Reloading due to ${JSON.stringify({
+              targetTimeBetweenLoads,
+              minutesSinceLastLoad: data.minutesSinceLastLoad,
+            })}`
+          )
+          lastReload.current = Date.now()
+          handleOnForceReload(false).finally(() => refetch())
+        }
+      },
+    }
+  )
 
   return (
     <div className={clsx("flex", "items-center", "w-full")}>
