@@ -55,14 +55,21 @@ export const loadFeed = async (
   } else {
     setReaderOptions({ includeFullContent: true, descriptionMaxLen: summaryLength })
     setParserOptions({ trimValues: false })
-    const parsedFeed = parseString(content)
-    if (!parsedFeed) {
+
+    let parsedFeed: FeedData | null
+    try {
+      parsedFeed = parseString(content)
+      if (!parsedFeed) {
+        throw new Error("Failed to parse feed")
+      }
+    } catch {
       console.error("Encountered an error while parsing " + feed.url, headers)
       return {
         status: LoadFeedStatus.ERROR,
         statusMessage: "Failed to parse " + feed.url,
       }
     }
+
     try {
       items = parsedFeed.entries?.map((item) => convertItem(item, feed)) ?? []
     } catch (error) {
