@@ -23,7 +23,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 # This will do the trick, use the corresponding env file for each environment.
 COPY .env.staging.local .env.production
-RUN yarn build
+RUN yarn blitz prisma generate && yarn build
 
 # 3. Production image, copy all the files and run next
 FROM node:16-slim AS runner
