@@ -214,14 +214,6 @@ describe("loadRRSHelpers#loadFeed works as expected", () => {
   })
 
   test("returns skipped status for recently updated feeds", () => {
-    loadFeed(
-      { lastLoad: dayjs().subtract(1, "minute").toDate(), loadIntervall: 1000 } as Feed,
-      false,
-      {
-        session: { $authorize: () => true, $isAuthorized: () => true },
-      } as unknown as Ctx
-    ).then(console.log)
-
     return expect(
       loadFeed(
         { lastLoad: dayjs().subtract(1, "minute").toDate(), loadIntervall: 1000 } as Feed,

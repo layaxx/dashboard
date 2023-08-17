@@ -1,3 +1,4 @@
+import { BlitzLogger } from "blitz"
 import { AuthenticatedSessionContext, getSession } from "@blitzjs/auth"
 import { Ctx, Routes } from "@blitzjs/next"
 import dayjs from "dayjs"
@@ -8,6 +9,8 @@ import db from "db"
 import { LoadFeedStatus, Result } from "lib/feeds/types"
 import { loadFeed } from "lib/serverOnly/loadRSSHelpers"
 
+const logger = BlitzLogger({ name: "/api/loadRSS" })
+
 export interface ResponseWithSession extends NextApiResponse<any> {
   blitzCtx?: { session: { $authorize: Function; $isAuthorized: Function } }
 }
@@ -17,7 +20,7 @@ const handler: NextApiHandler = async (request, response: ResponseWithSession) =
 
   if (!session.userId) {
     if (process.env.API_TOKEN && request.headers["api-token"] === process.env.API_TOKEN) {
-      console.log("Access to /api/clean granted due to valid api token")
+      logger.info("Access to /api/loadRSS granted due to valid api token")
 
       session = {
         $authorize: () => {},
@@ -25,7 +28,7 @@ const handler: NextApiHandler = async (request, response: ResponseWithSession) =
         $isAuthorized: () => true,
       } as AuthenticatedSessionContext
     } else {
-      console.log("denied Access")
+      logger.warn("denied Access")
       response.statusCode = 403
       response.statusMessage = "Please log in to use this API route"
       response.end()
@@ -67,7 +70,7 @@ const handler: NextApiHandler = async (request, response: ResponseWithSession) =
   for (const result of results) {
     if (result.status === LoadFeedStatus.ERROR) {
       if (result.isActive && result.consecutiveFailedLoads >= 9) {
-        console.log(`Deactivating feed ${result.name} due to too many consecutive failed loads`)
+        logger.warn(`Deactivating feed ${result.name} due to too many consecutive failed loads`)
         db.feedentry.create({
           data: {
             feedId: result.id,
@@ -118,7 +121,7 @@ const handler: NextApiHandler = async (request, response: ResponseWithSession) =
     },
   })
 
-  console.log("finished RSS reload:", {
+  logger.info("finished RSS reload:", {
     timeElapsed: timeStampAfter - timeStampBefore,
     errors,
     results,
