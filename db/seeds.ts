@@ -33,7 +33,7 @@ const seed = async () => {
     for (let indexEntry = 0; indexEntry < numberOfEntriesPerFeed; indexEntry++) {
       await db.feedentry.create({
         data: {
-          id: faker.unique(faker.datatype.string),
+          id: faker.helpers.unique(faker.datatype.string),
           link: faker.internet.url(),
           summary: faker.lorem.paragraph(),
           title: feedNamePrefix + faker.lorem.words(2),

@@ -1,6 +1,5 @@
 /* eslint-disable no-magic-numbers */
 import { faker } from "@faker-js/faker"
-import { Feed } from "@prisma/client"
 import { FeedEntry } from "feed-reader"
 import {
   convertItem,
@@ -66,7 +65,7 @@ describe("feedHelper#getLinkFromParsedItem works as expected", () => {
 describe("feedHelper#getContentFromParsedItem works as expected", () => {
   const itemSharedProperties = {
     categories: faker.lorem.paragraph(),
-    guid: faker.unique(faker.internet.url),
+    guid: faker.helpers.unique(faker.internet.url),
     creator: faker.internet.userName(),
     isoDate: new Date().toISOString(),
     link: faker.internet.url(),
@@ -95,7 +94,7 @@ describe("feedHelper#getContentFromParsedItem works as expected", () => {
 describe("feedHelper#getSummaryFromParsedItem works as expected", () => {
   const itemSharedProperties = {
     categories: faker.lorem.paragraph(),
-    guid: faker.unique(faker.internet.url),
+    guid: faker.helpers.unique(faker.internet.url),
     creator: faker.internet.userName(),
     isoDate: new Date().toISOString(),
     link: faker.internet.url(),
@@ -129,16 +128,18 @@ describe("feedHelper#convertItem works as expected", () => {
     link = faker.internet.url(),
     published = faker.date.past().toISOString()
 
-  const feed: Feed = { id: 77, url: faker.internet.url() } as Feed
+  const feed = { id: 77, url: faker.internet.url() }
 
   test("throws if neither guid nor id nor link are provided", () => {
-    expect(() => convertItem({ content, description, published } as FeedEntry, feed)).toThrowError()
+    expect(() =>
+      convertItem({ content, description, published } as FeedEntry, feed as any)
+    ).toThrowError()
   })
 
   test("defines all required properties", () => {
     const result = convertItem(
       { content, description, link, published, title: faker.lorem.words(2) },
-      feed
+      feed as any
     )
 
     expect(result).toBeDefined()

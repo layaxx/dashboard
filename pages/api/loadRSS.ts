@@ -1,6 +1,5 @@
-import { AuthenticatedMiddlewareCtx } from "blitz"
 import { AuthenticatedSessionContext, getSession } from "@blitzjs/auth"
-import { Routes } from "@blitzjs/next"
+import { Ctx, Routes } from "@blitzjs/next"
 import dayjs from "dayjs"
 import { NextApiResponse, NextApiHandler } from "next"
 import { performance } from "perf_hooks"
@@ -45,7 +44,7 @@ const handler: NextApiHandler = async (request, response: ResponseWithSession) =
       ...feed,
       ...(await loadFeed(feed, force, {
         session,
-      } as AuthenticatedMiddlewareCtx)),
+      } as Ctx)),
     }))
   )
 

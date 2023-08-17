@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { AuthenticatedMiddlewareCtx } from "blitz"
+import { Ctx } from "@blitzjs/next"
 import { invokeWithCtx } from "@blitzjs/rpc"
 import { Prisma } from "@prisma/client"
 import dayjs from "dayjs"
@@ -19,14 +19,14 @@ dayjs.extend(utc)
 export const loadFeed = async (
   feed: Feed,
   forceReload: boolean,
-  context: AuthenticatedMiddlewareCtx
+  context: Ctx
 ): Promise<LoadFeedResult> => {
   if (!context) {
     throw new Error("Missing ctx info")
   }
 
   const minutesSinceLastLoad = dayjs().diff(dayjs(feed.lastLoad), "minutes")
-  const targetInterval = feed.loadIntervall * Math.pow(1.8, feed.consecutiveFailedLoads)
+  const targetInterval = feed.loadIntervall * Math.pow(1.8, feed.consecutiveFailedLoads ?? 0)
 
   if (!forceReload && targetInterval > minutesSinceLastLoad) {
     return { status: LoadFeedStatus.SKIPPED, statusMessage: "Skipped due to feed.loadIntervall." }
@@ -105,7 +105,7 @@ export const loadFeed = async (
 
 export async function updateDB(
   items: Prisma.FeedentryUncheckedCreateInput[],
-  context: AuthenticatedMiddlewareCtx
+  context: Ctx
 ): Promise<{
   countUpdated: number
   countCreated: number

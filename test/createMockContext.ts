@@ -1,5 +1,4 @@
 import { Ctx, RequestMiddleware as Request, MiddlewareResponse as Response } from "blitz"
-import { getSession } from "@blitzjs/auth"
 import httpMocks from "node-mocks-http"
 import { User } from "db"
 
@@ -30,8 +29,16 @@ export default async function createMockContext<C extends Ctx>({
 
   // Ensures the response has the blitzCtx object which is required for
   // authorization checks
-  await getSession(mockRequest as any, mockResponse)
-
+  if (!mockResponse.blitzCtx)
+    mockResponse.blitzCtx = {
+      session: {
+        $publicData: {},
+        $isAuthorized: () => false,
+        $authorize: () => {
+          throw new Error("no")
+        },
+      },
+    } as unknown as C
   // Simulate login by saving public session data
   if (user) {
     // Need to use Object.assign instead of spread operator,
