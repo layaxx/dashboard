@@ -25,7 +25,9 @@ export const loadFeed = async (
   }
 
   const minutesSinceLastLoad = dayjs().diff(dayjs(feed.lastLoad), "minutes")
-  if (!forceReload && feed.loadIntervall > minutesSinceLastLoad) {
+  const targetInterval = feed.loadIntervall * Math.pow(1.8, feed.consecutiveFailedLoads)
+
+  if (!forceReload && targetInterval > minutesSinceLastLoad) {
     return { status: LoadFeedStatus.SKIPPED, statusMessage: "Skipped due to feed.loadIntervall." }
   }
 
@@ -86,7 +88,7 @@ export const loadFeed = async (
   const { countUpdated, countCreated } = await updateDB(items, context)
 
   await db.feed.update({
-    data: { lastLoad: dayjs().toISOString(), etag: headers.get("etag") },
+    data: { lastLoad: dayjs().toISOString(), etag: headers.get("etag"), consecutiveFailedLoads: 0 },
     where: { id: feed.id },
   })
 

@@ -1,4 +1,5 @@
 import { AuthenticatedSessionContext, getSession } from "@blitzjs/auth"
+import { Routes } from "@blitzjs/next"
 import { AuthenticatedMiddlewareCtx } from "@blitzjs/rpc"
 import dayjs from "dayjs"
 import { NextApiResponse, NextApiHandler } from "next"
@@ -41,8 +42,7 @@ const handler: NextApiHandler = async (request, response: ResponseWithSession) =
 
   const results: Result[] = await Promise.all(
     feeds.map(async (feed) => ({
-      name: feed.name,
-      id: feed.id,
+      ...feed,
       ...(await loadFeed(feed, force, {
         session,
       } as AuthenticatedMiddlewareCtx)),
@@ -63,7 +63,41 @@ const handler: NextApiHandler = async (request, response: ResponseWithSession) =
 
   const timeStampAfter = performance.now()
 
-  const errors = results
+  const errors: string[] = []
+
+  for (const result of results) {
+    if (result.status === LoadFeedStatus.ERROR) {
+      if (result.isActive && result.consecutiveFailedLoads >= 9) {
+        console.log(`Deactivating feed ${result.name} due to too many consecutive failed loads`)
+        db.feedentry.create({
+          data: {
+            feedId: result.id,
+            id: String(new Date().getMilliseconds()),
+            title: "Feed Disabled",
+            text: "Feed disabled due to too many consecutive failed loads",
+            summary: "Feed disabled due to too many consecutive failed loads",
+            link: String(Routes.FeedsStatusPage()),
+          },
+        })
+      }
+
+      db.feed.update({
+        where: { id: result.id },
+        data: {
+          consecutiveFailedLoads: { increment: 1 },
+          isActive: result.isActive && result.consecutiveFailedLoads < 10,
+        },
+      })
+      errors.push(
+        JSON.stringify({
+          errorMessage: result.errorMessage,
+          statusMessage: result.statusMessage,
+        })
+      )
+    }
+  }
+
+  results
     .map(
       (result) =>
         (result.status === LoadFeedStatus.ERROR &&
