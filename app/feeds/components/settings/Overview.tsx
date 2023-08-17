@@ -1,3 +1,4 @@
+"use client"
 import { useEffect, useState } from "react"
 import { Routes } from "@blitzjs/next"
 import { useMutation, useQuery } from "@blitzjs/rpc"
@@ -45,10 +46,8 @@ const SettingsOverview = () => {
 
   return (
     <>
-      <Link href={Routes.FeedsAddPage()}>
-        <a>
-          <Button icon={<PlusIcon />}>Add new Feed</Button>
-        </a>
+      <Link href={Routes.FeedsAddPage()} passHref>
+        <Button icon={<PlusIcon />}>Add new Feed</Button>
       </Link>
 
       <div className="w-full">
@@ -76,8 +75,11 @@ const SettingsOverview = () => {
               key={feed.id}
             >
               <div>
-                <Link href={Routes.FeedsSettingsPage({ id: feed.id })}>
-                  <a className={clsx("font-semibold", "text-gray-800", "text-xl")}>{feed.name}</a>
+                <Link
+                  href={Routes.FeedsSettingsPage({ id: feed.id })}
+                  className={clsx("font-semibold", "text-gray-800", "text-xl")}
+                >
+                  {feed.name}
                 </Link>
               </div>
             </div>

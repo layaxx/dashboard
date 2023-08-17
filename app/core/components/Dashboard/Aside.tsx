@@ -50,10 +50,8 @@ const Aside = ({ hideNavbar, setHideNavbar, title, feeds }: Props) => {
         >
           {title}
         </h1>
-        <Link href={Routes.FeedsSettingsOverviewPage()}>
-          <a className="w-full">
-            <CogIcon className={clsx("active:animate-spin", "h-7", "ml-auto")} />
-          </a>
+        <Link href={Routes.FeedsSettingsOverviewPage()} className="w-full">
+          <CogIcon className={clsx("active:animate-spin", "h-7", "ml-auto")} />
         </Link>
       </section>
       <section className={clsx("flex", "flex-1", "flex-col", "w-full")}>

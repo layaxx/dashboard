@@ -76,8 +76,11 @@ const SettingsItem: FC<IProps> = ({
     >
       <div>
         <div className={clsx("flex", "flex-row", "flex-wrap")}>
-          <Link href={Routes.FeedsSettingsPage({ id })}>
-            <a className={clsx("font-semibold", "text-gray-800", "text-xl")}>{name}</a>
+          <Link
+            href={Routes.FeedsSettingsPage({ id })}
+            className={clsx("font-semibold", "text-gray-800", "text-xl")}
+          >
+            {name}
           </Link>
           {!isActive && (
             <Button

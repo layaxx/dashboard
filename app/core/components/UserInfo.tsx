@@ -20,15 +20,11 @@ const UserInfo = () => {
     </Button>
   ) : (
     <div className={clsx("flex", "justify-between")}>
-      <Link href={Routes.SignupPage()}>
-        <a>
-          <strong>Sign Up</strong>
-        </a>
+      <Link href={Routes.SignupPage()} passHref>
+        <strong>Sign Up</strong>
       </Link>
-      <Link href={Routes.LoginPage()}>
-        <a>
-          <strong>Login</strong>
-        </a>
+      <Link href={Routes.LoginPage()} passHref>
+        <strong>Login</strong>
       </Link>
     </div>
   )

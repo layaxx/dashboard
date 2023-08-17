@@ -1,3 +1,4 @@
+"use client"
 import { FC } from "react"
 import { useQuery } from "@blitzjs/rpc"
 import { ExclamationCircleIcon } from "@heroicons/react/24/solid"

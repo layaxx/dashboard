@@ -1,3 +1,4 @@
+"use client"
 import { Fragment, useEffect } from "react"
 import { ErrorComponent } from "@blitzjs/next"
 import { useQuery, useInfiniteQuery } from "@blitzjs/rpc"

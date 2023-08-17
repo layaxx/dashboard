@@ -20,8 +20,13 @@
     "jsx": "preserve",
     "incremental": true,
     "tsBuildInfoFile": ".tsbuildinfo",
-    "types": ["jest", "node"]
+    "types": ["jest", "node"],
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "exclude": ["node_modules", "**/*.e2e.ts", "cypress", "jest.config.js"],
-  "include": ["blitz-env.d.ts", "**/*.ts", "**/*.tsx"]
+  "include": ["blitz-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"]
 }

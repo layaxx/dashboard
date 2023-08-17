@@ -1,3 +1,4 @@
+"use client"
 import { Routes } from "@blitzjs/next"
 import { invoke, useMutation, useQuery } from "@blitzjs/rpc"
 import clsx from "clsx"

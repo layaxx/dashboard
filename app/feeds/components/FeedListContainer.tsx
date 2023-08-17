@@ -1,3 +1,4 @@
+"use client"
 import { Suspense } from "react"
 import { Routes } from "@blitzjs/next"
 import { useQuery } from "@blitzjs/rpc"
@@ -23,17 +24,15 @@ export const FeedListContainer = ({ mode }: Props) => {
       <Suspense fallback={<Loader />}>
         <FeedList mode={mode} />
       </Suspense>
-      <Link href={Routes.FeedsReadingPage()}>
-        <a>
-          <FeedListItem
-            title={"Reading List"}
-            unreadCount={readListCount ?? 0}
-            isActive={mode === FEED_MODE.BOOKMARKS}
-            onClick={() => {
-              navigate("/feeds/reading")
-            }}
-          />
-        </a>
+      <Link href={Routes.FeedsReadingPage()} passHref>
+        <FeedListItem
+          title={"Reading List"}
+          unreadCount={readListCount ?? 0}
+          isActive={mode === FEED_MODE.BOOKMARKS}
+          onClick={() => {
+            navigate("/feeds/reading")
+          }}
+        />
       </Link>
     </ul>
   )

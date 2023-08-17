@@ -1,3 +1,4 @@
+"use client"
 import { useRef, useState } from "react"
 import { getAntiCSRFToken } from "@blitzjs/auth"
 import { Routes } from "@blitzjs/next"
@@ -106,11 +107,9 @@ const Warnings = () => {
   return (
     <div className={clsx("flex", "items-center", "w-full")}>
       <Link href={Routes.FeedsStatusPage()}>
-        <a>
-          <Button icon={<WarningsIcon result={result} isLoading={isLoading} isError={isError} />}>
-            Status
-          </Button>
-        </a>
+        <Button icon={<WarningsIcon result={result} isLoading={isLoading} isError={isError} />}>
+          Status
+        </Button>
       </Link>
 
       <Button onClick={() => handleOnForceReload(true)} disabled={isLoadingRSS}>
@@ -118,9 +117,7 @@ const Warnings = () => {
       </Button>
 
       <Link href={Routes.FeedsAddPage()}>
-        <a>
-          <Button icon={<PlusCircleIcon className="text-success" />}>Add</Button>
-        </a>
+        <Button icon={<PlusCircleIcon className="text-success" />}>Add</Button>
       </Link>
     </div>
   )

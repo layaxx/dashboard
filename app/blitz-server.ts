@@ -1,9 +1,11 @@
+import { BlitzLogger } from "blitz"
 import { AuthServerPlugin, PrismaStorage, simpleRolesIsAuthorized } from "@blitzjs/auth"
 import { setupBlitzServer } from "@blitzjs/next"
 import { authConfig } from "./blitz-client"
 import db from "db"
 
-export const { gSSP, gSP, api } = setupBlitzServer({
+BlitzLogger().info("Starting server...")
+export const { gSSP, gSP, api, useAuthenticatedBlitzContext } = setupBlitzServer({
   plugins: [
     AuthServerPlugin({
       ...authConfig,

@@ -1,3 +1,4 @@
+"use client"
 import { useState } from "react"
 import { useMutation, useInfiniteQuery } from "@blitzjs/rpc"
 import { PlusIcon } from "@heroicons/react/24/solid"

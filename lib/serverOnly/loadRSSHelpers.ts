@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
-import { invokeWithCtx, AuthenticatedMiddlewareCtx } from "@blitzjs/rpc"
+import { AuthenticatedMiddlewareCtx } from "blitz"
+import { invokeWithCtx } from "@blitzjs/rpc"
 import { Prisma } from "@prisma/client"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"

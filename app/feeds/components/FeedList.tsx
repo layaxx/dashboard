@@ -1,3 +1,4 @@
+"use client"
 import { FC } from "react"
 import { useQuery } from "@blitzjs/rpc"
 import { useRouter } from "next/router"
@@ -14,11 +15,15 @@ type Props = {
 export const FeedList: FC<Props> = ({ mode }) => {
   const secondsInMinute = 60
   const milliSecondsInSecond = 1000
-  const [{ feeds }] = useQuery(getFeeds, undefined, {
-    refetchInterval: milliSecondsInSecond * secondsInMinute,
-    refetchOnReconnect: true,
-    refetchOnWindowFocus: true,
-  })
+  const [{ feeds }] = useQuery(
+    getFeeds,
+    {},
+    {
+      refetchInterval: milliSecondsInSecond * secondsInMinute,
+      refetchOnReconnect: true,
+      refetchOnWindowFocus: true,
+    }
+  )
 
   const showAllFeeds = false
 

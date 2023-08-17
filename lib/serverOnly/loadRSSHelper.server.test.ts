@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { AuthenticatedMiddlewareCtx } from "@blitzjs/rpc"
+import { AuthenticatedMiddlewareCtx } from "blitz"
 import { faker } from "@faker-js/faker"
 import dayjs from "dayjs"
 import { fetchFromURL, getTitleAndTTLFromFeed, loadFeed } from "./loadRSSHelpers"

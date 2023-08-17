@@ -5,7 +5,7 @@ import {
   ArrowPathIcon,
 } from "@heroicons/react/24/outline"
 import clsx from "clsx"
-import Image from "next/image"
+import Image from "next/legacy/image"
 import { toast } from "react-toastify"
 
 export declare const STATUSES: {

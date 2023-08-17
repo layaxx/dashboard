@@ -1,6 +1,6 @@
+import { AuthenticatedMiddlewareCtx } from "blitz"
 import { AuthenticatedSessionContext, getSession } from "@blitzjs/auth"
 import { Routes } from "@blitzjs/next"
-import { AuthenticatedMiddlewareCtx } from "@blitzjs/rpc"
 import dayjs from "dayjs"
 import { NextApiResponse, NextApiHandler } from "next"
 import { performance } from "perf_hooks"

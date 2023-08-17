@@ -40,9 +40,7 @@ const Layout: BlitzLayout<{ title?: string; heading: string; children: React.Rea
               const path = array.slice(0, index + 1).join("/")
               return (
                 <Fragment key={path}>
-                  <Link href={path || "/"}>
-                    <a>{element || "Home"}</a>
-                  </Link>
+                  <Link href={path || "/"}>{element || "Home"}</Link>
                   <span className="mx-2">/</span>
                 </Fragment>
               )

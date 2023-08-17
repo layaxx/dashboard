@@ -1,6 +1,7 @@
 import { Suspense } from "react"
-import { BlitzPage } from "@blitzjs/next"
+import { BlitzPage, Routes } from "@blitzjs/next"
 import clsx from "clsx"
+import Link from "next/link"
 import UserInfo from "app/core/components/UserInfo"
 import Layout from "app/core/layouts/Layout"
 
@@ -28,8 +29,8 @@ const Home: BlitzPage = () => {
       </div>
       <div className={clsx("sm:flex", "sm:justify-center", "lg:justify-start", "mt-5", "sm:mt-8")}>
         <div className={clsx("rounded-md", "shadow")}>
-          <a
-            href="/feeds/rss"
+          <Link
+            href={Routes.FeedsRSSPage()}
             className={clsx(
               "hover:bg-indigo-700",
               "bg-primary",
@@ -51,11 +52,11 @@ const Home: BlitzPage = () => {
             )}
           >
             News Feed
-          </a>
+          </Link>
         </div>
         <div className={clsx("sm:ml-3", "sm:mt-0", "mt-3")}>
-          <a
-            href="/feeds/reading"
+          <Link
+            href={Routes.FeedsReadingPage()}
             className={clsx(
               "bg-indigo-100",
               "hover:bg-indigo-200",
@@ -77,7 +78,7 @@ const Home: BlitzPage = () => {
             )}
           >
             Bookmarks
-          </a>
+          </Link>
         </div>
       </div>
     </div>

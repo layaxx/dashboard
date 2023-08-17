@@ -1,4 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from "next/document"
+import { BlitzProvider } from "app/blitz-client"
 
 class MyDocument extends Document {
   // Only uncomment if you need to customize this behaviour
@@ -13,8 +14,10 @@ class MyDocument extends Document {
         <Head />
         <link rel="preload" as="font" crossOrigin="" href="/serif.ttf" />
         <body>
-          <Main />
-          <NextScript />
+          <BlitzProvider>
+            <Main />
+            <NextScript />
+          </BlitzProvider>
         </body>
       </Html>
     )
