@@ -24,7 +24,7 @@ const Item = ({ item, settings }: ItemProps) => {
       updateReadState({ id: item.id, read: isRead }).then(() =>
         setQueryData(
           getFeeds,
-          undefined,
+          {},
           (argument) => ({
             ...argument,
             recentlyReadCount: argument?.recentlyReadCount ?? 0,
