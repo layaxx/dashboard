@@ -16,11 +16,11 @@ export const timeAsHex = (time: Dayjs, options?: Options) => {
 const Zen = () => {
   const [isFullscreen, setIsFullscreen] = useState(false)
 
-  const [time, setTime] = useState(dayjs())
+  const [time, setTime] = useState(dayjs("1999-12-31T23:59:59.000Z"))
 
   useEffect(() => {
-    const milliseconds = 1000
-    const interval = setInterval(() => setTime(dayjs()), milliseconds)
+    const oneSecond = 1000
+    const interval = setInterval(() => setTime(dayjs()), oneSecond)
 
     return () => {
       clearInterval(interval)
