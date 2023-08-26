@@ -1,5 +1,5 @@
 "use client"
-import { useRef, useState } from "react"
+import { useState } from "react"
 import { getAntiCSRFToken } from "@blitzjs/auth"
 import { Routes } from "@blitzjs/next"
 import { invalidateQuery, useQuery } from "@blitzjs/rpc"
@@ -22,6 +22,8 @@ type Props = {
   isLoading: boolean
   isError: boolean
 }
+
+let lastReload = -1
 
 const WarningsIcon = ({ result, isLoading, isError }: Props) => {
   if (isLoading) {
@@ -81,14 +83,16 @@ const Warnings = () => {
     ).finally(() => setIsLoadingRSS(false))
   }
 
-  const lastReload = useRef<number>(-1)
   const [result, { isLoading, isError }] = useQuery(
     getStatus,
     {},
     {
       onSuccess: (data) => {
+        // eslint-disable-next-line no-magic-numbers
+        const thirtySeconds = 30 * 1000
+        const durationSinceLastReload = Date.now() - lastReload
         if (
-          (lastReload.current === -1 || Date.now() - lastReload.current > 30 * 1000) &&
+          (lastReload === -1 || durationSinceLastReload > thirtySeconds) &&
           data.minutesSinceLastLoad > targetTimeBetweenLoads
         ) {
           console.log(
@@ -97,7 +101,7 @@ const Warnings = () => {
               minutesSinceLastLoad: data.minutesSinceLastLoad,
             })}`
           )
-          lastReload.current = Date.now()
+          lastReload = Date.now()
           handleOnForceReload(false).finally(() => invalidateQuery(getStatus))
         }
       },
@@ -106,7 +110,7 @@ const Warnings = () => {
 
   return (
     <div className={clsx("flex", "items-center", "w-full")}>
-      <Link href={Routes.FeedsStatusPage()}>
+      <Link href={Routes.FeedsStatusPage()} passHref>
         <Button icon={<WarningsIcon result={result} isLoading={isLoading} isError={isError} />}>
           Status
         </Button>
@@ -116,7 +120,7 @@ const Warnings = () => {
         Force Reload
       </Button>
 
-      <Link href={Routes.FeedsAddPage()}>
+      <Link href={Routes.FeedsAddPage()} passHref>
         <Button icon={<PlusCircleIcon className="text-success" />}>Add</Button>
       </Link>
     </div>
