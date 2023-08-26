@@ -12,7 +12,6 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head />
-        <link rel="preload" as="font" crossOrigin="" href="/serif.ttf" />
         <body>
           <BlitzProvider>
             <Main />
