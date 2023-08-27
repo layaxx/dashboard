@@ -6,6 +6,7 @@ services:
       context: ../../
       dockerfile: docker/production/Dockerfile
     image: dashboard-production
+    env_file: ../../.env.production.local
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "node", "healthcheck.js"]
