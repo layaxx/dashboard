@@ -10,7 +10,6 @@ const ItemInformation = ({ item }: Props) => {
 
   return (
     <>
-      {/* FIXME: should not use creation date, should use separate value */}
       <span>{dayjs(item.createdAt).format("DD.MM")}</span>
       <span>{readTime} min</span>
     </>
