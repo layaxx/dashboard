@@ -23,13 +23,15 @@ const AddNewReadListItemPage: BlitzPage = () => {
 
   const url = !!slug && (typeof slug === "string" ? slug : getURLFromSlug(slug as string[]))
 
+  /* FIXME: this method ignores parameters */
+
   useEffect(() => {
     if (!!url) {
       addToReadlist({ url })
         .then(() => router.push(Routes.FeedsReadingPage()))
         .catch(console.error)
     }
-  }, [url])
+  }, [url, router, addToReadlist])
 
   if (!slug) {
     return <p>No Slug provided</p>

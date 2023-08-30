@@ -67,9 +67,12 @@ const handler: NextApiHandler = async (request, response: ResponseWithSession) =
 
   const errors: string[] = []
 
+  const consecutiveFailLimit = 10
   for (const result of results) {
     if (result.status === LoadFeedStatus.ERROR) {
-      if (result.isActive && result.consecutiveFailedLoads >= 9) {
+      const willBeDeactivated =
+        result.isActive && result.consecutiveFailedLoads + 1 >= consecutiveFailLimit
+      if (willBeDeactivated) {
         logger.warn(`Deactivating feed ${result.name} due to too many consecutive failed loads`)
         db.feedentry.create({
           data: {
@@ -87,7 +90,7 @@ const handler: NextApiHandler = async (request, response: ResponseWithSession) =
         where: { id: result.id },
         data: {
           consecutiveFailedLoads: { increment: 1 },
-          isActive: result.isActive && result.consecutiveFailedLoads < 10,
+          isActive: result.isActive && !willBeDeactivated,
         },
       })
       errors.push(

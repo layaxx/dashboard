@@ -26,7 +26,9 @@ export const loadFeed = async (
   }
 
   const minutesSinceLastLoad = dayjs().diff(dayjs(feed.lastLoad), "minutes")
-  const targetInterval = feed.loadIntervall * Math.pow(1.8, feed.consecutiveFailedLoads ?? 0)
+  const exponentialFalloffFactor = 1.8
+  const targetInterval =
+    feed.loadIntervall * Math.pow(exponentialFalloffFactor, feed.consecutiveFailedLoads ?? 0)
 
   if (!forceReload && targetInterval > minutesSinceLastLoad) {
     return { status: LoadFeedStatus.SKIPPED, statusMessage: "Skipped due to feed.loadIntervall." }

@@ -37,7 +37,7 @@ const seed = async () => {
           link: faker.internet.url(),
           summary: faker.lorem.paragraph(),
           title: feedNamePrefix + faker.lorem.words(2),
-          text: faker.lorem.paragraphs(3),
+          text: faker.lorem.paragraphs(3), // eslint-disable-line no-magic-numbers
           feedId: id,
         },
       })

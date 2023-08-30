@@ -11,8 +11,10 @@ const greeting = ((hour: number) => {
     evening: ["Good evening", "Nice to see you", "Fancy seeing you here", "Hi there"],
   }
 
+  // eslint-disable-next-line no-magic-numbers
   if (hour > 4 && hour < 12) {
     greetings = allGreetings.morning
+    // eslint-disable-next-line no-magic-numbers
   } else if (hour < 18) {
     greetings = allGreetings.day
   } else {
