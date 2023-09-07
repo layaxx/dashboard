@@ -54,7 +54,10 @@ export function cleanXSS(string: string) {
   return xss(string, XSSOptions)
 }
 
-export const convertItem = (item: FeedEntry, feed: Feed): Prisma.FeedentryUncheckedCreateInput => {
+export const convertItem = (
+  item: FeedEntry,
+  feed: Pick<Feed, "id" | "url">
+): Prisma.FeedentryUncheckedCreateInput => {
   const id = item.guid || item.id || item.link
 
   if (!id) {

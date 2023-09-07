@@ -62,8 +62,6 @@ export const LabeledTextField = forwardRef<HTMLInputElement, LabeledTextFieldPro
             {normalizedError}
           </div>
         )}
-
-        <style jsx>{``}</style>
       </div>
     )
   }

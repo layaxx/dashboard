@@ -9,6 +9,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   onClick?: MouseEventHandler<HTMLButtonElement>
   icon?: ReactChild
   submit?: boolean
+  notRounded?: boolean
 }
 
 const Button = ({
@@ -18,6 +19,7 @@ const Button = ({
   onClick,
   icon,
   disabled,
+  notRounded,
   ...rest
 }: Props) => {
   return (
@@ -40,7 +42,7 @@ const Button = ({
         "py-2",
         "focus:ring-2",
         "focus:ring-offset-2",
-        "rounded-md",
+        !notRounded && "rounded-md",
         "shadow-sm",
         "text-base",
         disabled && "text-opacity-70",
@@ -60,7 +62,8 @@ const Button = ({
           "text-white",
           "border-transparent",
         ],
-        "w-full"
+        "w-full",
+        rest.className
       )}
       onClick={onClick}
     >
