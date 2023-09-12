@@ -86,7 +86,7 @@ const handler: NextApiHandler = async (request, response: ResponseWithSession) =
         })
       }
 
-      db.feed.update({
+      await db.feed.update({
         where: { id: result.id },
         data: {
           consecutiveFailedLoads: { increment: 1 },

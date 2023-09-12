@@ -176,7 +176,7 @@ export async function fetchFromURL(
 ): Promise<{ content: string | undefined; headers: Headers; statusCode: number; ok: boolean }> {
   const headersRequest = new Headers({
     Accept: "text/xml",
-    "user-agent": "dashboard-rss-reader/1.0",
+    "user-agent": "dashboard-rss-reader/1.1",
   })
   if (!force) {
     if (feed && feed.etag) {
