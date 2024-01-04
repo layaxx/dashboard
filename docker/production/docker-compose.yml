@@ -1,7 +1,8 @@
 version: "3"
 
+name: dashboard-prod
 services:
-  dashboard-production-app:
+  app:
     build:
       context: ../../
       dockerfile: docker/production/Dockerfile
@@ -20,7 +21,7 @@ services:
       - public
       - backend
 
-  dashboard-production-db:
+  db:
     image: postgres:12.4-alpine
     env_file: ../../.env.production.local
     healthcheck:
