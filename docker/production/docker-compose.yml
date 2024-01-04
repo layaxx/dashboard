@@ -15,7 +15,7 @@ services:
       interval: 10s
       retries: 10
     depends_on:
-      dashboard-production-db:
+      db:
         condition: service_healthy
     networks:
       - public
