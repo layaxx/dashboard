@@ -1,5 +1,5 @@
 # 1. Install dependencies only when needed
-FROM node:16-slim AS deps
+FROM node:18-slim AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 
 WORKDIR /app
@@ -16,7 +16,7 @@ RUN \
 
 
 # 2. Rebuild the source code only when needed
-FROM node:16-slim AS builder
+FROM node:18-slim AS builder
 RUN apt-get update && apt-get install -y --no-install-recommends openssl git
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
@@ -26,7 +26,7 @@ COPY .env.staging.local .env.production
 RUN yarn blitz prisma generate && yarn build
 
 # 3. Production image, copy all the files and run next
-FROM node:16-slim AS runner
+FROM node:18-slim AS runner
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends openssl

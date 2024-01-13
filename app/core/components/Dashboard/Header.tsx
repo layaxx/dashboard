@@ -1,8 +1,8 @@
 import { Suspense } from "react"
 import { Bars3Icon, Bars3CenterLeftIcon } from "@heroicons/react/24/solid"
 import clsx from "clsx"
-import Loader from "../Loader"
 import DashboardGreeting from "./Greeting"
+import Loader from "../Loader"
 
 type HeaderProps = {
   hideNavbar: boolean

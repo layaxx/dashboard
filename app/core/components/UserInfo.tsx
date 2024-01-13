@@ -2,8 +2,8 @@ import { Routes } from "@blitzjs/next"
 import { useMutation } from "@blitzjs/rpc"
 import clsx from "clsx"
 import Link from "next/link"
-import { useCurrentUser } from "../hooks/useCurrentUser"
 import Button from "./Button"
+import { useCurrentUser } from "../hooks/useCurrentUser"
 import logout from "app/auth/mutations/logout"
 
 const UserInfo = () => {
