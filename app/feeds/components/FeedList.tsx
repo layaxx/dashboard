@@ -1,5 +1,6 @@
 "use client"
 import { FC } from "react"
+import { Routes } from "@blitzjs/next"
 import { useQuery } from "@blitzjs/rpc"
 import { useRouter } from "next/router"
 import FeedListItem from "./FeedListItem"
@@ -39,7 +40,7 @@ export const FeedList: FC<Props> = ({ mode }) => {
             isActive={mode === FEED_MODE.RSS && activeFeedID === RECENTLY_READ_ID}
             onClick={() => {
               if (mode === FEED_MODE.BOOKMARKS) {
-                router.push("/feeds/rss")
+                router.push(Routes.FeedsRSSPage())
               }
               setState((previous) => ({ ...previous, activeFeedID: RECENTLY_READ_ID }))
             }}
@@ -54,7 +55,7 @@ export const FeedList: FC<Props> = ({ mode }) => {
             isActive={mode === FEED_MODE.RSS && activeFeedID === ALL_FEEDS_ID}
             onClick={() => {
               if (mode === FEED_MODE.BOOKMARKS) {
-                router.push("/feeds/rss")
+                router.push(Routes.FeedsRSSPage())
               }
               setState((previous) => ({ ...previous, activeFeedID: ALL_FEEDS_ID }))
             }}
@@ -71,7 +72,7 @@ export const FeedList: FC<Props> = ({ mode }) => {
                   unreadCount={unreadCount}
                   onClick={() => {
                     if (mode !== FEED_MODE.RSS) {
-                      router.push("/feeds/rss")
+                      router.push(Routes.FeedsRSSPage())
                     }
                     if (isSelected) {
                       refetchItems()

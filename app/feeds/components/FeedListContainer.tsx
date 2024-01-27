@@ -17,7 +17,7 @@ type Props = {
 export const FeedListContainer = ({ mode }: Props) => {
   const [readListCount] = useQuery(countReadlistentries, {}, { suspense: false })
 
-  const { push: navigate } = useRouter()
+  const router = useRouter()
 
   return (
     <ul>
@@ -30,7 +30,7 @@ export const FeedListContainer = ({ mode }: Props) => {
           unreadCount={readListCount ?? 0}
           isActive={mode === FEED_MODE.BOOKMARKS}
           onClick={() => {
-            navigate("/feeds/reading")
+            router.push(Routes.FeedsReadingPage())
           }}
         />
       </Link>
