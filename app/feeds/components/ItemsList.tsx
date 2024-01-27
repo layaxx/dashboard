@@ -1,5 +1,5 @@
 "use client"
-import { Fragment, useEffect } from "react"
+import { Fragment, useEffect, useRef } from "react"
 import { ErrorComponent } from "@blitzjs/next"
 import { useQuery, useInfiniteQuery } from "@blitzjs/rpc"
 import Item from "./items/Item"
@@ -13,6 +13,8 @@ import { ALL_FEEDS_ID, RECENTLY_READ_ID } from "lib/config/feeds/feedIDs"
 
 export const ItemsList = () => {
   const [{ activeFeedID }] = useSharedState()
+
+  const skipOffset = useRef(0)
 
   const baseBatchSize = 20
 
@@ -37,7 +39,7 @@ export const ItemsList = () => {
     (fetchNextPageVariable) => {
       return {
         take: fetchNextPageVariable?.take ?? baseBatchSize,
-        skip: fetchNextPageVariable?.skip ?? 0,
+        skip: fetchNextPageVariable?.skip ? fetchNextPageVariable?.skip - skipOffset.current : 0,
         where: {
           feedId: activeFeedID === ALL_FEEDS_ID ? undefined : activeFeedID,
         },
@@ -50,6 +52,9 @@ export const ItemsList = () => {
       useErrorBoundary: true,
       getNextPageParam: ({ nextPage }) => nextPage,
       enabled: activeFeedID !== RECENTLY_READ_ID,
+      onSuccess: () => {
+        skipOffset.current = 0
+      },
     }
   )
 
@@ -84,7 +89,12 @@ export const ItemsList = () => {
         pages.map((page, index) => (
           <Fragment key={index}>
             {page.feedentries.map((item) => (
-              <Item item={item} key={item.id} settings={settings || defaultOptions} />
+              <Item
+                item={item}
+                key={item.id}
+                settings={settings || defaultOptions}
+                skipOffset={skipOffset}
+              />
             ))}
           </Fragment>
         ))}

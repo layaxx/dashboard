@@ -8,9 +8,13 @@ import ItemInformation from "./ItemInformation"
 import readItem from "app/feeds/mutations/readItem"
 import getFeeds from "app/feeds/queries/getFeeds"
 
-type ItemProps = { item: Feedentry; settings: Feedoption }
+type ItemProps = {
+  item: Feedentry
+  settings: Feedoption
+  skipOffset?: React.MutableRefObject<number>
+}
 
-const Item = ({ item, settings }: ItemProps) => {
+const Item = ({ item, settings, skipOffset }: ItemProps) => {
   const defaultExpanded = settings.expand
 
   const [isExpanded, setIsExpanded] = useState(defaultExpanded)
@@ -20,6 +24,7 @@ const Item = ({ item, settings }: ItemProps) => {
 
   const genericReadStateChange = (isRead: boolean) => {
     return () => {
+      if (skipOffset) skipOffset.current += isRead ? 1 : -1
       setHasBeenRead(isRead) // Optimistic UI
       updateReadState({ id: item.id, read: isRead }).then(() =>
         setQueryData(

@@ -15,7 +15,7 @@ const seed = async () => {
   })
 
   const numberOfFeeds = 5
-  const numberOfEntriesPerFeed = 30
+  const numberOfEntriesPerFeed = 40
 
   for (let index = 0; index < numberOfFeeds; index++) {
     const feedNamePrefix = "Feed " + index + ": "
@@ -25,7 +25,7 @@ const seed = async () => {
         name: feedNamePrefix + faker.internet.userName(),
         position: index,
         loadIntervall: 15,
-        url: faker.internet.url(),
+        url: faker.internet.url().replaceAll(/(\.\w+)$/g, ".invalid"), // prevent accidental requests to real servers
         lastLoad: faker.date.past(),
       },
     })
@@ -36,7 +36,7 @@ const seed = async () => {
           id: faker.helpers.unique(faker.datatype.string),
           link: faker.internet.url(),
           summary: faker.lorem.paragraph(),
-          title: feedNamePrefix + faker.lorem.words(2),
+          title: feedNamePrefix + "Entry " + indexEntry + ": " + faker.lorem.words(2),
           text: faker.lorem.paragraphs(3), // eslint-disable-line no-magic-numbers
           feedId: id,
         },
