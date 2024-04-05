@@ -2,11 +2,14 @@ import React, { ReactChild, useEffect, useState } from "react"
 import clsx from "clsx"
 import Aside from "../components/Dashboard/Aside"
 import Header from "../components/Dashboard/Header"
+import { useSharedState } from "../hooks/store"
 
 type Props = { items: ReactChild; feeds: ReactChild }
 
 const DashboardLayout = ({ items, feeds }: Props) => {
   const title = "Dashboard"
+
+  const [_, setSharedState] = useSharedState()
 
   // eslint-disable-next-line unicorn/consistent-function-scoping
   const loadFromLocalStorage = (): boolean =>
@@ -17,6 +20,10 @@ const DashboardLayout = ({ items, feeds }: Props) => {
   useEffect(() => {
     setHideNavbar(loadFromLocalStorage())
   }, [])
+
+  useEffect(() => {
+    setSharedState((previous) => ({ ...previous, closeAside: () => setHideNavbar(true) }))
+  }, [setHideNavbar, setSharedState])
 
   const setHideNavbarHandler = (input: boolean | ((argument0: boolean) => boolean)) => {
     if (typeof input === "boolean") {

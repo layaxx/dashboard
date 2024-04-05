@@ -12,6 +12,7 @@ const activeFeedID =
 const initialState = {
   activeFeedID,
   refetchItems: () => console.warn("Cannot refetch items as no handler is attached"),
+  closeAside: () => console.warn("Cannot close Aside as no handler is attached"),
 }
 
 const useCustomState = () => useState(initialState)

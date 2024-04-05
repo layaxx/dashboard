@@ -83,36 +83,40 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
           "top-0"
         )}
       >
-        <span
-          className={clsx("grow", "py-4", "truncate")}
-          onClick={() => {
-            setIsExpanded((previous) => !previous)
-            if (!hasBeenRead) read()
-          }}
-          title={item.title}
-        >
-          {item.title}
-        </span>
-        <span
-          className={clsx(
-            "border-l-2",
-            "flex",
-            "flex-col",
-            "font-normal",
-            "my-auto",
-            "px-2",
-            "shrink-0",
-            "text-gray-400",
-            "text-right",
-            "text-sm",
-            "w-16"
-          )}
-        >
-          <ItemInformation item={item} />
-        </span>
-        <span className={clsx("border-l-2", "flex", "py-4", "shrink-0", "text-gray-400")}>
+        <div className={clsx("flex", "flex-col-reverse", "md:flex-row", "w-full")}>
+          <div
+            className={clsx("grow", "pb-2", "md:py-4", "truncate")}
+            onClick={() => {
+              setIsExpanded((previous) => !previous)
+              if (!hasBeenRead) read()
+            }}
+            title={item.title}
+          >
+            {item.title}
+          </div>
+          <div
+            className={clsx(
+              "md:border-l-2",
+              "flex",
+              "md:flex-col",
+              "font-normal",
+              "my-auto",
+              "md:pt-0",
+              "pt-1",
+              "md:px-2",
+              "shrink-0",
+              "text-gray-400",
+              "text-right",
+              "text-sm",
+              "md:w-16"
+            )}
+          >
+            <ItemInformation item={item} />
+          </div>
+        </div>
+        <div className={clsx("border-l-2", "flex", "py-4", "shrink-0", "text-gray-400")}>
           <ItemControls item={item} read={read} unread={unread} hasBeenRead={hasBeenRead} />
-        </span>
+        </div>
       </div>
 
       {isExpanded && (

@@ -28,7 +28,16 @@ export const FeedList: FC<Props> = ({ mode }) => {
 
   const showAllFeeds = false
 
-  const [{ activeFeedID, refetchItems }, setState] = useSharedState()
+  const [{ activeFeedID, refetchItems, closeAside }, setState] = useSharedState()
+
+  const referenceID = "feed-list-item-0"
+
+  const closeIfNecessary = () => {
+    const asideIsFullscreen =
+      window &&
+      (document.querySelector("#" + referenceID)?.clientWidth ?? 0) / window.innerWidth > 0.9
+    if (asideIsFullscreen) closeAside()
+  }
 
   const router = useRouter()
   return (
@@ -37,12 +46,14 @@ export const FeedList: FC<Props> = ({ mode }) => {
         <>
           <FeedListItem
             title={"Recently Read"}
+            id={referenceID}
             isActive={mode === FEED_MODE.RSS && activeFeedID === RECENTLY_READ_ID}
             onClick={() => {
               if (mode === FEED_MODE.BOOKMARKS) {
                 router.push(Routes.FeedsRSSPage())
               }
               setState((previous) => ({ ...previous, activeFeedID: RECENTLY_READ_ID }))
+              closeIfNecessary()
             }}
           />
 
@@ -58,6 +69,7 @@ export const FeedList: FC<Props> = ({ mode }) => {
                 router.push(Routes.FeedsRSSPage())
               }
               setState((previous) => ({ ...previous, activeFeedID: ALL_FEEDS_ID }))
+              closeIfNecessary()
             }}
           />
 
@@ -79,6 +91,7 @@ export const FeedList: FC<Props> = ({ mode }) => {
                     } else {
                       localStorage.setItem(LOCALSTORAGE_FEEDID, JSON.stringify(id))
                       setState((previous) => ({ ...previous, activeFeedID: id }))
+                      closeIfNecessary()
                     }
                   }}
                   key={id}

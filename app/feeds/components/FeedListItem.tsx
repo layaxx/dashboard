@@ -5,11 +5,14 @@ type Props = {
   unreadCount?: number
   onClick: React.MouseEventHandler<HTMLLIElement>
   isActive: boolean
+  id?: string
 }
 
-const FeedListItem = ({ title, unreadCount, onClick, isActive }: Props) => {
+const FeedListItem = ({ title, unreadCount, onClick, isActive, id }: Props) => {
+  const otherProps = id ? { id } : {}
   return (
     <li
+      {...otherProps}
       className={clsx(
         "hover:bg-slate-200",
         "border-l-4",

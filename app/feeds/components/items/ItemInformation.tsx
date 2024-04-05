@@ -1,4 +1,5 @@
 import { Feedentry } from "@prisma/client"
+import clsx from "clsx"
 import dayjs from "dayjs"
 import { useReadTime } from "use-read-time"
 
@@ -10,7 +11,7 @@ const ItemInformation = ({ item }: Props) => {
 
   return (
     <>
-      <span>{dayjs(item.createdAt).format("DD.MM")}</span>
+      <span className={clsx("md:mr-0", "mr-4")}>{dayjs(item.createdAt).format("DD.MM")}</span>
       <span>{readTime} min</span>
     </>
   )

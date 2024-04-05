@@ -1,10 +1,6 @@
-import {
-  StarIcon,
-  EyeIcon,
-  EyeSlashIcon,
-  ArrowTopRightOnSquareIcon,
-} from "@heroicons/react/24/solid"
+import { EyeIcon, EyeSlashIcon, ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid"
 import { Feedentry } from "@prisma/client"
+import clsx from "clsx"
 
 type ItemControlProps = {
   item: Feedentry
@@ -18,9 +14,8 @@ const ItemControls = ({ item, read, unread, hasBeenRead }: ItemControlProps) => 
 
   return (
     <>
-      <StarIcon className={sharedClassName} />
       <span
-        className={sharedClassName}
+        className={clsx(sharedClassName, "ml-2")}
         onClick={() => {
           if (hasBeenRead) {
             unread()

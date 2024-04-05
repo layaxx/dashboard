@@ -16,8 +16,7 @@ type Props = {
   feeds: ReactChild
 }
 const Aside = ({ hideNavbar, setHideNavbar, title, feeds }: Props) => {
-  const [{ activeFeedID }, setState] = useSharedState()
-  console.log(activeFeedID)
+  const [{ activeFeedID }] = useSharedState()
   return (
     <aside
       className={clsx(
