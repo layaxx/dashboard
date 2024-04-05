@@ -20,6 +20,7 @@ const Header = ({ hideNavbar, setHideNavbar }: HeaderProps) => (
       "text-primary",
       "w-full"
     )}
+    onClick={() => setHideNavbar((previous) => !previous)}
   >
     <div>
       <Suspense fallback={<Loader />}>
@@ -30,7 +31,6 @@ const Header = ({ hideNavbar, setHideNavbar }: HeaderProps) => (
     <div aria-label="toggler" className={clsx("flex", "items-center", "justify-center")}>
       <button
         aria-label={hideNavbar ? "open" : "close"}
-        onClick={() => setHideNavbar((previous) => !previous)}
         className={clsx("focus:outline-none", "focus:ring-2")}
       >
         {hideNavbar ? <Bars3Icon className="w-6" /> : <Bars3CenterLeftIcon className="w-6" />}

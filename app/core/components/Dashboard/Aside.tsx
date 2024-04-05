@@ -5,6 +5,7 @@ import clsx from "clsx"
 import Link from "next/link"
 import Zen from "./zen"
 import Loader from "../Loader"
+import { useSharedState } from "app/core/hooks/store"
 import Warnings from "app/feeds/components/Warnings"
 import version from "lib/config/version"
 
@@ -15,6 +16,8 @@ type Props = {
   feeds: ReactChild
 }
 const Aside = ({ hideNavbar, setHideNavbar, title, feeds }: Props) => {
+  const [{ activeFeedID }, setState] = useSharedState()
+  console.log(activeFeedID)
   return (
     <aside
       className={clsx(
@@ -41,17 +44,20 @@ const Aside = ({ hideNavbar, setHideNavbar, title, feeds }: Props) => {
           "text-primary",
           "w-full"
         )}
+        onClick={() => setHideNavbar((previous) => !previous)}
       >
         <h1
-          className={clsx("font-bold", "focus:outline-none", "focus:ring-2", "text-2xl")}
+          className={clsx("font-bold", "mr-auto", "focus:outline-none", "focus:ring-2", "text-2xl")}
           aria-label={hideNavbar ? "open" : "close"}
-          onClick={() => setHideNavbar((previous) => !previous)}
           title={version || "unknown version"}
         >
           {title}
         </h1>
-        <Link href={Routes.FeedsSettingsOverviewPage()} className="w-full" passHref>
-          <CogIcon className={clsx("active:animate-spin", "h-7", "ml-auto")} />
+        <Link
+          href={{ ...Routes.FeedsSettingsOverviewPage(), hash: "feed-" + activeFeedID }}
+          passHref
+        >
+          <CogIcon className={clsx("active:animate-spin", "h-7")} />
         </Link>
       </section>
       <section className={clsx("flex", "flex-1", "flex-col", "w-full")}>

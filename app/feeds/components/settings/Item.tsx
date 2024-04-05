@@ -73,6 +73,7 @@ const SettingsItem: FC<IProps> = ({
         "shadow-lg",
         "w-full"
       )}
+      id={"feed-" + String(id)}
     >
       <div>
         <div className={clsx("flex", "flex-row", "flex-wrap")}>

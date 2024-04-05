@@ -33,7 +33,7 @@ const Layout: BlitzLayout<{ title?: string; heading: string; children: React.Rea
           <span className={clsx("block", "xl:inline")}>{heading}</span>
         </h1>
         <nav className="mt-4">
-          {router.asPath
+          {router.pathname
             .split("/")
             .filter((element, index) => index === 0 || element)
             .map((element, index, array) => {
