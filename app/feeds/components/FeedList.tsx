@@ -88,6 +88,7 @@ export const FeedList: FC<Props> = ({ mode }) => {
                     }
                     if (isSelected) {
                       refetchItems()
+                      closeIfNecessary()
                     } else {
                       localStorage.setItem(LOCALSTORAGE_FEEDID, JSON.stringify(id))
                       setState((previous) => ({ ...previous, activeFeedID: id }))
