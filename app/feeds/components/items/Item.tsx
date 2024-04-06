@@ -83,7 +83,9 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
           "top-0"
         )}
       >
-        <div className={clsx("flex", "flex-col-reverse", "md:flex-row", "w-full")}>
+        <div
+          className={clsx("flex", "flex-col-reverse", "md:flex-row", "overflow-hidden", "w-full")}
+        >
           <div
             className={clsx("grow", "pb-2", "md:py-4", "truncate")}
             onClick={() => {

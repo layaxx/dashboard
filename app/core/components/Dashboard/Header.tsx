@@ -15,7 +15,8 @@ const Header = ({ hideNavbar, setHideNavbar }: HeaderProps) => (
       "flex",
       "items-center",
       "justify-between",
-      "p-6",
+      "px-4",
+      "py-6",
       "rounded-r",
       "text-primary",
       "w-full"
