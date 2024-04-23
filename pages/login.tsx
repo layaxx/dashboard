@@ -12,12 +12,12 @@ const LoginPage: BlitzPage = () => {
   const session = useSession({ suspense: false })
 
   useEffect(() => {
-    if (session.userId) router.push("/")
-  }, [session, router])
+    if (session.userId) router.push(next)
+  }, [session, router, next])
 
   return (
     <div>
-      <LoginForm onSuccess={() => router.push(next)} />
+      <LoginForm />
     </div>
   )
 }

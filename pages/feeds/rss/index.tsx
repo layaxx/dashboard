@@ -1,5 +1,5 @@
 import { Suspense } from "react"
-import { BlitzPage } from "@blitzjs/next"
+import { BlitzPage, Routes } from "@blitzjs/next"
 import Head from "next/head"
 import Loader from "app/core/components/Loader"
 import DashboardLayout from "app/core/layouts/DashboardLayout"
@@ -31,6 +31,6 @@ const FeedsRSSPage: BlitzPage = () => {
   )
 }
 
-FeedsRSSPage.authenticate = true
+FeedsRSSPage.authenticate = { redirectTo: Routes.LoginPage() }
 
 export default FeedsRSSPage
