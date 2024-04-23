@@ -38,7 +38,7 @@ export function Form<S extends z.ZodType<any, any>>({
       initialValues={initialValues}
       validate={validateZodSchema(schema)}
       onSubmit={onSubmit}
-      render={({ handleSubmit, form, submitting, submitError, pristine }) => (
+      render={({ handleSubmit, form, submitting, submitError }) => (
         <form onSubmit={handleSubmit} {...props}>
           {/* Form fields supplied as children are rendered here */}
           {children}
@@ -51,13 +51,13 @@ export function Form<S extends z.ZodType<any, any>>({
 
           <div className="mt-4">
             {submitText && (
-              <Button type="submit" icon={submitIcon} disabled={submitting || pristine}>
+              <Button type="submit" icon={submitIcon} disabled={submitting}>
                 {submitText}
               </Button>
             )}
 
             {resetText && (
-              <Button type="button" onClick={form.reset} disabled={submitting || pristine}>
+              <Button type="button" onClick={form.reset} disabled={submitting}>
                 {resetText}
               </Button>
             )}

@@ -37,7 +37,13 @@ export const LoginForm = (props: LoginFormProps) => {
         }}
       >
         <LabeledTextField name="email" label="Email" placeholder="Email" />
-        <LabeledTextField name="password" label="Password" placeholder="Password" type="password" />
+        <LabeledTextField
+          name="password"
+          label="Password"
+          placeholder="Password"
+          type="password"
+          autoComplete="current-password"
+        />
       </Form>
 
       <div style={{ marginTop: "1rem" }}>

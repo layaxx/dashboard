@@ -1,4 +1,6 @@
+import { Routes } from "@blitzjs/next"
 import { useMutation } from "@blitzjs/rpc"
+import Link from "next/link"
 import signup from "app/auth/mutations/signup"
 import { Signup } from "app/auth/validations"
 import { Form, FORM_ERROR } from "app/core/components/Form"
@@ -33,6 +35,10 @@ export const SignupForm = (props: SignupFormProps) => {
         <LabeledTextField name="email" label="Email" placeholder="Email" />
         <LabeledTextField name="password" label="Password" placeholder="Password" type="password" />
       </Form>
+
+      <div style={{ marginTop: "1rem" }}>
+        Or <Link href={Routes.LoginPage()}>Log In</Link>
+      </div>
     </div>
   )
 }
