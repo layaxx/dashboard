@@ -23,10 +23,19 @@ const Home: BlitzPage = () => {
         )}
       >
         Login status:
-        <Suspense fallback="Loading...">
-          <UserInfo />
-        </Suspense>
       </div>
+      <Suspense
+        fallback={
+          <div className={clsx("max-w-sm", "mx-auto", "w-full")}>
+            <div className={clsx("animate-pulse", "flex", "space-x-4")}>
+              <div className={clsx("bg-slate-200", "h-4", "mt-1", "rounded", "w-6/12")}></div>
+              <div className={clsx("bg-slate-200", "h-10", "rounded", "w-6/12")}></div>
+            </div>
+          </div>
+        }
+      >
+        <UserInfo />
+      </Suspense>
       <div className={clsx("sm:flex", "sm:justify-center", "lg:justify-start", "mt-5", "sm:mt-8")}>
         <div className={clsx("rounded-md", "shadow")}>
           <Link

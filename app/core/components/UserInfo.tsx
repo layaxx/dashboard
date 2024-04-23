@@ -11,20 +11,24 @@ const UserInfo = () => {
   const [logoutMutation] = useMutation(logout)
 
   return currentUser ? (
-    <Button
-      onClick={async () => {
-        await logoutMutation()
-      }}
-    >
-      Logout
-    </Button>
+    <div className={clsx("flex", "h-10", "justify-between")}>
+      <strong>You are logged in!</strong>
+      <Button
+        onClick={async () => {
+          await logoutMutation()
+        }}
+      >
+        Logout
+      </Button>
+    </div>
   ) : (
-    <div className={clsx("flex", "justify-between")}>
+    <div className={clsx("flex", "h-10", "justify-between")}>
+      <strong>You are not logged in.</strong>
       <Link href={Routes.SignupPage()} passHref>
-        <strong>Sign Up</strong>
+        <Button>Sign Up</Button>
       </Link>
       <Link href={Routes.LoginPage()} passHref>
-        <strong>Login</strong>
+        <Button className="font-bold">Login</Button>
       </Link>
     </div>
   )
