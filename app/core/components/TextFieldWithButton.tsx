@@ -1,6 +1,7 @@
 import { forwardRef, ComponentPropsWithoutRef, PropsWithoutRef } from "react"
 import clsx from "clsx"
 import { useField, UseFieldConfig } from "react-final-form"
+import { twMerge } from "tailwind-merge"
 import Button from "./Button"
 
 export interface TextFieldWithButton extends PropsWithoutRef<JSX.IntrinsicElements["input"]> {
@@ -62,7 +63,10 @@ export const TextFieldWithButton = forwardRef<HTMLInputElement, TextFieldWithBut
             <Button
               {...button}
               notRounded
-              className={clsx("sm:ml-0", "mt-0", "mx-0", "rounded-r", button.className)}
+              className={twMerge(
+                clsx("ml-0", "sm:ml-0", "mt-0", "mx-0", "rounded-r"),
+                button.className
+              )}
             >
               {button.value}
             </Button>
