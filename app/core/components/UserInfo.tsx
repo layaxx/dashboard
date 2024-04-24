@@ -24,12 +24,10 @@ const UserInfo = () => {
   ) : (
     <div className={clsx("flex", "h-10", "justify-between")}>
       <strong>You are not logged in.</strong>
-      <Link href={Routes.SignupPage()} passHref>
-        <Button>Sign Up</Button>
-      </Link>
-      <Link href={Routes.LoginPage()} passHref>
-        <Button className="font-bold">Login</Button>
-      </Link>
+      <Button href={Routes.SignupPage()}>Sign Up</Button>
+      <Button href={Routes.LoginPage()} className="font-bold">
+        Login
+      </Button>
     </div>
   )
 }

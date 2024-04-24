@@ -1,14 +1,15 @@
 "use client"
-import { useState } from "react"
+import { FC, ReactElement, useState } from "react"
 import { getAntiCSRFToken } from "@blitzjs/auth"
 import { Routes } from "@blitzjs/next"
 import { invalidateQuery, useQuery } from "@blitzjs/rpc"
 import { CheckCircleIcon, ExclamationCircleIcon, PlusCircleIcon } from "@heroicons/react/24/solid"
 import clsx from "clsx"
-import Link from "next/link"
+import { twMerge } from "tailwind-merge"
 import getFeeds from "../queries/getFeeds"
 import getStatus, { IStatusResult } from "../queries/getStatus"
 import Button from "app/core/components/Button"
+import ButtonGroup from "app/core/components/ButtonGroup"
 import Loader from "app/core/components/Loader"
 import { notifyPromiseAdvanced } from "app/core/hooks/notify"
 import {
@@ -110,19 +111,22 @@ const Warnings = () => {
 
   return (
     <div className={clsx("flex", "items-center", "w-full")}>
-      <Link href={Routes.FeedsStatusPage()} passHref>
-        <Button icon={<WarningsIcon result={result} isLoading={isLoading} isError={isError} />}>
+      <ButtonGroup notRounded>
+        <Button
+          icon={<WarningsIcon result={result} isLoading={isLoading} isError={isError} />}
+          href={Routes.FeedsStatusPage()}
+        >
           Status
         </Button>
-      </Link>
 
-      <Button onClick={() => handleOnForceReload(true)} disabled={isLoadingRSS}>
-        Force Reload
-      </Button>
+        <Button onClick={() => handleOnForceReload(true)} disabled={isLoadingRSS}>
+          Force Reload
+        </Button>
 
-      <Link href={Routes.FeedsAddPage()} passHref>
-        <Button icon={<PlusCircleIcon className="text-success" />}>Add</Button>
-      </Link>
+        <Button icon={<PlusCircleIcon className="text-success" />} href={Routes.FeedsAddPage()}>
+          Add
+        </Button>
+      </ButtonGroup>
     </div>
   )
 }

@@ -65,7 +65,7 @@ const Aside = ({ hideNavbar, setHideNavbar, title, feeds }: Props) => {
           <div className={clsx("pr-4", "py-2")}>{feeds}</div>
         </div>
       </section>
-      <section>
+      <section className="w-full">
         <Suspense fallback={<Loader />}>
           <Warnings />
         </Suspense>

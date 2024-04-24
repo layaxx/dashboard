@@ -46,9 +46,9 @@ const SettingsOverview = () => {
 
   return (
     <>
-      <Link href={Routes.FeedsAddPage()} passHref>
-        <Button icon={<PlusIcon />}>Add new Feed</Button>
-      </Link>
+      <Button href={Routes.FeedsAddPage()} icon={<PlusIcon />}>
+        Add new Feed
+      </Button>
 
       <div className="w-full">
         {(feeds as Feed[]).map((feed, index) => (
