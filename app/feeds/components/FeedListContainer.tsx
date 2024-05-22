@@ -6,8 +6,8 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { FeedList } from "./FeedList"
 import FeedListItem from "./FeedListItem"
+import FeedListSkeleton from "./FeedListSkeleton"
 import countReadlistentries from "../readlistentries/queries/countReadlistentries"
-import Loader from "app/core/components/Loader"
 import { FEED_MODE } from "types"
 
 type Props = {
@@ -21,7 +21,7 @@ export const FeedListContainer = ({ mode }: Props) => {
 
   return (
     <ul>
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={<FeedListSkeleton />}>
         <FeedList mode={mode} />
       </Suspense>
       <Link href={Routes.FeedsReadingPage()} passHref>
