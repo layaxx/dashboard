@@ -29,13 +29,13 @@
     ]
   },
   "dependencies": {
-    "@blitzjs/auth": "2.0.2",
-    "@blitzjs/next": "2.0.2",
-    "@blitzjs/rpc": "2.0.2",
+    "@blitzjs/auth": "2.0.9",
+    "@blitzjs/next": "2.0.9",
+    "@blitzjs/rpc": "2.0.9",
     "@heroicons/react": "2.0.12",
     "@prisma/client": "5",
     "@tailwindcss/typography": "0.5.1",
-    "blitz": "2.0.2",
+    "blitz": "2.0.9",
     "chart.js": "^3.0.0",
     "chartjs-adapter-dayjs-3": "1.2.3",
     "clsx": "1.2.1",
