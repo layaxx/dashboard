@@ -1,11 +1,10 @@
 "use client"
-import { FC, ReactElement, useState } from "react"
+import { FC, useState } from "react"
 import { getAntiCSRFToken } from "@blitzjs/auth"
 import { Routes } from "@blitzjs/next"
 import { invalidateQuery, useQuery } from "@blitzjs/rpc"
 import { CheckCircleIcon, ExclamationCircleIcon, PlusCircleIcon } from "@heroicons/react/24/solid"
 import clsx from "clsx"
-import { twMerge } from "tailwind-merge"
 import getFeeds from "../queries/getFeeds"
 import getStatus, { IStatusResult } from "../queries/getStatus"
 import Button from "app/core/components/Button"
@@ -26,7 +25,7 @@ type Props = {
 
 let lastReload = -1
 
-const WarningsIcon = ({ result, isLoading, isError }: Props) => {
+const WarningsIcon: FC<Props> = ({ result, isLoading, isError }) => {
   if (isLoading) {
     return <Loader />
   }
@@ -47,7 +46,7 @@ const WarningsIcon = ({ result, isLoading, isError }: Props) => {
   return <CheckCircleIcon className="text-success" />
 }
 
-const Warnings = () => {
+const Warnings: FC = () => {
   const [isLoadingRSS, setIsLoadingRSS] = useState(false)
 
   const handleOnForceReload = async (force: boolean) => {
