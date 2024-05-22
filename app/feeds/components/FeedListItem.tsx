@@ -1,4 +1,42 @@
+import { DetailedHTMLProps, FC, LiHTMLAttributes } from "react"
 import clsx from "clsx"
+import { twMerge } from "tailwind-merge"
+
+type LIProps = DetailedHTMLProps<LiHTMLAttributes<HTMLLIElement>, HTMLLIElement>
+
+export const FeedListItemWrapper: FC<LIProps> = ({ children, className, ...props }) => {
+  return (
+    <li
+      className={twMerge(
+        clsx(
+          "hover:bg-slate-200",
+          "border-l-4",
+          "border-transparent",
+          "cursor-pointer",
+          "flex",
+          "pl-2",
+          "py-1"
+        ),
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </li>
+  )
+}
+
+export const FeedListItemBadge: FC<LIProps> = ({ children, className, ...props }) => (
+  <span
+    className={twMerge(
+      clsx("bg-primary", "font-bold", "px-3", "rounded-xl", "text-white"),
+      className
+    )}
+    {...props}
+  >
+    {children}
+  </span>
+)
 
 type Props = {
   title: string
@@ -11,26 +49,14 @@ type Props = {
 const FeedListItem = ({ title, unreadCount, onClick, isActive, id }: Props) => {
   const otherProps = id ? { id } : {}
   return (
-    <li
+    <FeedListItemWrapper
+      className={clsx(isActive && "border-primary")}
       {...otherProps}
-      className={clsx(
-        "hover:bg-slate-200",
-        "border-l-4",
-        isActive ? "border-primary" : "border-transparent",
-        "cursor-pointer",
-        "flex",
-        "pl-2",
-        "py-1"
-      )}
       onClick={onClick}
     >
       <span className="grow">{title}</span>{" "}
-      {unreadCount !== undefined && (
-        <span className={clsx("bg-primary", "font-bold", "px-3", "rounded-xl", "text-white")}>
-          {unreadCount}
-        </span>
-      )}
-    </li>
+      {unreadCount !== undefined && <FeedListItemBadge>{unreadCount}</FeedListItemBadge>}
+    </FeedListItemWrapper>
   )
 }
 

@@ -45,7 +45,7 @@ export const FeedList: FC<Props> = ({ mode }) => {
       {feeds && (
         <>
           <FeedListItem
-            title={"Recently Read"}
+            title="Recently Read"
             id={referenceID}
             isActive={mode === FEED_MODE.RSS && activeFeedID === RECENTLY_READ_ID}
             onClick={() => {
