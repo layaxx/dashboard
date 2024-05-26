@@ -2,5 +2,5 @@
 . "$(dirname "$0")/_/husky.sh"
 
 yarn tsc
-yarn eslint $(git diff --name-only HEAD | grep -E '\.(js|jsx|ts|tsx)$' | xargs)
+yarn eslint $(git diff --diff-filter=d --name-only HEAD | grep -E '\.(js|jsx|ts|tsx)$' | xargs)
 yarn pretty-quick --staged
