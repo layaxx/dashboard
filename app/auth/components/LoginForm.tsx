@@ -16,8 +16,6 @@ export const LoginForm = (props: LoginFormProps) => {
 
   return (
     <div>
-      <h1>Login</h1>
-
       <Form
         submitText="Login"
         schema={Login}
@@ -46,7 +44,7 @@ export const LoginForm = (props: LoginFormProps) => {
         />
       </Form>
 
-      <div style={{ marginTop: "1rem" }}>
+      <div className="mt-4">
         Or <Link href={Routes.SignupPage()}>Sign Up</Link>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import { validateZodSchema } from "blitz"
 import { ReactNode, PropsWithoutRef, ReactChild, MouseEventHandler } from "react"
+import clsx from "clsx"
 import { Form as FinalForm, FormProps as FinalFormProps } from "react-final-form"
 import { z } from "zod"
 import Button from "./Button"
@@ -49,9 +50,9 @@ export function Form<S extends z.ZodType<any, any>>({
             </div>
           )}
 
-          <div className="mt-4">
+          <div className={clsx("flex", "mt-4")}>
             {submitText && (
-              <Button type="submit" icon={submitIcon} disabled={submitting}>
+              <Button type="submit" icon={submitIcon} disabled={submitting} className="flex-auto">
                 {submitText}
               </Button>
             )}

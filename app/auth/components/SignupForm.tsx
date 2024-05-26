@@ -15,8 +15,7 @@ export const SignupForm = (props: SignupFormProps) => {
 
   return (
     <div>
-      <h1>Create an Account</h1>
-
+      {" "}
       <Form
         submitText="Create Account"
         schema={Signup}
@@ -35,8 +34,7 @@ export const SignupForm = (props: SignupFormProps) => {
         <LabeledTextField name="email" label="Email" placeholder="Email" />
         <LabeledTextField name="password" label="Password" placeholder="Password" type="password" />
       </Form>
-
-      <div style={{ marginTop: "1rem" }}>
+      <div className="mt-4">
         Or <Link href={Routes.LoginPage()}>Log In</Link>
       </div>
     </div>
