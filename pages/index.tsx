@@ -7,13 +7,10 @@ import Layout from "app/core/layouts/Layout"
 
 const Home: BlitzPage = () => {
   return (
-    <div className={clsx("sm:text-center", "lg:text-left")}>
+    <div className={clsx("sm:text-center", "lg:text-left", ["w-full", "max-w-96"])}>
       <div
         className={clsx(
-          "sm:max-w-xl",
-          "mt-3",
-          "sm:mt-5",
-          "md:mt-5",
+          "mt-5",
           "lg:mx-0",
           "sm:mx-auto",
           "text-base",
@@ -36,7 +33,7 @@ const Home: BlitzPage = () => {
       >
         <UserInfo />
       </Suspense>
-      <div className={clsx("sm:flex", "sm:justify-center", "lg:justify-start", "mt-5", "sm:mt-8")}>
+      <div className={clsx("sm:flex", "md:justify-between", "sm:justify-center", "mt-8")}>
         <div className={clsx("rounded-md", "shadow")}>
           <Link
             href={Routes.FeedsRSSPage()}
