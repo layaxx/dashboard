@@ -9,24 +9,30 @@ const UserInfo = () => {
   const currentUser = useCurrentUser()
   const [logoutMutation] = useMutation(logout)
 
-  return currentUser ? (
-    <div className={clsx("flex", "h-10", "justify-between")}>
-      <strong>You are logged in!</strong>
-      <Button
-        onClick={async () => {
-          await logoutMutation()
-        }}
-      >
-        Logout
-      </Button>
-    </div>
+  const message = currentUser ? "You are logged in!" : "You are not logged in."
+  const buttons = currentUser ? (
+    <Button
+      onClick={async () => {
+        await logoutMutation()
+      }}
+    >
+      Logout
+    </Button>
   ) : (
-    <div className={clsx("flex", "h-10", "justify-between")}>
-      <strong>You are not logged in.</strong>
-      <Button href={Routes.SignupPage()}>Sign Up</Button>
+    <>
+      <Button href={Routes.SignupPage()} className="text-nowrap">
+        Sign Up
+      </Button>
       <Button href={Routes.LoginPage()} className="font-bold">
         Login
       </Button>
+    </>
+  )
+
+  return (
+    <div className={clsx("flex", "h-10")}>
+      <span className={clsx("font-bold", "w-1/2")}>{message}</span>
+      <div className={clsx("flex", "justify-between", "w-1/2")}>{buttons}</div>
     </div>
   )
 }

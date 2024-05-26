@@ -63,7 +63,7 @@ const Button = ({
             "sm:text-sm",
             "sm:w-auto",
             variant === "light" && [
-              !disabled && "hover:bg-gray-50",
+              !disabled && "hover:bg-gray-100",
               "bg-white",
               "border-gray-300",
               "focus:ring-indigo-500",
