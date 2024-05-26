@@ -2,7 +2,6 @@ import { Suspense } from "react"
 import { Bars3Icon, Bars3CenterLeftIcon } from "@heroicons/react/24/solid"
 import clsx from "clsx"
 import DashboardGreeting from "./Greeting"
-import Loader from "../Loader"
 
 type HeaderProps = {
   hideNavbar: boolean
@@ -23,8 +22,12 @@ const Header = ({ hideNavbar, setHideNavbar }: HeaderProps) => (
     )}
     onClick={() => setHideNavbar((previous) => !previous)}
   >
-    <div>
-      <Suspense fallback={<Loader />}>
+    <div className="w-full">
+      <Suspense
+        fallback={
+          <h1 className={clsx("animate-pulse", "bg-slate-200", "h-8", "text-2xl", "w-7/12")} />
+        }
+      >
         <DashboardGreeting />
       </Suspense>
     </div>
