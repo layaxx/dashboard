@@ -49,8 +49,6 @@ const Button = ({
             "inline-flex",
             "justify-center",
             "sm:ml-3",
-            "sm:mt-0",
-            "mt-3",
             "focus:outline-none",
             "px-4",
             "py-2",
@@ -58,10 +56,8 @@ const Button = ({
             "focus:ring-offset-2",
             !notRounded && "rounded-md",
             "shadow-sm",
-            "text-base",
             disabled && "text-opacity-70",
-            "sm:text-sm",
-            "sm:w-auto",
+            "text-sm",
             variant === "light" && [
               !disabled && "hover:bg-gray-100",
               "bg-white",
@@ -76,7 +72,7 @@ const Button = ({
               "text-white",
               "border-transparent",
             ],
-            "w-full"
+            "w-auto"
           ),
           rest.className
         )}
