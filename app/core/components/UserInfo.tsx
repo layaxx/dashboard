@@ -15,6 +15,7 @@ const UserInfo = () => {
       onClick={async () => {
         await logoutMutation()
       }}
+      className="flex-auto"
     >
       Logout
     </Button>
@@ -32,7 +33,7 @@ const UserInfo = () => {
   return (
     <div className={clsx("flex", "h-10")}>
       <span className={clsx("font-bold", "w-1/2")}>{message}</span>
-      <div className={clsx("flex", "justify-between", "w-1/2")}>{buttons}</div>
+      <div className={clsx("flex", "h-10", "justify-between", "w-1/2")}>{buttons}</div>
     </div>
   )
 }
