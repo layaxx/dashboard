@@ -6,7 +6,7 @@ import { twMerge } from "tailwind-merge"
 
 type ButtonVariant = "danger" | "success" | "light" | "primary"
 
-interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: any
   variant?: ButtonVariant
   onClick?: MouseEventHandler<HTMLButtonElement>
@@ -26,10 +26,10 @@ const Button = ({
   notRounded,
   href,
   ...rest
-}: Props) => {
+}: ButtonProps) => {
   const Wrapper = href
     ? ({ children }: PropsWithChildren<{}>) => (
-        <Link href={href} passHref>
+        <Link href={href} passHref className="contents">
           {children}
         </Link>
       )

@@ -1,13 +1,12 @@
-import { ReactChild, Suspense } from "react"
-import { Routes } from "@blitzjs/next"
+import { ReactChild } from "react"
+import { ErrorBoundary, Routes } from "@blitzjs/next"
 import { CogIcon } from "@heroicons/react/24/solid"
 import clsx from "clsx"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import Zen from "./zen"
-import Loader from "../Loader"
 import { useSharedState } from "app/core/hooks/store"
-import Warnings from "app/feeds/components/Warnings"
+import Controls from "app/feeds/components/controls"
 import version from "lib/config/version"
 
 const ClientSideSettingsLink = dynamic(
@@ -70,19 +69,26 @@ const Aside = ({ hideNavbar, setHideNavbar, title, feeds }: Props) => (
       </h1>
       <ClientSideSettingsLink />
     </section>
-    <section className={clsx("flex", "flex-1", "flex-col", "w-full")}>
-      <div className={clsx("border-b", "border-gray-600", "mt-6", "pb-5", "pl-4", "w-full")}>
+    <section className={clsx("flex", "flex-auto", "flex-col", "w-full")}>
+      <div
+        className={clsx("border-b", "border-gray-600", "h-full", "mt-6", "pb-5", "pl-4", "w-full")}
+      >
         <p className={clsx("font-bold", "leading-4", "text-primary", "uppercase")}>Reader</p>
         <div className={clsx("pr-4", "py-2")}>{feeds}</div>
       </div>
     </section>
     <section className="w-full">
-      <Suspense fallback={<Loader />}>
-        <Warnings />
-      </Suspense>
+      <Controls />
     </section>
     <section className={clsx("flex", "flex-col", "h-32", "w-full")}>
-      <Zen />
+      <ErrorBoundary
+        fallbackRender={({ resetErrorBoundary }) => {
+          resetErrorBoundary()
+          return <></>
+        }}
+      >
+        <Zen />
+      </ErrorBoundary>
     </section>
   </aside>
 )
