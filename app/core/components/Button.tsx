@@ -48,7 +48,6 @@ const Button = ({
             "font-medium",
             "inline-flex",
             "justify-center",
-            "sm:ml-3",
             "focus:outline-none",
             "px-4",
             "py-2",

@@ -1,4 +1,5 @@
 import { BlitzPage, Routes } from "@blitzjs/next"
+import clsx from "clsx"
 import { useRouter } from "next/router"
 import { SignupForm } from "app/auth/components/SignupForm"
 import Layout from "app/core/layouts/Layout"
@@ -7,7 +8,7 @@ const SignupPage: BlitzPage = () => {
   const router = useRouter()
 
   return (
-    <div>
+    <div className={clsx(["w-full", "max-w-96"])}>
       <SignupForm onSuccess={() => router.push(Routes.Home())} />
     </div>
   )
