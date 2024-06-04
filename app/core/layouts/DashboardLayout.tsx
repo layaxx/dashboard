@@ -36,7 +36,7 @@ const DashboardLayout = ({ items, feeds }: Props) => {
 
   return (
     <>
-      <div className={clsx("flex", "flex-row", "h-screen", "overflow-hidden", "w-full")}>
+      <div className={clsx("flex", "flex-row", "h-dvh", "overflow-hidden", "w-full")}>
         <Aside
           hideNavbar={hideNavbar}
           setHideNavbar={setHideNavbarHandler}
