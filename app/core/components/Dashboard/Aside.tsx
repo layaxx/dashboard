@@ -69,12 +69,19 @@ const Aside = ({ hideNavbar, setHideNavbar, title, feeds }: Props) => (
       </h1>
       <ClientSideSettingsLink />
     </section>
-    <section className={clsx("flex", "flex-auto", "flex-col", "w-full")}>
+    <section className={clsx("grow", "overflow-y-hidden", "pt-6", "w-full")}>
       <div
-        className={clsx("border-b", "border-gray-600", "h-full", "mt-6", "pb-5", "pl-4", "w-full")}
+        className={clsx(
+          "border-b",
+          "border-gray-600",
+          "h-full",
+          "overflow-y-hidden",
+          "pl-4",
+          "w-full"
+        )}
       >
         <p className={clsx("font-bold", "leading-4", "text-primary", "uppercase")}>Reader</p>
-        <div className={clsx("pr-4", "py-2")}>{feeds}</div>
+        <div className={clsx("h-full", "overflow-y-auto", "pb-5", "pr-4", "py-2")}>{feeds}</div>
       </div>
     </section>
     <section className="w-full">
