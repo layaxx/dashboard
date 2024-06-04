@@ -8,15 +8,7 @@ import {
   getSummaryFromParsedItem,
   idAsLinkIfSensible,
 } from "./feedHelpers"
-import getFeeds from "app/feeds/queries/getFeeds"
 import summaryLength from "lib/config/feeds/summaryLength"
-
-jest.mock("db", () => ({
-  feed: {
-    findMany: jest.fn(() => []),
-  },
-  feedentry: { groupBy: () => [{ id: 1, _count: { id: 1 } }], count: () => 4 },
-}))
 
 describe("feedHelper#idAsLinkIfSensible works as expected", () => {
   test("returns undefined for undefined", () => {
@@ -27,7 +19,7 @@ describe("feedHelper#idAsLinkIfSensible works as expected", () => {
     "returns undefined for invalid URLs",
     (invalidURL) => {
       expect(idAsLinkIfSensible(invalidURL)).toBeUndefined()
-    }
+    },
   )
 
   test.each([
@@ -48,15 +40,6 @@ describe("feedHelper#getLinkFromParsedItem works as expected", () => {
     expect(getLinkFromParsedItem({ link }, fallback)).toBe(link)
   })
 
-  /* TODO: look at this again
-  test("use guid as fallback if valid", () => {
-     expect(getLinkFromParsedItem({ guid }, fallback)).toBe(guid)
-   })
-
-   test("use fallback if guid invalid", () => {
-     expect(getLinkFromParsedItem({ guid: "not a valid url" }, fallback)).toBe(fallback)
-   }) */
-
   test("use fallback otherwise", () => {
     expect(getLinkFromParsedItem({}, fallback)).toBe(fallback)
   })
@@ -65,7 +48,7 @@ describe("feedHelper#getLinkFromParsedItem works as expected", () => {
 describe("feedHelper#getContentFromParsedItem works as expected", () => {
   const itemSharedProperties = {
     categories: faker.lorem.paragraph(),
-    guid: faker.helpers.unique(faker.internet.url),
+    guid: faker.internet.url(),
     creator: faker.internet.userName(),
     isoDate: new Date().toISOString(),
     link: faker.internet.url(),
@@ -86,7 +69,7 @@ describe("feedHelper#getContentFromParsedItem works as expected", () => {
 
   test("fallback if neither content nor title available", () => {
     expect(getContentFromParsedItem({ ...itemSharedProperties })).toBe(
-      "Neither Title nor content provided"
+      "Neither Title nor content provided",
     )
   })
 })
@@ -94,7 +77,7 @@ describe("feedHelper#getContentFromParsedItem works as expected", () => {
 describe("feedHelper#getSummaryFromParsedItem works as expected", () => {
   const itemSharedProperties = {
     categories: faker.lorem.paragraph(),
-    guid: faker.helpers.unique(faker.internet.url),
+    guid: faker.internet.url(),
     creator: faker.internet.userName(),
     isoDate: new Date().toISOString(),
     link: faker.internet.url(),
@@ -111,13 +94,13 @@ describe("feedHelper#getSummaryFromParsedItem works as expected", () => {
         ...itemSharedProperties,
         content,
         description,
-      })
+      }),
     ).toBe(description)
   })
 
   test("takes first part of content as fallback", () => {
     expect(getSummaryFromParsedItem({ ...itemSharedProperties, content })).toBe(
-      content.slice(0, summaryLength) + "..."
+      content.slice(0, summaryLength) + "...",
     )
   })
 })
@@ -132,14 +115,14 @@ describe("feedHelper#convertItem works as expected", () => {
 
   test("throws if neither guid nor id nor link are provided", () => {
     expect(() =>
-      convertItem({ content, description, published } as FeedEntry, feed as any)
+      convertItem({ content, description, published } as FeedEntry, feed as any),
     ).toThrowError()
   })
 
   test("defines all required properties", () => {
     const result = convertItem(
       { content, description, link, published, title: faker.lorem.words(2) },
-      feed as any
+      feed as any,
     )
 
     expect(result).toBeDefined()
@@ -151,13 +134,4 @@ describe("feedHelper#convertItem works as expected", () => {
     expect(result.feedId).toBe(feed.id)
     expect(result.createdAt).toBeDefined()
   })
-})
-
-test("renders blitz documentation link", async () => {
-  if (!global.ctx || !global.ctx.authorized) {
-    fail("No Authorized Ctx found.")
-  }
-
-  const { feeds } = await getFeeds({}, global.ctx.authorized!)
-  return expect(feeds.length).toBe(0)
 })

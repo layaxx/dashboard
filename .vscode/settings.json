@@ -23,6 +23,7 @@
     "Intervall",
     "LOCALSTORAGE",
     "notistack",
+    "prisma",
     "Readlist",
     "readlistentries",
     "readlistentry",

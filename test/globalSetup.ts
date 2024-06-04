@@ -1,16 +1,15 @@
-import dotenv from "dotenv"
-import database from "../db"
+import {} from "@prisma/client"
+import { mockDeep, mockReset, DeepMockProxy } from "jest-mock-extended"
 
-module.exports = async () => {
-  dotenv.config()
+import prisma from "db"
 
-  await database.$reset()
+jest.mock("db", () => ({
+  __esModule: true,
+  default: mockDeep<typeof prisma>(),
+}))
 
-  await database.user.create({
-    data: { email: "testing@localhost.localdomain", name: "Testing", role: "ADMIN" },
-  })
+beforeEach(() => {
+  mockReset(prismaMock)
+})
 
-  await database.feed.create({
-    data: { name: "saf", url: "asdfasd", position: 3, lastLoad: new Date() },
-  })
-}
+export const prismaMock = prisma as unknown as DeepMockProxy<typeof prisma>

@@ -53,9 +53,11 @@ const RSSPreviewPage: BlitzPage = () => {
             status: "success",
           }
         },
-      }
+      },
     ).finally(() => setIsLoading(false))
   }
+
+  console.log("feedEntries", feedEntries)
 
   return (
     <>

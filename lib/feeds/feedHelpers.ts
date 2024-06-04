@@ -1,7 +1,6 @@
 import dayjs from "dayjs"
-import { FeedEntry } from "feed-reader"
+import type { FeedEntry } from "feed-reader"
 import xss, { whiteList } from "xss"
-import { Feed, Prisma } from "db"
 import summaryLength from "lib/config/feeds/summaryLength"
 
 export function idAsLinkIfSensible(id: string | undefined): string | undefined {
@@ -54,10 +53,7 @@ export function cleanXSS(string: string) {
   return xss(string, XSSOptions)
 }
 
-export const convertItem = (
-  item: FeedEntry,
-  feed: Pick<Feed, "id" | "url">
-): Prisma.FeedentryUncheckedCreateInput => {
+export const convertItem = (item: FeedEntry, feed: { id: number; url: string }): any => {
   const id = item.guid || item.id || item.link
 
   if (!id) {

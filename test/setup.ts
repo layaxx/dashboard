@@ -1,16 +1,16 @@
 import dotenv from "dotenv"
 import createMockContext from "./createMockContext"
-import db from "db"
+import { prismaMock } from "./globalSetup"
 
 beforeAll(async () => {
   dotenv.config()
 
-  await db.$reset()
+  await prismaMock.$reset()
 
-  let newUser = await db.user.findFirst()
+  let newUser = await prismaMock.user.findFirst()
 
   if (!newUser) {
-    newUser = await db.user.create({
+    newUser = await prismaMock.user.create({
       data: { email: "testing@localhost.localdomain", name: "Testing", role: "ADMIN" },
     })
   }
