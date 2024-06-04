@@ -2,6 +2,7 @@
 import { Fragment, useEffect, useRef } from "react"
 import { ErrorComponent } from "@blitzjs/next"
 import { useQuery, useInfiniteQuery } from "@blitzjs/rpc"
+import clsx from "clsx"
 import Item from "./items/Item"
 import getRecentlyReadEntries from "../queries/getRecentlyReadEntries"
 import Button from "app/core/components/Button"
@@ -102,7 +103,7 @@ export const ItemsList = () => {
       <Button
         onClick={() => fetchNextPage()}
         disabled={!hasNextPage || !!isFetchingNextPage}
-        style={{ marginTop: "2rem", marginBottom: "10rem" }}
+        className={clsx("mb-40", "md:ml-10", "ml-2", "mt-8")}
       >
         {isFetchingNextPage && <Loader />}
         {!isFetchingNextPage && (hasNextPage ? "Load More" : "Nothing more to load")}

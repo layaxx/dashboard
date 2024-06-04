@@ -35,7 +35,7 @@ export const ItemList = () => {
 
   return (
     <>
-      <div>
+      <div className="md:px-10">
         <Form
           onSubmit={({ url }, form) =>
             addRLE({ url }).then(() => {
@@ -71,7 +71,7 @@ export const ItemList = () => {
       <Button
         onClick={() => fetchNextPage()}
         disabled={!hasNextPage || !!isFetchingNextPage}
-        style={{ marginTop: "2rem", marginBottom: "10rem" }}
+        className={clsx("mb-40", "md:ml-10", "ml-2", "mt-8")}
       >
         {isFetchingNextPage && <Loader />}
         {!isFetchingNextPage && (hasNextPage ? "Load More" : "Nothing more to load")}

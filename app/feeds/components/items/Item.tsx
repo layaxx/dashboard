@@ -85,6 +85,7 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
           "cursor-pointer",
           "flex",
           "font-medium",
+          "md:px-10",
           "px-2",
           "rounded-sm",
           "sticky",
@@ -97,7 +98,7 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
           className={clsx("flex", "flex-col-reverse", "md:flex-row", "overflow-hidden", "w-full")}
         >
           <div
-            className={clsx("grow", "pb-2", "md:py-4", "truncate")}
+            className={clsx("grow", "pb-2", "pr-2", "md:py-4", "truncate")}
             onClick={() => {
               setIsExpanded((previous) => !previous)
               if (!hasBeenRead) read()
@@ -139,6 +140,7 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
             "max-w-prose",
             "pb-5",
             "prose",
+            "md:px-10",
             "px-2"
           )}
         >
