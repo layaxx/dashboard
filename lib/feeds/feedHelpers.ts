@@ -1,6 +1,6 @@
 import dayjs from "dayjs"
 import type { FeedEntry } from "feed-reader"
-import xss, { whiteList } from "xss"
+import xss, { IFilterXSSOptions, whiteList } from "xss"
 import summaryLength from "lib/config/feeds/summaryLength"
 
 export function idAsLinkIfSensible(id: string | undefined): string | undefined {
@@ -40,7 +40,7 @@ export function getSummaryFromParsedItem(item: Partial<FeedEntry>): string {
   return getContentFromParsedItem(item).slice(0, summaryLength) + "..." // TODO: content could be html
 }
 
-const XSSOptions = {
+const XSSOptions: IFilterXSSOptions = {
   whiteList: {
     a: ["href", "title", "target"],
     picture: [],
