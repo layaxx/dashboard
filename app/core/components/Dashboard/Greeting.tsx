@@ -23,12 +23,15 @@ const greeting = ((hour: number) => {
   return greetings[Math.floor(Math.random() * greetings.length)]
 })(new Date().getHours())
 
+// Prevent chrome on mobile from converting email to a link
+const sanitizeEmail = (email?: string) => (email ? <a>{email}</a> : "Anon")
+
 const DashboardGreeting = React.memo(() => {
   const user = useCurrentUser()
 
   return (
     <h1 className={clsx("font-bold", "text-2xl", "text-primary")}>
-      {greeting}, {user?.name ?? user?.email}!
+      {greeting}, {user?.name ?? sanitizeEmail(user?.email)}!
     </h1>
   )
 })
