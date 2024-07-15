@@ -32,7 +32,7 @@ export const ItemsList = () => {
   const [settings] = useQuery(
     getFeedoption,
     { id: activeFeedID! },
-    { enabled: !!activeFeedID, placeholderData: defaultOptions }
+    { enabled: !!activeFeedID, placeholderData: defaultOptions },
   )
 
   const [pages, { fetchNextPage, hasNextPage, isFetchingNextPage, refetch }] = useInfiniteQuery(
@@ -56,7 +56,7 @@ export const ItemsList = () => {
       onSuccess: () => {
         skipOffset.current = 0
       },
-    }
+    },
   )
 
   const [recentlyReadResult] = useQuery(
@@ -65,7 +65,7 @@ export const ItemsList = () => {
     {
       enabled: activeFeedID === RECENTLY_READ_ID,
       useErrorBoundary: true,
-    }
+    },
   )
 
   useEffect(() => {

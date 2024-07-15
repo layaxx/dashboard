@@ -1,9 +1,9 @@
 import { Suspense } from "react"
 import { BlitzPage, Routes } from "@blitzjs/next"
 import Head from "next/head"
-import Loader from "app/core/components/Loader"
 import DashboardLayout from "app/core/layouts/DashboardLayout"
 import { FeedListContainer } from "app/feeds/components/FeedListContainer"
+import ItemSkeleton from "app/feeds/components/items/ItemSkeleton"
 import { ItemsList } from "app/feeds/components/ItemsList"
 import { FEED_MODE } from "types"
 
@@ -17,11 +17,9 @@ const FeedsRSSPage: BlitzPage = () => {
         feeds={<FeedListContainer mode={FEED_MODE.RSS} />}
         items={
           <Suspense
-            fallback={
-              <div className="mt-2">
-                <Loader />
-              </div>
-            }
+            fallback={Array.from({ length: 5 }, (_, index) => index).map((index) => (
+              <ItemSkeleton key={index} />
+            ))}
           >
             <ItemsList />
           </Suspense>
