@@ -9,10 +9,6 @@ const ItemSkeleton = () => (
       "border-b-2",
       "border-slate-100",
       "h-16",
-      "md:px-10",
-      "px-2",
-      "rounded-sm",
-      "text-lg",
       "top-0",
       "w-full",
     )}

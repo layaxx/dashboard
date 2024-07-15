@@ -41,8 +41,8 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
                 return feed
               }) ?? [],
           }),
-          { refetch: false }
-        ).catch(() => setHasBeenRead(!isRead))
+          { refetch: false },
+        ).catch(() => setHasBeenRead(!isRead)),
       )
     }
   }
@@ -85,20 +85,20 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
           "cursor-pointer",
           "flex",
           "font-medium",
-          "md:px-10",
+          "lg:px-10",
           "px-2",
           "rounded-sm",
           "sticky",
           hasBeenRead && "text-gray-600",
           "text-lg",
-          "top-0"
+          "top-0",
         )}
       >
         <div
-          className={clsx("flex", "flex-col-reverse", "md:flex-row", "overflow-hidden", "w-full")}
+          className={clsx("flex", "flex-col-reverse", "lg:flex-row", "overflow-hidden", "w-full")}
         >
           <div
-            className={clsx("grow", "pb-2", "pr-2", "md:py-4", "truncate")}
+            className={clsx("grow", "pb-2", "pr-2", "lg:py-4", "truncate")}
             onClick={() => {
               setIsExpanded((previous) => !previous)
               if (!hasBeenRead) read()
@@ -109,19 +109,19 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
           </div>
           <div
             className={clsx(
-              "md:border-l-2",
+              "lg:border-l-2",
               "flex",
-              "md:flex-col",
+              "lg:flex-col",
               "font-normal",
               "my-auto",
-              "md:pt-0",
+              "lg:pt-0",
               "pt-1",
-              "md:px-2",
+              "lg:px-2",
               "shrink-0",
               "text-gray-400",
               "text-right",
               "text-sm",
-              "md:w-16"
+              "lg:w-16",
             )}
           >
             <ItemInformation item={item} />
@@ -140,8 +140,8 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
             "max-w-prose",
             "pb-5",
             "prose",
-            "md:px-10",
-            "px-2"
+            "lg:px-10",
+            "px-2",
           )}
         >
           {content}

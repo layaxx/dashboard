@@ -24,10 +24,10 @@ const ReadlistItem = ({ url, id, hide, unhide }: Props) => {
           "cursor-pointer",
           "flex",
           "font-medium",
-          "md:px-10",
+          "lg:px-10",
           "px-2",
           "rounded-sm",
-          "text-lg"
+          "text-lg",
         )}
       >
         <span className={clsx("grow", "py-4", "truncate")} title={url}>

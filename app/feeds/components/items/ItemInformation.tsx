@@ -11,7 +11,7 @@ const ItemInformation = ({ item }: Props) => {
 
   return (
     <>
-      <span className={clsx("md:mr-0", "mr-4")}>{dayjs(item.createdAt).format("DD.MM")}</span>
+      <span className={clsx("lg:mr-0", "mr-4")}>{dayjs(item.createdAt).format("DD.MM")}</span>
       <span>{readTime} min</span>
     </>
   )
