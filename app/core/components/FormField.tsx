@@ -1,14 +1,15 @@
-import { ChangeEventHandler, FC, HTMLAttributes } from "react"
+import type { FC, HTMLAttributes } from "react"
 import clsx from "clsx"
 import { Field } from "react-final-form"
 
 type FormFieldProps = {
+  required?: boolean
   name: string
   label: string
   type: string
+  placeholder?: string
   labelProps?: HTMLAttributes<HTMLLabelElement>
   inputProps?: HTMLAttributes<HTMLInputElement>
-  preOnChange?: ChangeEventHandler<HTMLInputElement>
 }
 
 const FormField: FC<FormFieldProps> = ({
@@ -17,11 +18,17 @@ const FormField: FC<FormFieldProps> = ({
   type,
   labelProps,
   inputProps,
-  preOnChange,
+  required,
+  placeholder,
 }) => {
-  if (!preOnChange) {
-    preOnChange = (event) => event
-  }
+  const labelContent = required
+    ? [
+        label,
+        <span key="required-indicator" className={"text-red-700"}>
+          *
+        </span>,
+      ]
+    : [label]
   return (
     <Field
       name={name}
@@ -32,16 +39,23 @@ const FormField: FC<FormFieldProps> = ({
           className={clsx(
             "flex",
             "flex-row",
+            type === "checkbox" && "justify-between",
+            labelProps?.className,
             meta.dirty && !meta.valid && !meta.modifiedSinceLastSubmit && "text-error",
-            labelProps?.className
           )}
         >
-          {label}
+          <span className="min-w-36">{labelContent}</span>
           <input
             {...inputProps}
             {...input}
-            onChange={(event) => input.onChange(preOnChange!(event))}
-            className={clsx("text-right", "w-full", inputProps?.className)}
+            onChange={(event) => input.onChange(event)}
+            placeholder={placeholder}
+            className={clsx(
+              inputProps?.className,
+              "border-b-2",
+              type === "checkbox" ? "w-4" : "grow",
+              "text-right",
+            )}
           />
         </label>
       )}

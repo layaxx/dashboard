@@ -1,8 +1,7 @@
 "use client"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Routes } from "@blitzjs/next"
 import { useMutation, useQuery } from "@blitzjs/rpc"
-import { PlusIcon } from "@heroicons/react/24/outline"
 import { Feed } from "@prisma/client"
 import clsx from "clsx"
 import Link from "next/link"
@@ -21,7 +20,6 @@ const SettingsOverview = () => {
   })
 
   const [list, setList] = useState<Feed[]>(feeds)
-
   const [updateFeed] = useMutation(updateFeedMutation)
 
   const anyNotInCorrectOrder = list.map((feed, index) => feed.position !== index).some(Boolean)
@@ -36,7 +34,7 @@ const SettingsOverview = () => {
             id: feed.id,
           })
         }
-      })
+      }),
     )
     await refetch()
     if (deletedIndex === undefined) notify("Successfully reordered feeds", { status: "success" })
@@ -44,12 +42,19 @@ const SettingsOverview = () => {
 
   useEffect(() => setList(feeds), [feeds])
 
+  const hasScrolled = useRef(false)
+  useEffect(() => {
+    if (location.hash && !hasScrolled.current) {
+      const element = document.querySelector(location.hash)
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" })
+        hasScrolled.current = true
+      }
+    }
+  })
+
   return (
     <>
-      <Button href={Routes.FeedsAddPage()} icon={<PlusIcon />}>
-        Add new Feed
-      </Button>
-
       <div className="w-full">
         {(feeds as Feed[]).map((feed, index) => (
           <SettingsItem {...feed} key={feed.id} refetch={async () => saveCurrentOrder(index)} />
@@ -70,7 +75,7 @@ const SettingsOverview = () => {
                 "py-4",
                 "rounded-lg",
                 "shadow-lg",
-                "w-full"
+                "w-full",
               )}
               key={feed.id}
             >

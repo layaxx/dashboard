@@ -1,12 +1,11 @@
-"use client"
 import { Routes } from "@blitzjs/next"
 import { invoke, useMutation, useQuery } from "@blitzjs/rpc"
 import clsx from "clsx"
 import { FormApi } from "final-form"
 import { useRouter } from "next/router"
+import FormSkeleton from "./FormSkeleton"
 import Form from "app/core/components/Form"
 import FormField from "app/core/components/FormField"
-import Loader from "app/core/components/Loader"
 import notify, { notifyPromise } from "app/core/hooks/notify"
 import createFeedMutation from "app/feeds/mutations/createFeed"
 import removeFeedMutation from "app/feeds/mutations/deleteFeed"
@@ -24,7 +23,7 @@ const SettingsForm = ({ id, isCreate }: Props) => {
       refetchOnReconnect: true,
       refetchOnWindowFocus: true,
       enabled: !isCreate,
-    }
+    },
   )
 
   const [createFeed] = useMutation(createFeedMutation)
@@ -34,7 +33,7 @@ const SettingsForm = ({ id, isCreate }: Props) => {
   const router = useRouter()
 
   if (isFetching) {
-    return <Loader />
+    return <FormSkeleton />
   }
   if (!feed && !isCreate) {
     return <p>Invalid id provided: {id}</p>
@@ -42,7 +41,7 @@ const SettingsForm = ({ id, isCreate }: Props) => {
 
   const submitHandler = async (
     values: { name: string; url: string; loadIntervall: number | string; isActive: boolean },
-    form: FormApi
+    form: FormApi,
   ) => {
     try {
       new URL(values.url)
@@ -86,7 +85,7 @@ const SettingsForm = ({ id, isCreate }: Props) => {
             status: "error",
           })
           console.error(error)
-        }
+        },
       )
     } else {
       notifyPromise(
@@ -101,7 +100,7 @@ const SettingsForm = ({ id, isCreate }: Props) => {
           pending: { title: "Updating Feed" },
           success: { title: "Updated Feed" },
           error: { title: "Failed to update FeedEntry" },
-        }
+        },
       )
     }
   }
@@ -119,7 +118,7 @@ const SettingsForm = ({ id, isCreate }: Props) => {
           () =>
             notify("Failed to delete Feed", {
               status: "error",
-            })
+            }),
         )
 
   return (
@@ -135,12 +134,12 @@ const SettingsForm = ({ id, isCreate }: Props) => {
         "py-4",
         "rounded-lg",
         "shadow-lg",
-        "w-full"
+        "w-full",
       )}
     >
       <Form
         onSubmit={submitHandler}
-        initialValues={isCreate ? { url: "", name: "new Feed", loadIntervall: 60 } : feed}
+        initialValues={isCreate ? { url: "", name: "", loadIntervall: 60 } : feed}
         submitText={isCreate ? "Add new Feed" : "Update Settings"}
         deleteText="Delete"
         onDelete={deleteHandler}
@@ -149,27 +148,22 @@ const SettingsForm = ({ id, isCreate }: Props) => {
           <h3 className={clsx("font-semibold", "text-2xl")}>
             {isCreate ? "Add new Feed" : "Edit Settings"}
           </h3>
-
-          <FormField name="name" label="Name: " type="Text" />
-
-          <FormField name="url" type="url" label="URL: " />
-
+          <FormField
+            required
+            name="url"
+            type="url"
+            label="URL: "
+            placeholder="https://example.com/feed.xml"
+          />
+          <p></p>
+          <FormField name="name" label="Name: " type="Text" placeholder="(can be auto-detected)" />
           <FormField
             name="loadIntervall"
             type="number"
             label="Load Intervall: "
             labelProps={{ style: { whiteSpace: "pre" } }}
           />
-
-          {!isCreate && (
-            <FormField
-              name="isActive"
-              label="isActive"
-              type="checkbox"
-              labelProps={{ className: "justify-between" }}
-              inputProps={{ className: "w-4" }}
-            />
-          )}
+          {!isCreate && <FormField name="isActive" label="isActive" type="checkbox" />}
         </div>
       </Form>
     </div>

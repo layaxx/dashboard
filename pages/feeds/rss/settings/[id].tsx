@@ -1,9 +1,9 @@
 import { Suspense } from "react"
 import { BlitzPage, useParam } from "@blitzjs/next"
 import Head from "next/head"
-import Loader from "app/core/components/Loader"
 import Layout from "app/core/layouts/Layout"
 import SettingsForm from "app/feeds/components/settings/Form"
+import SettingsFormSkeleton from "app/feeds/components/settings/FormSkeleton"
 
 const FeedsSettingsPage: BlitzPage = () => {
   const id = useParam("id")
@@ -13,7 +13,7 @@ const FeedsSettingsPage: BlitzPage = () => {
       <Head>
         <title>Feeds - Settings</title>
       </Head>
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={<SettingsFormSkeleton />}>
         <SettingsForm id={Number(id)} />
       </Suspense>
     </>
