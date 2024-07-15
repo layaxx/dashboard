@@ -18,11 +18,11 @@ const Header = ({ hideNavbar, setHideNavbar }: HeaderProps) => (
       "py-6",
       "rounded-r",
       "text-primary",
-      "w-full"
+      "w-full",
     )}
     onClick={() => setHideNavbar((previous) => !previous)}
   >
-    <div className="w-full">
+    <div className="overflow-hidden">
       <Suspense
         fallback={
           <h1 className={clsx("animate-pulse", "bg-slate-200", "h-8", "text-2xl", "w-7/12")} />
