@@ -1,5 +1,5 @@
 import { ReactChild } from "react"
-import { ErrorBoundary, Routes } from "@blitzjs/next"
+import { Routes } from "@blitzjs/next"
 import { CogIcon } from "@heroicons/react/24/solid"
 import clsx from "clsx"
 import dynamic from "next/dynamic"
@@ -23,7 +23,7 @@ const ClientSideSettingsLink = dynamic(
       </Link>
     )
   },
-  { ssr: false, loading: () => <CogIcon className="h-7" /> }
+  { ssr: false, loading: () => <CogIcon className="h-7" /> },
 )
 
 type Props = {
@@ -44,7 +44,7 @@ const Aside = ({ hideNavbar, setHideNavbar, title, feeds }: Props) => (
       "justify-start",
       "shrink-0",
       "sm:w-96",
-      "w-full"
+      "w-full",
     )}
   >
     <section
@@ -56,7 +56,7 @@ const Aside = ({ hideNavbar, setHideNavbar, title, feeds }: Props) => (
         "px-4",
         "py-6",
         "text-primary",
-        "w-full"
+        "w-full",
       )}
       onClick={() => setHideNavbar((previous) => !previous)}
     >
@@ -77,7 +77,7 @@ const Aside = ({ hideNavbar, setHideNavbar, title, feeds }: Props) => (
           "h-full",
           "overflow-y-hidden",
           "pl-4",
-          "w-full"
+          "w-full",
         )}
       >
         <p className={clsx("font-bold", "leading-4", "text-primary", "uppercase")}>Reader</p>
@@ -88,14 +88,7 @@ const Aside = ({ hideNavbar, setHideNavbar, title, feeds }: Props) => (
       <Controls />
     </section>
     <section className={clsx("flex", "flex-col", "h-32", "w-full")}>
-      <ErrorBoundary
-        fallbackRender={({ resetErrorBoundary }) => {
-          resetErrorBoundary()
-          return <></>
-        }}
-      >
-        <Zen />
-      </ErrorBoundary>
+      <Zen />
     </section>
   </aside>
 )

@@ -3,7 +3,6 @@ import clsx from "clsx"
 import { Dayjs } from "dayjs"
 import Particles from "react-tsparticles"
 import options from "./particleOptions"
-import { timeAsHex } from "."
 
 type Props = {
   time: Dayjs
@@ -26,7 +25,7 @@ const FullscreenModal = ({ time, close }: Props) => {
         "left-0",
         "top-0",
         "w-full",
-        "z-50"
+        "z-50",
       )}
       style={{ transition: "opacity 0.25s ease" }}
     >
@@ -42,11 +41,11 @@ const FullscreenModal = ({ time, close }: Props) => {
           "text-9xl",
           "text-center",
           "text-white",
-          "w-full"
+          "w-full",
         )}
-        style={{ backgroundColor: "#" + timeAsHex(time) }}
+        style={{ backgroundColor: "#" + time.format("HHmmss") }}
       >
-        <p> {timeAsHex(time, { divider: ":", skipSeconds: true })}</p>
+        <p>{time.format("HH:mm")}</p>
       </div>
     </div>
   )

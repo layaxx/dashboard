@@ -5,10 +5,11 @@ import { Routes } from "@blitzjs/next"
 import { invalidateQuery } from "@blitzjs/rpc"
 import { PlusCircleIcon } from "@heroicons/react/24/solid"
 import clsx from "clsx"
-import StatusButton from "./StatusButton"
+import StatusIcon from "./StatusIcon"
 import getFeeds from "../../queries/getFeeds"
 import Button from "app/core/components/Button"
 import ButtonGroup from "app/core/components/ButtonGroup"
+import Loader from "app/core/components/Loader"
 import { notifyPromiseAdvanced } from "app/core/hooks/notify"
 
 const Controls: FC = () => {
@@ -44,30 +45,25 @@ const Controls: FC = () => {
             message: errors,
           }
         },
-      }
+      },
     ).finally(() => setIsLoadingRSS(false))
   }
 
   const handleReload = useCallback(() => handleOnForceReload(false), [])
-  const buttonProps = {
-    className: clsx("border-0", "flex-auto", "grow"),
-    notRounded: true,
-  }
 
   return (
     <div className={clsx("flex", "items-center", "w-full")}>
       <ButtonGroup notRounded>
-        <div className={clsx("flex", "w-28")}>
-          <Suspense
-            fallback={
-              <Button disabled {...buttonProps}>
-                Loading
-              </Button>
-            }
-          >
-            <StatusButton handleReload={handleReload} buttonProps={buttonProps} />
-          </Suspense>
-        </div>
+        <Button
+          icon={
+            <Suspense fallback={<Loader />}>
+              <StatusIcon handleReload={handleReload} />
+            </Suspense>
+          }
+          href={Routes.FeedsStatusPage()}
+        >
+          Status
+        </Button>
 
         <Button onClick={() => handleOnForceReload(true)} disabled={isLoadingRSS}>
           Force Reload

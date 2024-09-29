@@ -10,7 +10,7 @@ import getFeeds from "app/feeds/queries/getFeeds"
 
 type ItemProps = {
   item: Feedentry
-  settings: Feedoption
+  settings: Pick<Feedoption, "expand">
   skipOffset?: React.MutableRefObject<number>
 }
 

@@ -20,9 +20,9 @@ const ButtonGroup: FC<{ children: Array<ReactElement>; notRounded?: boolean }> =
             !notRounded && [
               index === 0 && "rounded-l",
               index === children.length - 1 && "rounded-r",
-            ]
+            ],
           ),
-          child.props.className
+          child.props.className,
         ),
         notRounded: true,
       },

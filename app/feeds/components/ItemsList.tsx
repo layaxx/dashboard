@@ -1,5 +1,5 @@
 "use client"
-import { Fragment, useEffect, useRef } from "react"
+import { useRef } from "react"
 import { ErrorComponent } from "@blitzjs/next"
 import { useQuery, useInfiniteQuery } from "@blitzjs/rpc"
 import clsx from "clsx"
@@ -7,6 +7,7 @@ import Item from "./items/Item"
 import getRecentlyReadEntries from "../queries/getRecentlyReadEntries"
 import Button from "app/core/components/Button"
 import Loader from "app/core/components/Loader"
+import notify from "app/core/hooks/notify"
 import { useSharedState } from "app/core/hooks/store"
 import getFeedoption from "app/feedoptions/queries/getFeedoption"
 import getFeedentries from "app/feeds/queries/getFeedentries"
@@ -14,20 +15,14 @@ import { ALL_FEEDS_ID, RECENTLY_READ_ID } from "lib/config/feeds/feedIDs"
 
 export const ItemsList = () => {
   const [{ activeFeedID }] = useSharedState()
-
   const skipOffset = useRef(0)
 
   const baseBatchSize = 20
 
   const defaultOptions = {
-    createdAt: new Date(),
     expand: false,
-    id: -1,
     oldestFirst: true,
-    updatedAt: new Date(),
   }
-
-  const [_, setState] = useSharedState()
 
   const [settings] = useQuery(
     getFeedoption,
@@ -35,26 +30,27 @@ export const ItemsList = () => {
     { enabled: !!activeFeedID, placeholderData: defaultOptions },
   )
 
-  const [pages, { fetchNextPage, hasNextPage, isFetchingNextPage, refetch }] = useInfiniteQuery(
+  const [pages, { fetchNextPage, hasNextPage, isFetchingNextPage }] = useInfiniteQuery(
     getFeedentries,
-    (fetchNextPageVariable) => {
-      return {
-        take: fetchNextPageVariable?.take ?? baseBatchSize,
-        skip: fetchNextPageVariable?.skip ? fetchNextPageVariable?.skip - skipOffset.current : 0,
-        where: {
-          feedId: activeFeedID === ALL_FEEDS_ID ? undefined : activeFeedID,
-        },
-      }
-    },
+    (fetchNextPageVariable) => ({
+      take: fetchNextPageVariable?.take ?? baseBatchSize,
+      skip: fetchNextPageVariable?.skip ? fetchNextPageVariable?.skip - skipOffset.current : 0,
+      where: {
+        feedId: activeFeedID === ALL_FEEDS_ID ? undefined : activeFeedID,
+      },
+    }),
     {
       refetchInterval: false,
       refetchOnReconnect: false,
       refetchOnWindowFocus: false,
-      useErrorBoundary: true,
-      getNextPageParam: ({ nextPage }) => nextPage,
       enabled: activeFeedID !== RECENTLY_READ_ID,
-      onSuccess: () => {
+      getNextPageParam: ({ nextPage }) => nextPage,
+      onSuccess() {
         skipOffset.current = 0
+      },
+      onError(error) {
+        console.error(error)
+        notify("Error fetching items", { status: "error" })
       },
     },
   )
@@ -63,20 +59,20 @@ export const ItemsList = () => {
     getRecentlyReadEntries,
     {},
     {
+      refetchInterval: false,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
       enabled: activeFeedID === RECENTLY_READ_ID,
-      useErrorBoundary: true,
+      onError(error) {
+        console.error(error)
+        notify("Error fetching items", { status: "error" })
+      },
     },
   )
 
-  useEffect(() => {
-    if (activeFeedID !== RECENTLY_READ_ID) {
-      setState((previous) => ({ ...previous, refetchItems: refetch }))
-    }
-  }, [activeFeedID, refetch, setState])
-
-  if (activeFeedID === RECENTLY_READ_ID && recentlyReadResult && recentlyReadResult.feedentries) {
+  if (activeFeedID === RECENTLY_READ_ID && recentlyReadResult?.feedentries) {
     return (
-      <div style={{ marginBottom: "10rem" }}>
+      <div className="mb-40">
         {recentlyReadResult.feedentries.map((item) => (
           <Item item={item} key={item.id} settings={settings || defaultOptions} />
         ))}
@@ -85,30 +81,28 @@ export const ItemsList = () => {
   }
 
   return pages ? (
-    <>
+    <div>
       {pages.length > 0 &&
-        pages.map((page, index) => (
-          <Fragment key={index}>
-            {page.feedentries.map((item) => (
-              <Item
-                item={item}
-                key={item.id}
-                settings={settings || defaultOptions}
-                skipOffset={skipOffset}
-              />
-            ))}
-          </Fragment>
-        ))}
+        pages.flatMap(({ feedentries }) =>
+          feedentries.map((item) => (
+            <Item
+              item={item}
+              key={item.id}
+              settings={settings || defaultOptions}
+              skipOffset={skipOffset}
+            />
+          )),
+        )}
 
       <Button
         onClick={() => fetchNextPage()}
-        disabled={!hasNextPage || !!isFetchingNextPage}
+        disabled={!hasNextPage || isFetchingNextPage}
         className={clsx("mb-40", "md:ml-10", "ml-2", "mt-8")}
       >
         {isFetchingNextPage && <Loader />}
         {!isFetchingNextPage && (hasNextPage ? "Load More" : "Nothing more to load")}
       </Button>
-    </>
+    </div>
   ) : (
     <ErrorComponent statusCode={500} title={"Error in ItemsList"} />
   )

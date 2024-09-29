@@ -17,7 +17,7 @@ const FeedsRSSPage: BlitzPage = () => {
         feeds={<FeedListContainer mode={FEED_MODE.RSS} />}
         items={
           <Suspense
-            fallback={Array.from({ length: 5 }, (_, index) => index).map((index) => (
+            fallback={Array.from({ length: 5 }, (_, index) => (
               <ItemSkeleton key={index} />
             ))}
           >

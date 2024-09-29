@@ -1,26 +1,18 @@
 import { useEffect, useState } from "react"
 import clsx from "clsx"
-import dayjs, { Dayjs } from "dayjs"
+import dayjs from "dayjs"
 import FullscreenModal from "./FullscreenModal"
 
-type Options = { divider?: string; skipSeconds?: boolean }
-
-export const timeAsHex = (time: Dayjs, options?: Options) => {
-  const { divider, skipSeconds } = options ?? {}
-  if (skipSeconds) {
-    return time.format(divider ? "HH" + divider + "mm" : "HHmm")
-  }
-  return time.format(divider ? "HH" + divider + "mm" + divider + "ss" : "HHmmss")
-}
-
-const Zen = () => {
+const Zen: React.FC = () => {
   const [isFullscreen, setIsFullscreen] = useState(false)
 
   const [time, setTime] = useState(dayjs())
+  const [hasAttached, setHasAttached] = useState(false)
 
   useEffect(() => {
-    const oneSecond = 1000
-    const interval = setInterval(() => setTime(dayjs()), oneSecond)
+    const threeSeconds = 3000
+    const interval = setInterval(() => setTime(dayjs()), threeSeconds)
+    setHasAttached(true)
 
     return () => {
       clearInterval(interval)
@@ -33,6 +25,7 @@ const Zen = () => {
 
   return (
     <div
+      suppressHydrationWarning
       className={clsx(
         "flex-1",
         "font-bold",
@@ -42,12 +35,12 @@ const Zen = () => {
         "text-3xl",
         "text-center",
         "text-white",
-        "w-full"
+        "w-full",
       )}
-      style={{ backgroundColor: "#" + timeAsHex(time) }}
+      style={{ backgroundColor: "#" + time.format("HHmmss") }}
       onClick={() => setIsFullscreen((pre) => !pre)}
     >
-      <p>{timeAsHex(time, { divider: ":", skipSeconds: true })}</p>
+      <p>{hasAttached ? time.format("HH:mm") : "00:00"}</p>
     </div>
   )
 }
