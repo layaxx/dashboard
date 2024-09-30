@@ -1,8 +1,11 @@
 import { FC } from "react"
+import { getAntiCSRFToken } from "@blitzjs/auth"
 import { invalidateQuery, useQuery } from "@blitzjs/rpc"
 import { ExclamationCircleIcon, CheckCircleIcon } from "@heroicons/react/24/outline"
 import clsx from "clsx"
 import { ButtonProps } from "app/core/components/Button"
+import { notifyPromiseAdvanced } from "app/core/hooks/notify"
+import getFeeds from "app/feeds/queries/getFeeds"
 import getStatus from "app/feeds/queries/getStatus"
 import {
   maxAcceptableAverageLoadTime,
@@ -11,13 +14,45 @@ import {
 } from "lib/config/feeds/status"
 
 type StatusButtonProps = {
-  handleReload: () => Promise<unknown>
   buttonProps?: Omit<ButtonProps, "children">
 }
 
 let lastReload = -1
 
-const StatusIcon: FC<StatusButtonProps> = ({ handleReload }) => {
+// eslint-disable-next-line unicorn/consistent-function-scoping
+const handleOnReload = async () => {
+  notifyPromiseAdvanced(
+    () =>
+      window.fetch("/api/loadRSS", {
+        credentials: "include",
+        headers: {
+          "anti-csrf": getAntiCSRFToken(),
+        },
+      }),
+    {
+      pending: { title: "Loading Feeds" },
+      error: async () => ({ title: "Failed to load Feeds" }),
+      success: async (response) => {
+        if (!response.ok) {
+          console.error(response)
+          return { title: "Failed to load Feeds", status: "error" }
+        }
+
+        invalidateQuery(getFeeds)
+
+        const { errors } = JSON.parse(await response.text())
+        const hasErrors = errors && errors.length > 0
+        return {
+          title: "Loaded Feeds" + (hasErrors ? " (with Errors)" : ""),
+          status: hasErrors ? "warning" : "success",
+          message: errors,
+        }
+      },
+    },
+  )
+}
+
+const StatusIcon: FC<StatusButtonProps> = () => {
   const [result, { isError }] = useQuery(
     getStatus,
     {},
@@ -30,14 +65,15 @@ const StatusIcon: FC<StatusButtonProps> = ({ handleReload }) => {
           (lastReload === -1 || durationSinceLastReload > thirtySeconds) &&
           data.minutesSinceLastLoad > targetTimeBetweenLoads
         ) {
-          console.log(
+          // eslint-disable-next-line no-console
+          console.debug(
             `Reloading due to ${JSON.stringify({
               targetTimeBetweenLoads,
               minutesSinceLastLoad: data.minutesSinceLastLoad,
             })}`,
           )
           lastReload = Date.now()
-          handleReload().finally(() => invalidateQuery(getStatus))
+          handleOnReload().finally(() => invalidateQuery(getStatus))
         }
       },
     },

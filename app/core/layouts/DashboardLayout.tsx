@@ -7,8 +7,6 @@ import { useSharedState } from "../hooks/store"
 type Props = { items: ReactChild; feeds: ReactChild }
 
 const DashboardLayout = ({ items, feeds }: Props) => {
-  const title = "Dashboard"
-
   const [_, setSharedState] = useSharedState()
 
   // eslint-disable-next-line unicorn/consistent-function-scoping
@@ -37,16 +35,10 @@ const DashboardLayout = ({ items, feeds }: Props) => {
   return (
     <>
       <div className={clsx("flex", "flex-row", "h-dvh", "overflow-hidden", "w-full")}>
-        <Aside
-          hideNavbar={hideNavbar}
-          setHideNavbar={setHideNavbarHandler}
-          title={title}
-          feeds={feeds}
-        />
-
+        <Aside hideNavbar={hideNavbar} setHideNavbar={setHideNavbarHandler} feeds={feeds} />
         {/*  eslint-disable-next-line tailwindcss/no-arbitrary-value */}
         <div className={clsx("overflow-x-clip", hideNavbar ? "w-full" : "w-[calc(100%-24rem)]")}>
-          <Header hideNavbar={hideNavbar} setHideNavbar={setHideNavbarHandler} />
+          {hideNavbar && <Header hideNavbar={hideNavbar} setHideNavbar={setHideNavbarHandler} />}
           <main className={clsx("bg-slate-100", "h-full", "overflow-y-scroll")}>{items}</main>
         </div>
       </div>

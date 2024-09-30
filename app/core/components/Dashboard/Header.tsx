@@ -22,10 +22,10 @@ const Header = ({ hideNavbar, setHideNavbar }: HeaderProps) => (
     )}
     onClick={() => setHideNavbar((previous) => !previous)}
   >
-    <div className="overflow-hidden">
+    <div className={clsx("overflow-hidden", "w-full")}>
       <Suspense
         fallback={
-          <h1 className={clsx("animate-pulse", "bg-slate-200", "h-8", "text-2xl", "w-7/12")} />
+          <h1 className={clsx("animate-pulse", "bg-slate-200", "h-8", "text-2xl", "w-full")} />
         }
       >
         <DashboardGreeting />

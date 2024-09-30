@@ -1,6 +1,6 @@
-import { RouteUrlObject } from "blitz"
 import { ButtonHTMLAttributes, MouseEventHandler, PropsWithChildren, ReactChild } from "react"
 import clsx from "clsx"
+import { Url } from "next/dist/shared/lib/router/router"
 import Link from "next/link"
 import { twMerge } from "tailwind-merge"
 
@@ -13,7 +13,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   icon?: ReactChild
   submit?: boolean
   notRounded?: boolean
-  href?: string | RouteUrlObject
+  href?: Url
 }
 
 const Button = ({
@@ -71,9 +71,9 @@ const Button = ({
               "text-white",
               "border-transparent",
             ],
-            "w-auto"
+            "w-auto",
           ),
-          rest.className
+          rest.className,
         )}
         onClick={onClick}
       >

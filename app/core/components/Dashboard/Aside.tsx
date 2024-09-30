@@ -1,38 +1,15 @@
 import { ReactChild } from "react"
-import { Routes } from "@blitzjs/next"
-import { CogIcon } from "@heroicons/react/24/solid"
 import clsx from "clsx"
-import dynamic from "next/dynamic"
-import Link from "next/link"
+import Header from "./Header"
 import Zen from "./zen"
-import { useSharedState } from "app/core/hooks/store"
 import Controls from "app/feeds/components/controls"
-import version from "lib/config/version"
-
-const ClientSideSettingsLink = dynamic(
-  async () => () => {
-    const [{ activeFeedID }] = useSharedState()
-    return (
-      <Link href={{ ...Routes.FeedsSettingsOverviewPage(), hash: "feed-" + activeFeedID }} passHref>
-        <CogIcon
-          onClickCapture={(event) => {
-            event.stopPropagation()
-          }}
-          className={clsx("active:animate-spin", "h-7")}
-        />
-      </Link>
-    )
-  },
-  { ssr: false, loading: () => <CogIcon className="h-7" /> },
-)
 
 type Props = {
   hideNavbar: boolean
   setHideNavbar: React.Dispatch<React.SetStateAction<boolean>>
-  title: string
   feeds: ReactChild
 }
-const Aside = ({ hideNavbar, setHideNavbar, title, feeds }: Props) => (
+const Aside = ({ hideNavbar, setHideNavbar, feeds }: Props) => (
   <aside
     className={clsx(
       "bg-slate-300",
@@ -47,28 +24,10 @@ const Aside = ({ hideNavbar, setHideNavbar, title, feeds }: Props) => (
       "w-full",
     )}
   >
-    <section
-      className={clsx(
-        "border-b",
-        "border-primary",
-        "flex",
-        "items-center",
-        "px-4",
-        "py-6",
-        "text-primary",
-        "w-full",
-      )}
-      onClick={() => setHideNavbar((previous) => !previous)}
-    >
-      <h1
-        className={clsx("font-bold", "mr-auto", "focus:outline-none", "focus:ring-2", "text-2xl")}
-        aria-label={hideNavbar ? "open" : "close"}
-        title={version || "unknown version"}
-      >
-        {title}
-      </h1>
-      <ClientSideSettingsLink />
+    <section className={clsx("border-b", "border-primary", "w-full")}>
+      <Header hideNavbar={hideNavbar} setHideNavbar={setHideNavbar} />
     </section>
+
     <section className={clsx("grow", "overflow-y-hidden", "pt-6", "w-full")}>
       <div
         className={clsx(
