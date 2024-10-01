@@ -39,7 +39,9 @@ const FormField: FC<FormFieldProps> = ({
           className={clsx(
             "flex",
             "flex-row",
+            "flex-wrap",
             type === "checkbox" && "justify-between",
+            "mt-4",
             labelProps?.className,
             meta.dirty && !meta.valid && !meta.modifiedSinceLastSubmit && "text-error",
           )}

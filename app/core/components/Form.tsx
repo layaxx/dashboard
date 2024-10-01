@@ -4,6 +4,7 @@ import clsx from "clsx"
 import { Form as FinalForm, FormProps as FinalFormProps } from "react-final-form"
 import { z } from "zod"
 import Button from "./Button"
+import ButtonGroup from "./ButtonGroup"
 
 export { FORM_ERROR } from "final-form"
 
@@ -51,23 +52,25 @@ export function Form<S extends z.ZodType<any, any>>({
           )}
 
           <div className={clsx("flex", "mt-4")}>
-            {submitText && (
-              <Button type="submit" icon={submitIcon} disabled={submitting} className="flex-auto">
-                {submitText}
-              </Button>
-            )}
+            <ButtonGroup>
+              {submitText && (
+                <Button type="submit" icon={submitIcon} disabled={submitting} className="flex-auto">
+                  {submitText}
+                </Button>
+              )}
 
-            {resetText && (
-              <Button type="button" onClick={form.reset} disabled={submitting}>
-                {resetText}
-              </Button>
-            )}
+              {resetText && (
+                <Button type="button" onClick={form.reset} disabled={submitting}>
+                  {resetText}
+                </Button>
+              )}
 
-            {onDelete && (
-              <Button type="button" onClick={onDelete} variant="danger">
-                {deleteText ?? "Delete"}
-              </Button>
-            )}
+              {onDelete && (
+                <Button type="button" onClick={onDelete} variant="danger">
+                  {deleteText ?? "Delete"}
+                </Button>
+              )}
+            </ButtonGroup>
           </div>
         </form>
       )}
