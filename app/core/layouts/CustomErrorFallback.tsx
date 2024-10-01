@@ -2,6 +2,7 @@ import { AuthenticationError, AuthorizationError } from "blitz"
 import React from "react"
 import { ErrorFallbackProps } from "@blitzjs/next"
 import clsx from "clsx"
+import CustomErrorComponent from "../components/CustomErrorComponent"
 import LoginForm from "app/auth/components/LoginForm"
 
 function CustomErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
@@ -17,13 +18,7 @@ function CustomErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) 
     message = "Sorry, you are not authorized to access this"
   }
 
-  return (
-    <div className="w-full">
-      <h2 className={clsx("font-bold", "text-4xl", "text-center")}>
-        {statusCode} - {message}
-      </h2>
-    </div>
-  )
+  return <CustomErrorComponent statusCode={statusCode} message={message} />
 }
 
 export default CustomErrorFallback

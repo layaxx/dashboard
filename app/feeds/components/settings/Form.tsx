@@ -1,42 +1,29 @@
 import { Routes } from "@blitzjs/next"
-import { invoke, useMutation, useQuery } from "@blitzjs/rpc"
+import { invoke, useMutation } from "@blitzjs/rpc"
 import clsx from "clsx"
 import { FormApi } from "final-form"
 import { useRouter } from "next/router"
-import FormSkeleton from "./FormSkeleton"
+import CustomErrorComponent from "app/core/components/CustomErrorComponent"
 import Form from "app/core/components/Form"
 import FormField from "app/core/components/FormField"
 import notify, { notifyPromise } from "app/core/hooks/notify"
 import createFeedMutation from "app/feeds/mutations/createFeed"
 import removeFeedMutation from "app/feeds/mutations/deleteFeed"
 import updateFeedMutation from "app/feeds/mutations/updateFeed"
-import getFeed from "app/feeds/queries/getFeed"
 import getTitleAndTTLQuery from "app/feeds/queries/getInfoFromFeedURL"
+import { Feed } from "db"
 
-type Props = { id?: number; isCreate?: boolean }
+type Props = { feed?: Feed; isCreate?: boolean }
 
-const SettingsForm = ({ id, isCreate }: Props) => {
-  const [feed, { isFetching }] = useQuery(
-    getFeed,
-    { id },
-    {
-      refetchOnReconnect: true,
-      refetchOnWindowFocus: true,
-      enabled: !isCreate,
-    },
-  )
-
+const SettingsForm = ({ feed, isCreate }: Props) => {
   const [createFeed] = useMutation(createFeedMutation)
   const [updateFeed] = useMutation(updateFeedMutation)
   const [removeFeed] = useMutation(removeFeedMutation)
 
   const router = useRouter()
 
-  if (isFetching) {
-    return <FormSkeleton />
-  }
   if (!feed && !isCreate) {
-    return <p>Invalid id provided: {id}</p>
+    return <CustomErrorComponent statusCode={404} message="Feed not found" />
   }
 
   const submitHandler = async (
@@ -75,8 +62,8 @@ const SettingsForm = ({ id, isCreate }: Props) => {
         () => {
           notifyPromise(fetch("/api/loadRSS?force=true"), {
             pending: { title: "Fetching Entries" },
-            success: { title: "Created Entry" },
-            error: { title: "Created Entry", message: "Failed initial fetch" },
+            success: { title: "Created Feed" },
+            error: { title: "Created Feed", message: "Failed initial fetch" },
           }).finally(() => router.push(Routes.FeedsSettingsOverviewPage()))
         },
         (error) => {
@@ -92,7 +79,10 @@ const SettingsForm = ({ id, isCreate }: Props) => {
         updateFeed({
           id: feed!.id,
           name: values.name,
-          loadIntervall: Number.parseInt("" + values.loadIntervall, 10),
+          loadIntervall:
+            typeof values.loadIntervall === "number"
+              ? values.loadIntervall
+              : Number.parseInt(values.loadIntervall, 10),
           url: values.url,
           isActive: values.isActive,
         }),
@@ -105,21 +95,22 @@ const SettingsForm = ({ id, isCreate }: Props) => {
     }
   }
 
-  const deleteHandler = isCreate
-    ? undefined
-    : () =>
-        removeFeed({ id: id ?? -1, removeEntries: true }).then(
-          () => {
-            notify("Successfully deleted Feed", {
-              status: "success",
-            })
-            router.push(Routes.FeedsSettingsOverviewPage())
-          },
-          () =>
-            notify("Failed to delete Feed", {
-              status: "error",
-            }),
-        )
+  const deleteHandler =
+    isCreate || !feed
+      ? undefined
+      : () =>
+          removeFeed({ id: feed.id, removeEntries: true }).then(
+            () => {
+              notify("Successfully deleted Feed", {
+                status: "success",
+              })
+              router.push(Routes.FeedsSettingsOverviewPage())
+            },
+            () =>
+              notify("Failed to delete Feed", {
+                status: "error",
+              }),
+          )
 
   return (
     <div
