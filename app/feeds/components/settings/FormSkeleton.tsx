@@ -10,8 +10,8 @@ const SettingsFormSkeleton = () => {
         "border-purple-700",
         "border-solid",
         "border-t-4",
-        "h-48",
         "max-w-lg",
+        "min-h-48",
         "my-4",
         "px-8",
         "py-4",
@@ -21,8 +21,11 @@ const SettingsFormSkeleton = () => {
       )}
     >
       <SkeletonRow size="lg" />
-      <SkeletonRow />
-      <SkeletonRow />
+      <SkeletonRow className="mt-4" />
+      <SkeletonRow className="mt-4" />
+      <SkeletonRow className="mt-4" />
+      <SkeletonRow className="mt-4" />
+      <SkeletonRow className="mt-4" size="lg" />
     </div>
   )
 }
