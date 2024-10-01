@@ -1,9 +1,10 @@
 import React, { Fragment } from "react"
-import { BlitzLayout } from "@blitzjs/next"
+import { BlitzLayout, ErrorBoundary } from "@blitzjs/next"
 import clsx from "clsx"
 import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/router"
+import CustomErrorFallback from "./CustomErrorFallback"
 
 const Layout: BlitzLayout<{ title?: string; heading: string; children: React.ReactNode }> = ({
   title,
@@ -30,7 +31,7 @@ const Layout: BlitzLayout<{ title?: string; heading: string; children: React.Rea
               "sm:text-5xl",
               "md:text-6xl",
               "text-gray-100",
-              "tracking-tight"
+              "tracking-tight",
             )}
           >
             <span className={clsx("block", "xl:inline")}>{heading}</span>
@@ -62,10 +63,16 @@ const Layout: BlitzLayout<{ title?: string; heading: string; children: React.Rea
           "md:px-8",
           "py-4",
           "md:py-8",
-          "w-full"
+          "w-full",
         )}
       >
-        {children}
+        <ErrorBoundary
+          fallbackRender={({ error, resetErrorBoundary }) => (
+            <CustomErrorFallback error={error} resetErrorBoundary={resetErrorBoundary} />
+          )}
+        >
+          {children}
+        </ErrorBoundary>
       </main>
     </>
   )
