@@ -4,7 +4,7 @@ import db from "db"
 
 const DeleteFeed = z.object({
   id: z.number(),
-  removeEntries: z.boolean().optional().default(false),
+  removeEntries: z.boolean(),
 })
 
 export default resolver.pipe(
@@ -14,8 +14,13 @@ export default resolver.pipe(
     if (removeEntries) {
       await db.feedentry.deleteMany({ where: { feedId: id } })
     }
-    const feed = await db.feed.deleteMany({ where: { id } })
+    const feed = await db.feed.delete({ where: { id } })
+
+    await db.feed.updateMany({
+      data: { position: { decrement: 1 } },
+      where: { position: { gt: feed.position } },
+    })
 
     return feed
-  }
+  },
 )

@@ -1,46 +1,16 @@
 "use client"
-import { useEffect, useRef, useState } from "react"
-import { Routes } from "@blitzjs/next"
-import { useMutation, useQuery } from "@blitzjs/rpc"
-import { Feed } from "@prisma/client"
-import clsx from "clsx"
-import Link from "next/link"
-import { ReactSortable } from "react-sortablejs"
+import { useEffect, useRef } from "react"
+import { useQuery } from "@blitzjs/rpc"
+import FeedReordering from "./FeedReordering"
 import SettingsItem from "./Item"
-import Button from "app/core/components/Button"
-import notify from "app/core/hooks/notify"
-import updateFeedMutation from "app/feeds/mutations/updateFeed"
 import getFeeds from "app/feeds/queries/getFeeds"
 
 const SettingsOverview = () => {
-  const [{ feeds }, { refetch }] = useQuery(getFeeds, undefined, {
+  const [{ feeds }, { refetch, dataUpdatedAt }] = useQuery(getFeeds, undefined, {
     refetchOnReconnect: true,
     refetchOnWindowFocus: true,
     refetchOnMount: true,
   })
-
-  const [list, setList] = useState<Feed[]>(feeds)
-  const [updateFeed] = useMutation(updateFeedMutation)
-
-  const anyNotInCorrectOrder = list.map((feed, index) => feed.position !== index).some(Boolean)
-  const saveCurrentOrder = async (deletedIndex?: number) => {
-    const hasDeletedIndex = typeof deletedIndex === "number"
-
-    await Promise.all(
-      list.map((feed, index) => {
-        if (feed.position !== index || (hasDeletedIndex && index > deletedIndex)) {
-          return updateFeed({
-            position: hasDeletedIndex && index > deletedIndex ? index - 1 : index,
-            id: feed.id,
-          })
-        }
-      }),
-    )
-    await refetch()
-    if (deletedIndex === undefined) notify("Successfully reordered feeds", { status: "success" })
-  }
-
-  useEffect(() => setList(feeds), [feeds])
 
   const hasScrolled = useRef(false)
   useEffect(() => {
@@ -56,49 +26,10 @@ const SettingsOverview = () => {
   return (
     <>
       <div className="w-full">
-        {(feeds as Feed[]).map((feed, index) => (
-          <SettingsItem {...feed} key={feed.id} refetch={async () => saveCurrentOrder(index)} />
-        ))}
+        {Array.isArray(feeds) &&
+          feeds.map((feed) => <SettingsItem {...feed} key={feed.id} refetch={refetch} />)}
       </div>
-      <div>
-        <h2 className={clsx("font-bold", "text-2xl", "tracking-tight")}>Order of feeds:</h2>
-        <ReactSortable list={list} setList={setList}>
-          {list.map((feed) => (
-            <div
-              className={clsx(
-                "bg-white",
-                "border-purple-700",
-                "border-solid",
-                "border-t-4",
-                "my-4",
-                "px-8",
-                "py-4",
-                "rounded-lg",
-                "shadow-lg",
-                "w-full",
-              )}
-              key={feed.id}
-            >
-              <div>
-                <Link
-                  href={Routes.FeedsSettingsPage({ id: feed.id })}
-                  className={clsx("font-semibold", "text-gray-800", "text-xl")}
-                >
-                  {feed.name}
-                </Link>
-              </div>
-            </div>
-          ))}
-        </ReactSortable>
-
-        {anyNotInCorrectOrder && (
-          <div className={clsx("flex", "place-content-center")}>
-            <Button onClick={() => saveCurrentOrder()} variant="primary">
-              Save new Order
-            </Button>
-          </div>
-        )}
-      </div>
+      <FeedReordering feeds={feeds} refetch={refetch} key={dataUpdatedAt} />
     </>
   )
 }
