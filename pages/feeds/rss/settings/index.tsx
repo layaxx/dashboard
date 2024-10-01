@@ -1,6 +1,6 @@
 import { Suspense } from "react"
 import { BlitzPage, Routes } from "@blitzjs/next"
-import { PlusIcon } from "@heroicons/react/24/outline"
+import { MagnifyingGlassIcon, PlusIcon } from "@heroicons/react/24/outline"
 import Head from "next/head"
 import Button from "app/core/components/Button"
 import Loader from "app/core/components/Loader"
@@ -16,6 +16,9 @@ const FeedsSettingsOverviewPage: BlitzPage = () => {
 
       <Button href={Routes.FeedsAddPage()} icon={<PlusIcon />}>
         Add new Feed
+      </Button>
+      <Button href={Routes.RSSPreviewPage()} icon={<MagnifyingGlassIcon />}>
+        Preview Feed
       </Button>
 
       <div className="w-full">

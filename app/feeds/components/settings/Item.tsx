@@ -41,7 +41,7 @@ const SettingsItem: FC<IProps> = ({
       (error) => {
         console.error(error)
         notify("Failed removed feed", { status: "error" })
-      }
+      },
     )
   const handleMarkAllAsRead = () =>
     readAllItemsInFeed({ feedId: id }).then(
@@ -53,10 +53,10 @@ const SettingsItem: FC<IProps> = ({
       (error) => {
         console.error(error)
         notify("Failure", {
-          message: `Failed to mark all entries of ${url} as read`,
+          message: `Failed to mark some/all entries of ${url} as read`,
           status: "error",
         })
-      }
+      },
     )
 
   return (
@@ -71,7 +71,7 @@ const SettingsItem: FC<IProps> = ({
         "py-4",
         "rounded-lg",
         "shadow-lg",
-        "w-full"
+        "w-full",
       )}
       id={"feed-" + String(id)}
     >
