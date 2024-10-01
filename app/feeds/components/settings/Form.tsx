@@ -155,7 +155,6 @@ const SettingsForm = ({ id, isCreate }: Props) => {
             label="URL: "
             placeholder="https://example.com/feed.xml"
           />
-          <p></p>
           <FormField name="name" label="Name: " type="Text" placeholder="(can be auto-detected)" />
           <FormField
             name="loadIntervall"
@@ -163,7 +162,7 @@ const SettingsForm = ({ id, isCreate }: Props) => {
             label="Load Intervall: "
             labelProps={{ style: { whiteSpace: "pre" } }}
           />
-          {!isCreate && <FormField name="isActive" label="isActive" type="checkbox" />}
+          {!isCreate && <FormField name="isActive" label="is active:" type="checkbox" />}
         </div>
       </Form>
     </div>
