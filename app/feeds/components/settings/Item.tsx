@@ -7,10 +7,10 @@ import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 import Link from "next/link"
 import Button from "app/core/components/Button"
+import ButtonGroup from "app/core/components/ButtonGroup"
 import notify from "app/core/hooks/notify"
 import removeFeedMutation from "app/feeds/mutations/deleteFeed"
 import readAllItemsInFeedMutation from "app/feeds/mutations/readAllItemsInFeed"
-import updateFeedMutation from "app/feeds/mutations/updateFeed"
 
 dayjs.extend(relativeTime)
 
@@ -33,7 +33,6 @@ const SettingsItem: FC<IProps> = ({
 
   const [removeFeed] = useMutation(removeFeedMutation)
   const [readAllItemsInFeed] = useMutation(readAllItemsInFeedMutation)
-  const [updateFeed] = useMutation(updateFeedMutation)
 
   const handleDeleteFeed = () =>
     removeFeed({ id, removeEntries: true }).then(
@@ -62,12 +61,13 @@ const SettingsItem: FC<IProps> = ({
   return (
     <div
       className={clsx(
-        "bg-white",
+        isActive ? "bg-white" : "bg-red-100",
         "border-purple-700",
         "border-solid",
         "border-t-4",
         "my-4",
-        "px-8",
+        "px-4",
+        "md:px-8",
         "py-4",
         "rounded-lg",
         "shadow-lg",
@@ -81,20 +81,9 @@ const SettingsItem: FC<IProps> = ({
             href={Routes.FeedsSettingsPage({ id })}
             className={clsx("font-semibold", "text-gray-800", "text-xl")}
           >
+            {!isActive && "[inactive] "}
             {name}
           </Link>
-          {!isActive && (
-            <Button
-              onClick={() =>
-                updateFeed({ id, isActive: true }).then(() => {
-                  notify("Successfully reactivated Feed", { status: "success" })
-                  refetch()
-                })
-              }
-            >
-              Reactivate
-            </Button>
-          )}
         </div>
 
         <div className={clsx("flex", "flex-row", "flex-wrap")}>
@@ -119,11 +108,13 @@ const SettingsItem: FC<IProps> = ({
             </div>
           </div>
 
-          <div className={clsx("flex", "md:flex-col", "flex-row", "md:flex-wrap", "md:w-1/4")}>
-            <Button onClick={handleMarkAllAsRead}>Mark all as read</Button>
-            <Button variant="danger" onClick={handleDeleteFeed}>
-              Delete Feed
-            </Button>
+          <div className={clsx("flex", "md:flex-col", "md:w-1/4", "w-full")}>
+            <ButtonGroup notRounded>
+              <Button onClick={handleMarkAllAsRead}>Mark all as read</Button>
+              <Button variant="danger" onClick={handleDeleteFeed}>
+                Delete Feed
+              </Button>
+            </ButtonGroup>
           </div>
         </div>
       </div>
