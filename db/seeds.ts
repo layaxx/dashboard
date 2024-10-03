@@ -2,6 +2,8 @@ import { SecurePassword } from "@blitzjs/auth/secure-password"
 import { faker } from "@faker-js/faker"
 import db from "db"
 
+const getFeedNamePrefix = (index: number) => "Feed " + (index + 1) + ": "
+
 const seed = async () => {
   await db.$reset()
 
@@ -17,34 +19,35 @@ const seed = async () => {
   const numberOfFeeds = 5
   const numberOfEntriesPerFeed = 40
 
-  for (let index = 0; index < numberOfFeeds; index++) {
-    const feedNamePrefix = "Feed " + index + ": "
-
-    const { id } = await db.feed.create({
-      data: {
-        name: feedNamePrefix + faker.internet.userName(),
-        position: index,
-        loadIntervall: 15,
-        url: faker.internet.url().replaceAll(/(\.\w+)$/g, ".invalid"), // prevent accidental requests to real servers
-        lastLoad: faker.date.past(),
-      },
-    })
-
-    for (let indexEntry = 0; indexEntry < numberOfEntriesPerFeed; indexEntry++) {
-      await db.feedentry.create({
-        data: {
-          id: faker.string.alphanumeric(5) + indexEntry, // ensure unique id
-          link: faker.internet.url(),
-          summary: faker.lorem.paragraph(),
-          title: feedNamePrefix + "Entry " + indexEntry + ": " + faker.lorem.words(2),
-          text: faker.lorem.paragraphs(3), // eslint-disable-line no-magic-numbers
-          feedId: id,
-        },
-      })
+  const feedData = Array.from({ length: numberOfFeeds }, (_, index) => {
+    return {
+      name: getFeedNamePrefix(index) + faker.internet.userName(),
+      position: index,
+      loadIntervall: 15,
+      url: faker.internet.url({ appendSlash: false }).replaceAll(/(\.\w+)$/g, ".invalid"), // prevent accidental requests to real servers
+      lastLoad: faker.date.past(),
     }
+  })
+  const feeds = await db.feed.createManyAndReturn({ data: feedData })
 
-    await db.readlistentry.create({ data: { url: faker.internet.url() } })
-  }
+  const entriesData = feeds.flatMap((feed, feedIndex) => {
+    return Array.from({ length: numberOfEntriesPerFeed }, (_, index) => ({
+      id: String(feedIndex * numberOfEntriesPerFeed + index), // ensure unique id
+      link: faker.internet.url(),
+      summary: faker.lorem.paragraph(),
+      title: getFeedNamePrefix(feedIndex) + "Entry " + index + ": " + faker.lorem.words(2),
+      text: faker.lorem.paragraphs(
+        { min: 1, max: 100 },
+        faker.datatype.boolean() ? "<br/>\n" : "\n",
+      ),
+      feedId: feed.id,
+    }))
+  })
+  await db.feedentry.createMany({ data: entriesData })
+
+  await db.readlistentry.createMany({
+    data: Array.from({ length: numberOfFeeds }, () => ({ url: faker.internet.url() })),
+  })
 }
 
 export default seed
