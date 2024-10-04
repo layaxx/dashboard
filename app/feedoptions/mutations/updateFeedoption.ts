@@ -5,6 +5,8 @@ import db from "db"
 const UpdateFeedoption = z.object({
   id: z.number(),
   name: z.string(),
+  expand: z.boolean(),
+  oldestFirst: z.boolean(),
 })
 
 export default resolver.pipe(
@@ -14,5 +16,5 @@ export default resolver.pipe(
     const feedoption = await db.feedoption.update({ data, where: { id } })
 
     return feedoption
-  }
+  },
 )

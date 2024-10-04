@@ -48,18 +48,20 @@ model Token {
 }
 
 model Feed {
-  id                     Int         @id @default(autoincrement())
-  createdAt              DateTime    @default(now())
-  updatedAt              DateTime    @updatedAt
+  id                     Int             @id @default(autoincrement())
+  createdAt              DateTime        @default(now())
+  updatedAt              DateTime        @updatedAt
   position               Int
   name                   String
   lastLoad               DateTime
-  loadIntervall          Int         @default(60)
-  url                    String      @unique
+  loadIntervall          Int             @default(60)
+  url                    String          @unique
   etag                   String?
-  Feedentry              Feedentry[]
-  isActive               Boolean     @default(true)
-  consecutiveFailedLoads Int         @default(0)
+  entries                Feedentry[]
+  isActive               Boolean         @default(true)
+  consecutiveFailedLoads Int             @default(0)
+  loadEvents             FeedLoadEvent[]
+  options                Feedoption?
 }
 
 model Feedoption {
@@ -68,6 +70,7 @@ model Feedoption {
   updatedAt   DateTime @updatedAt
   expand      Boolean  @default(false)
   oldestFirst Boolean  @default(true)
+  feed        Feed     @relation(fields: [id], references: [id])
 }
 
 model Readlistentry {
@@ -109,6 +112,17 @@ model StatusClean {
   updatedAt DateTime @updatedAt
   time      DateTime
   duration  Float
+}
+
+model FeedLoadEvent {
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  feedId     Int
+  updatedIds String[]
+  createdIds String[]
+  errors     String[]
+  feed       Feed     @relation(fields: [feedId], references: [id])
 }
 
 enum TokenType {

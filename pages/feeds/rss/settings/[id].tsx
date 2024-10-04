@@ -2,32 +2,38 @@ import React from "react"
 import { BlitzPage } from "@blitzjs/next"
 import Head from "next/head"
 import { gSSP } from "app/blitz-server"
+import CustomErrorComponent from "app/core/components/CustomErrorComponent"
 import Layout from "app/core/layouts/Layout"
-import SettingsForm from "app/feeds/components/settings/Form"
+import FeedsSettingsPageContent from "app/feeds/components/settings/FeedsSettingsPageContent"
 import getFeed from "app/feeds/queries/getFeed"
-import { Feed } from "db"
+import { FeedWithEventsAndCount } from "lib/feeds/types"
 
-const FeedsSettingsPage: BlitzPage<{ feed: Feed }> = ({ feed }) => {
+type Props = {
+  feed?: FeedWithEventsAndCount
+}
+
+const FeedsSettingsPage: BlitzPage<Props> = ({ feed }) => {
   return (
     <>
       <Head>
         <title>Feeds - Settings</title>
       </Head>
 
-      <SettingsForm feed={feed} />
+      {feed ? (
+        <FeedsSettingsPageContent feed={feed} />
+      ) : (
+        <CustomErrorComponent statusCode={404} message="This feed does not exist." />
+      )}
     </>
   )
 }
 
-export const getServerSideProps = gSSP<{ feed?: Feed }>(async ({ ctx, params }) => {
-  let feed: Feed
+export const getServerSideProps = gSSP<Props>(async ({ ctx, params }) => {
+  let feed: FeedWithEventsAndCount | undefined
   try {
-    feed = await getFeed({ id: Number(params?.id) }, ctx)
-  } catch (error) {
-    console.error(error)
-    return {
-      props: {},
-    }
+    feed = await getFeed({ id: Number(params?.id), includeLoadEvents: true }, ctx)
+  } catch {
+    console.error(params)
   }
 
   return {

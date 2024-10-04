@@ -5,8 +5,9 @@ import dayjs from "dayjs"
 import { NextApiResponse, NextApiHandler } from "next"
 import { performance } from "perf_hooks"
 import { api } from "app/blitz-server"
-import db from "db"
+import db, { FeedLoadEvent } from "db"
 import { LoadFeedStatus, Result } from "lib/feeds/types"
+import { HTTP_FORBIDDEN, HTTP_OK } from "lib/serverOnly/consts"
 import { loadFeed } from "lib/serverOnly/loadRSSHelpers"
 
 const logger = BlitzLogger({ name: "/api/loadRSS" })
@@ -28,111 +29,106 @@ const handler: NextApiHandler = async (request, response: ResponseWithSession) =
         $isAuthorized: () => true,
       } as AuthenticatedSessionContext
     } else {
-      logger.warn("denied Access")
-      response.statusCode = 403
-      response.statusMessage = "Please log in to use this API route"
-      response.end()
+      logger.warn("denied Access to /api/loadRSS")
+      response.status(HTTP_FORBIDDEN).send("Please log in to use this API route")
       return
     }
   }
 
-  const timeStampBefore = performance.now()
+  const timeStampBeforeLoad = performance.now()
 
   const force = Boolean(request.query["force"])
-
   const feeds = await db.feed.findMany(force ? undefined : { where: { isActive: true } })
 
   const results: Result[] = await Promise.all(
     feeds.map(async (feed) => ({
-      ...feed,
-      ...(await loadFeed(feed, force, {
+      feed,
+      result: await loadFeed(feed, force, {
         session,
-      } as Ctx)),
-    }))
+      } as Ctx),
+    })),
   )
 
-  const { updated, created } = results
-    .filter((result) => result.changes)
-    .reduce(
-      ({ updated, created }, current) => {
-        return {
-          updated: updated + (current.changes?.updated ?? 0),
-          created: created + (current.changes?.created ?? 0),
-        }
-      },
-      { updated: 0, created: 0 }
-    )
+  const timeStampAfterLoad = performance.now()
 
-  const timeStampAfter = performance.now()
-
-  const errors: string[] = []
-
+  const events: Pick<FeedLoadEvent, "feedId" | "errors" | "createdIds" | "updatedIds">[] = []
   const consecutiveFailLimit = 10
-  for (const result of results) {
+  let updateCount = 0
+  let insertCount = 0
+  for (const { result, feed } of results.filter(
+    ({ result }) => result.status !== LoadFeedStatus.SKIPPED,
+  )) {
+    events.push({
+      feedId: feed.id,
+      createdIds: result.changes?.createdIds ?? [],
+      updatedIds: result.changes?.updatedIds ?? [],
+      errors:
+        result.status === LoadFeedStatus.ERROR
+          ? [
+              JSON.stringify({
+                statusMessage: result.statusMessage,
+                errorMessage: result.errorMessage,
+              }),
+            ]
+          : [],
+    })
+
+    updateCount += result.changes?.updatedIds.length ?? 0
+    insertCount += result.changes?.createdIds.length ?? 0
+
     if (result.status === LoadFeedStatus.ERROR) {
       const willBeDeactivated =
-        result.isActive && result.consecutiveFailedLoads + 1 >= consecutiveFailLimit
+        feed.isActive && feed.consecutiveFailedLoads + 1 >= consecutiveFailLimit
+
       if (willBeDeactivated) {
-        logger.warn(`Deactivating feed ${result.name} due to too many consecutive failed loads`)
-        db.feedentry.create({
+        logger.warn(`Deactivating feed ${feed.name} due to too many consecutive failed loads`)
+        await db.feedentry.create({
           data: {
-            feedId: result.id,
-            id: String(new Date().getMilliseconds()),
+            feedId: feed.id,
+            id: `disable-${feed.id}-${new Date().getMilliseconds()}`,
             title: "Feed Disabled",
             text: "Feed disabled due to too many consecutive failed loads",
             summary: "Feed disabled due to too many consecutive failed loads",
-            link: String(Routes.FeedsStatusPage()),
+            link: Routes.FeedsStatusPage().pathname,
           },
         })
       }
 
       await db.feed.update({
-        where: { id: result.id },
+        where: { id: feed.id },
         data: {
           consecutiveFailedLoads: { increment: 1 },
-          isActive: result.isActive && !willBeDeactivated,
+          isActive: feed.isActive && !willBeDeactivated,
         },
       })
-      errors.push(
-        JSON.stringify({
-          errorMessage: result.errorMessage,
-          statusMessage: result.statusMessage,
-        })
-      )
     }
   }
 
-  results
-    .map(
-      (result) =>
-        (result.status === LoadFeedStatus.ERROR &&
-          JSON.stringify({
-            errorMessage: result.errorMessage,
-            statusMessage: result.statusMessage,
-          })) ??
-        false
-    )
-    .filter(Boolean) as string[]
+  await db.feedLoadEvent.createMany({
+    data: events,
+  })
 
+  const errors = events
+    .filter((event) => event.errors.length > 0 && event.errors[0])
+    .map((error) => String(error.errors[0]))
   await db.statusLoad.create({
     data: {
       loadTime: dayjs().toISOString(),
-      loadDuration: timeStampAfter - timeStampBefore,
+      loadDuration: timeStampAfterLoad - timeStampBeforeLoad,
       errors,
-      updateCount: updated,
-      insertCount: created,
+      updateCount,
+      insertCount,
     },
   })
 
   logger.info("finished RSS reload:", {
-    timeElapsed: timeStampAfter - timeStampBefore,
+    timeElapsed: timeStampAfterLoad - timeStampBeforeLoad,
     errors,
     results,
   })
 
-  response.statusCode = 200
-  response.setHeader("Content-Type", "application/json")
-  response.json({ results, timeElapsed: timeStampAfter - timeStampBefore, errors })
-  response.end()
+  response
+    .status(HTTP_OK)
+    .json({ results, timeElapsed: timeStampAfterLoad - timeStampBeforeLoad, errors })
 }
 export default api(handler)
