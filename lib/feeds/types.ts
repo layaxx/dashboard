@@ -1,4 +1,4 @@
-import { Feed } from "@prisma/client"
+import { Feed, FeedLoadEvent, Feedoption } from "@prisma/client"
 
 export enum LoadFeedStatus {
   SKIPPED = "skipped",
@@ -10,9 +10,15 @@ export type LoadFeedResult = {
   status: LoadFeedStatus
   statusMessage?: string
   errorMessage?: string
-  changes?: { updated: number; created: number; ignored: number }
+  changes?: { createdIds: string[]; updatedIds: string[]; ignored: number }
 }
 
-export type Result = LoadFeedResult & Feed
+export type Result = { result: LoadFeedResult; feed: Feed }
 
 export type HandleItemResult = { updated: number; created: number; ignored: number }
+
+export type FeedWithEventsAndCount = Feed & {
+  loadEvents: FeedLoadEvent[]
+  _count: { entries: number }
+  options: Feedoption | null
+}
