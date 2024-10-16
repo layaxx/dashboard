@@ -5,6 +5,7 @@ import clsx from "clsx"
 import parse, { HTMLReactParserOptions, Element } from "html-react-parser"
 import ItemControls from "./ItemControls"
 import ItemInformation from "./ItemInformation"
+import { feedListOmit } from "../FeedList"
 import readItem from "app/feeds/mutations/readItem"
 import getFeeds from "app/feeds/queries/getFeeds"
 
@@ -29,18 +30,19 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
       updateReadState({ id: item.id, read: isRead }).then(() =>
         setQueryData(
           getFeeds,
-          {},
-          (argument) => ({
-            ...argument,
-            recentlyReadCount: argument?.recentlyReadCount ?? 0,
-            feeds:
-              argument?.feeds.map((feed) => {
-                if (feed.id === item.feedId) {
-                  feed.unreadCount = isRead ? feed.unreadCount - 1 : feed.unreadCount + 1
-                }
-                return feed
-              }) ?? [],
-          }),
+          feedListOmit,
+          (argument) => {
+            return {
+              ...argument,
+              feeds:
+                argument?.feeds.map((feed) => {
+                  if (feed.id === item.feedId) {
+                    feed.unreadCount = isRead ? feed.unreadCount - 1 : feed.unreadCount + 1
+                  }
+                  return feed
+                }) ?? [],
+            }
+          },
           { refetch: false },
         ).catch(() => setHasBeenRead(!isRead)),
       )

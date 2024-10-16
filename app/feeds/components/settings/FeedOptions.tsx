@@ -9,6 +9,7 @@ import { notifyPromise } from "app/core/hooks/notify"
 import createFeedoptionMutation from "app/feedoptions/mutations/createFeedoption"
 import updateFeedoptionMutation from "app/feedoptions/mutations/updateFeedoption"
 import getFeed from "app/feeds/queries/getFeed"
+import { FeedEntryOrdering } from "db"
 import { FeedWithEventsAndCount } from "lib/feeds/types"
 
 const FeedOptions: React.FC<{ feed: FeedWithEventsAndCount }> = ({ feed: initialData }) => {
@@ -21,7 +22,10 @@ const FeedOptions: React.FC<{ feed: FeedWithEventsAndCount }> = ({ feed: initial
   const relevantOptions = feed.options
 
   const rows: Array<[string, ReactNode]> = [
-    ["Ordering", relevantOptions.oldestFirst ? "Oldest first" : "Newest first"],
+    [
+      "Ordering",
+      relevantOptions.ordering === FeedEntryOrdering.OLDEST_FIRST ? "Oldest first" : "Newest first",
+    ],
     ["Auto-expansion", relevantOptions.expand ? "On" : "Off"],
   ]
 
@@ -33,8 +37,8 @@ const FeedOptions: React.FC<{ feed: FeedWithEventsAndCount }> = ({ feed: initial
         name="ordering"
         component={(props) => (
           <select className="w-full" {...props.input}>
-            <option value="oldestFirst">Oldest first</option>
-            <option value="newestFirst">Newest first</option>
+            <option value="OLDEST_FIRST">Oldest first</option>
+            <option value="NEWEST_FIRST">Newest first</option>
           </select>
         )}
       />,
@@ -46,7 +50,7 @@ const FeedOptions: React.FC<{ feed: FeedWithEventsAndCount }> = ({ feed: initial
     <>
       <Form
         onSubmit={(
-          values: { autoExpand: boolean; ordering: "newestFirst" | "oldestFirst" },
+          values: { autoExpand: boolean; ordering: FeedEntryOrdering },
           form: FormApi<any, Partial<any>>,
         ): SubmissionErrors | void => {
           if (form.getState().pristine) {
@@ -58,12 +62,12 @@ const FeedOptions: React.FC<{ feed: FeedWithEventsAndCount }> = ({ feed: initial
               ? updateFeedOption({
                   id: feed.options!.id,
                   expand: values.autoExpand,
-                  oldestFirst: values.ordering === "oldestFirst",
+                  ordering: values.ordering,
                 })
               : createFeedOption({
                   id: feed.id,
                   expand: values.autoExpand,
-                  oldestFirst: values.ordering === "oldestFirst",
+                  ordering: values.ordering,
                 })
 
           notifyPromise(action, {
@@ -76,7 +80,7 @@ const FeedOptions: React.FC<{ feed: FeedWithEventsAndCount }> = ({ feed: initial
         }}
         initialValues={{
           autoExpand: relevantOptions.expand,
-          ordering: relevantOptions.oldestFirst ? "oldestFirst" : "newestFirst",
+          ordering: relevantOptions.ordering,
         }}
         submitText={isEditing ? "Save" : undefined}
         resetText={isEditing ? "Cancel" : "Edit"}

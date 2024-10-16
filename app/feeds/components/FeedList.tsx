@@ -9,6 +9,15 @@ import { LOCALSTORAGE_FEEDID, useSharedState } from "app/core/hooks/store"
 import { ALL_FEEDS_ID, RECENTLY_READ_ID } from "lib/config/feeds/feedIDs"
 import { FEED_MODE } from "types"
 
+export const feedListOmit = {
+  consecutiveFailedLoads: true,
+  etag: true,
+  createdAt: true,
+  updatedAt: true,
+  lastLoad: true,
+  loadIntervall: true,
+}
+
 type Props = {
   mode: FEED_MODE
 }
@@ -16,15 +25,11 @@ type Props = {
 export const FeedList: FC<Props> = ({ mode }) => {
   const secondsInMinute = 60
   const milliSecondsInSecond = 1000
-  const [{ feeds }] = useQuery(
-    getFeeds,
-    {},
-    {
-      refetchInterval: milliSecondsInSecond * secondsInMinute,
-      refetchOnReconnect: true,
-      refetchOnWindowFocus: true,
-    }
-  )
+  const [{ feeds }] = useQuery(getFeeds, feedListOmit, {
+    refetchInterval: milliSecondsInSecond * secondsInMinute,
+    refetchOnReconnect: true,
+    refetchOnWindowFocus: true,
+  })
 
   const showAllFeeds = false
 
@@ -61,7 +66,7 @@ export const FeedList: FC<Props> = ({ mode }) => {
             title={"All Feeds"}
             unreadCount={feeds.reduce(
               (accumulator: number, current) => accumulator + current.unreadCount,
-              0
+              0,
             )}
             isActive={mode === FEED_MODE.RSS && activeFeedID === ALL_FEEDS_ID}
             onClick={() => {

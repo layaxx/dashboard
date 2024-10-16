@@ -1,5 +1,6 @@
 import { SecurePassword } from "@blitzjs/auth/secure-password"
 import { faker } from "@faker-js/faker"
+import dayjs from "dayjs"
 import db from "db"
 
 const getFeedNamePrefix = (index: number) => "Feed " + (index + 1) + ": "
@@ -41,6 +42,9 @@ const seed = async () => {
         faker.datatype.boolean() ? "<br/>\n" : "\n",
       ),
       feedId: feed.id,
+      createdAt: dayjs()
+        .subtract(numberOfEntriesPerFeed - index, "day")
+        .toDate(),
     }))
   })
   await db.feedentry.createMany({ data: entriesData })
