@@ -153,7 +153,12 @@ const SettingsForm = ({ feed, isCreate }: Props) => {
             type="Text"
             placeholder="(can be auto-detected)"
           />
-          <FormField name="loadIntervall" type="number" label="Load Intervall: " />
+          <FormField
+            name="loadIntervall"
+            type="number"
+            label="Load Intervall: "
+            labelProps={{ className: "mb-4" }}
+          />
           {!isCreate && <FormField name="isActive" label="is active:" type="checkbox" />}
         </div>
       </Form>

@@ -4,6 +4,7 @@ import Head from "next/head"
 import { gSSP } from "app/blitz-server"
 import CustomErrorComponent from "app/core/components/CustomErrorComponent"
 import Layout from "app/core/layouts/Layout"
+import { defaultOptions } from "app/feedoptions"
 import FeedsSettingsPageContent from "app/feeds/components/settings/FeedsSettingsPageContent"
 import getFeed from "app/feeds/queries/getFeed"
 import { FeedWithEventsAndCount } from "lib/feeds/types"
@@ -29,16 +30,29 @@ const FeedsSettingsPage: BlitzPage<Props> = ({ feed }) => {
 }
 
 export const getServerSideProps = gSSP<Props>(async ({ ctx, params }) => {
-  let feed: FeedWithEventsAndCount | undefined
   try {
-    feed = await getFeed({ id: Number(params?.id), includeLoadEvents: true }, ctx)
+    const feed = await getFeed({ id: Number(params?.id), includeLoadEvents: true }, ctx)
+
+    if (feed && !feed.options) {
+      feed.options = {
+        ...defaultOptions,
+        id: -1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }
+    }
+    return {
+      props: {
+        feed: feed as FeedWithEventsAndCount,
+      },
+    }
   } catch {
     console.error(params)
   }
 
   return {
     props: {
-      feed,
+      feed: undefined,
     },
   }
 })

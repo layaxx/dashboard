@@ -32,7 +32,13 @@ export const SignupForm = (props: SignupFormProps) => {
         }}
       >
         <LabeledTextField name="email" label="Email" placeholder="Email" />
-        <LabeledTextField name="password" label="Password" placeholder="Password" type="password" />
+        <LabeledTextField
+          name="password"
+          label="Password"
+          placeholder="Password"
+          type="password"
+          outerProps={{ className: "mb-4" }}
+        />
       </Form>
       <div className="mt-4">
         Or <Link href={Routes.LoginPage()}>Log In</Link>

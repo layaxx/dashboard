@@ -26,19 +26,19 @@ export const ItemList = () => {
     },
     {
       getNextPageParam: ({ nextPage }) => nextPage,
-    }
+    },
   )
 
   const [toBeRemoved, setToBeRemoved] = useState<number[]>([])
 
-  const [addRLE] = useMutation(createReadlistentry)
+  const [addReadlistEntry] = useMutation(createReadlistentry)
 
   return (
     <>
       <div className="md:px-10">
         <Form
           onSubmit={({ url }, form) =>
-            addRLE({ url }).then(() => {
+            addReadlistEntry({ url }).then(() => {
               refetch()
               form.reset()
             })
@@ -65,7 +65,7 @@ export const ItemList = () => {
                 setToBeRemoved((previous) => previous.filter((argument) => argument !== id))
               }
             />
-          ))
+          )),
       )}
 
       <Button

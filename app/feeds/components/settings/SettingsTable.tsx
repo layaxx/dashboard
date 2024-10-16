@@ -7,7 +7,7 @@ const SettingsTable: React.FC<{ rows: [string, ReactNode][] }> = ({ rows }) => {
       <tbody>
         {rows.map(([name, value]) => (
           <tr className={clsx("border-b", "border-gray-200")} key={name}>
-            <td className={clsx("border-gray-200", "border-r", "p-2")}>{name}</td>
+            <td className={clsx("border-gray-200", "border-r", "p-2", "w-1/2")}>{name}</td>
             <td className="p-2">{value}</td>
           </tr>
         ))}

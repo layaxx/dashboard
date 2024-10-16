@@ -4,7 +4,6 @@ import db from "db"
 
 const UpdateFeedoption = z.object({
   id: z.number(),
-  name: z.string(),
   expand: z.boolean(),
   oldestFirst: z.boolean(),
 })

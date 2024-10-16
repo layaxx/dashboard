@@ -20,5 +20,5 @@ export type HandleItemResult = { updated: number; created: number; ignored: numb
 export type FeedWithEventsAndCount = Feed & {
   loadEvents: FeedLoadEvent[]
   _count: { entries: number }
-  options: Feedoption | null
+  options: Feedoption
 }

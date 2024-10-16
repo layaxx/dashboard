@@ -1,6 +1,5 @@
 import { validateZodSchema } from "blitz"
 import { ReactNode, PropsWithoutRef, ReactChild, MouseEventHandler } from "react"
-import clsx from "clsx"
 import { Form as FinalForm, FormProps as FinalFormProps } from "react-final-form"
 import { z } from "zod"
 import Button from "./Button"
@@ -40,40 +39,56 @@ export function Form<S extends z.ZodType<any, any>>({
       initialValues={initialValues}
       validate={validateZodSchema(schema)}
       onSubmit={onSubmit}
-      render={({ handleSubmit, form, submitting, submitError }) => (
-        <form onSubmit={handleSubmit} {...props}>
-          {/* Form fields supplied as children are rendered here */}
-          {children}
+      render={({ handleSubmit, form, submitting, submitError }) => {
+        return (
+          <form onSubmit={handleSubmit} {...props}>
+            {/* Form fields supplied as children are rendered here */}
+            {children}
 
-          {submitError && (
-            <div role="alert" className="text-error">
-              {submitError}
+            {submitError && (
+              <div role="alert" className="text-error">
+                {submitError}
+              </div>
+            )}
+
+            <div className="flex">
+              <ButtonGroup>
+                {submitText && (
+                  <Button
+                    type="submit"
+                    icon={submitIcon}
+                    disabled={submitting}
+                    className="flex-auto"
+                  >
+                    {submitText}
+                  </Button>
+                )}
+
+                {resetText && (
+                  <Button
+                    type="button"
+                    onClick={(event) => {
+                      form.reset()
+                      if (props.onReset) {
+                        props.onReset(event as any)
+                      }
+                    }}
+                    disabled={submitting}
+                  >
+                    {resetText}
+                  </Button>
+                )}
+
+                {onDelete && (
+                  <Button type="button" onClick={onDelete} variant="danger">
+                    {deleteText ?? "Delete"}
+                  </Button>
+                )}
+              </ButtonGroup>
             </div>
-          )}
-
-          <div className={clsx("flex", "mt-4")}>
-            <ButtonGroup>
-              {submitText && (
-                <Button type="submit" icon={submitIcon} disabled={submitting} className="flex-auto">
-                  {submitText}
-                </Button>
-              )}
-
-              {resetText && (
-                <Button type="button" onClick={form.reset} disabled={submitting}>
-                  {resetText}
-                </Button>
-              )}
-
-              {onDelete && (
-                <Button type="button" onClick={onDelete} variant="danger">
-                  {deleteText ?? "Delete"}
-                </Button>
-              )}
-            </ButtonGroup>
-          </div>
-        </form>
-      )}
+          </form>
+        )
+      }}
     />
   )
 }

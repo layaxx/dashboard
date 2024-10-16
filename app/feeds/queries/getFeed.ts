@@ -1,6 +1,7 @@
 import { NotFoundError } from "blitz"
 import { resolver } from "@blitzjs/rpc"
 import { z } from "zod"
+import { defaultOptions } from "app/feedoptions"
 import db from "db"
 
 const GetFeed = z.object({
@@ -24,6 +25,15 @@ export default resolver.pipe(
     })
 
     if (!feed) throw new NotFoundError()
+
+    if (!feed.options) {
+      feed.options = {
+        ...defaultOptions,
+        id: -1,
+        createdAt: new Date(0),
+        updatedAt: new Date(0),
+      }
+    }
 
     return feed
   },

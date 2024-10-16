@@ -33,7 +33,7 @@ const Controls: FC = () => {
         <Button
           href={
             hasAttached
-              ? { ...Routes.FeedsSettingsOverviewPage(), hash: "feed-" + activeFeedID }
+              ? Routes.FeedsSettingsPage({ id: activeFeedID })
               : Routes.FeedsSettingsOverviewPage()
           }
           icon={<CogIcon />}
