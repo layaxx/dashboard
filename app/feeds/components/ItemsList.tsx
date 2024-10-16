@@ -12,6 +12,7 @@ import { useSharedState } from "app/core/hooks/store"
 import { defaultOptions } from "app/feedoptions"
 import getFeedoption from "app/feedoptions/queries/getFeedoption"
 import getFeedentries from "app/feeds/queries/getFeedentries"
+import { FeedEntryOrdering } from "db"
 import { ALL_FEEDS_ID, RECENTLY_READ_ID } from "lib/config/feeds/feedIDs"
 
 export const ItemsList = () => {
@@ -26,10 +27,15 @@ export const ItemsList = () => {
     { enabled: !!activeFeedID, placeholderData: defaultOptions },
   )
 
+  const orderBy: { createdAt: "asc" | "desc" } = {
+    createdAt: settings?.ordering === FeedEntryOrdering.OLDEST_FIRST ? "asc" : "desc",
+  }
+
   const [pages, { fetchNextPage, hasNextPage, isFetchingNextPage }] = useInfiniteQuery(
     getFeedentries,
     (fetchNextPageVariable) => ({
       take: fetchNextPageVariable?.take ?? baseBatchSize,
+      orderBy,
       skip: fetchNextPageVariable?.skip ? fetchNextPageVariable?.skip - skipOffset.current : 0,
       where: {
         feedId: activeFeedID === ALL_FEEDS_ID ? undefined : activeFeedID,

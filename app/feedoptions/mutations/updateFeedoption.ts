@@ -5,7 +5,7 @@ import db from "db"
 const UpdateFeedoption = z.object({
   id: z.number(),
   expand: z.boolean(),
-  oldestFirst: z.boolean(),
+  ordering: z.enum(["OLDEST_FIRST", "NEWEST_FIRST", "RANDOM"]),
 })
 
 export default resolver.pipe(

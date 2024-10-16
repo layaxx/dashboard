@@ -1,4 +1,6 @@
-export const defaultOptions = {
+import { FeedEntryOrdering } from "db"
+
+export const defaultOptions: { expand: boolean; ordering: FeedEntryOrdering } = {
   expand: false,
-  oldestFirst: true,
+  ordering: FeedEntryOrdering.NEWEST_FIRST,
 }

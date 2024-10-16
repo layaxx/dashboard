@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
 }
 
 datasource db {
@@ -65,12 +66,12 @@ model Feed {
 }
 
 model Feedoption {
-  id          Int      @id
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  expand      Boolean  @default(false)
-  oldestFirst Boolean  @default(true)
-  feed        Feed     @relation(fields: [id], references: [id])
+  id        Int               @id
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  expand    Boolean           @default(false)
+  ordering  FeedEntryOrdering @default(NEWEST_FIRST)
+  feed      Feed              @relation(fields: [id], references: [id])
 }
 
 model Readlistentry {
@@ -127,4 +128,10 @@ model FeedLoadEvent {
 
 enum TokenType {
   RESET_PASSWORD
+}
+
+enum FeedEntryOrdering {
+  OLDEST_FIRST
+  NEWEST_FIRST
+  RANDOM
 }

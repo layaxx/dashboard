@@ -1,24 +1,19 @@
 import { resolver } from "@blitzjs/rpc"
-import db from "db"
+import db, { Feed } from "db"
 
-export default resolver.pipe(resolver.authorize(), async () => {
-  const allFeeds = await db.feed.findMany({ orderBy: { position: "asc" } })
-  const unreadCounts = await db.feedentry.groupBy({
-    by: ["feedId"],
-    _count: { id: true },
-    where: { isArchived: false },
+type FeedOmit = Partial<Record<keyof Feed, boolean>>
+
+export default resolver.pipe(resolver.authorize(), async (omit: FeedOmit | null | undefined) => {
+  const allFeeds = await db.feed.findMany({
+    orderBy: { position: "asc" },
+    omit,
+    include: { options: true, _count: { select: { entries: { where: { isArchived: false } } } } },
   })
 
   return {
     feeds: allFeeds.map((feed) => ({
       ...feed,
-      unreadCount:
-        unreadCounts.find((aggregateResult) => aggregateResult.feedId === feed.id)?._count.id ?? 0,
+      unreadCount: feed._count.entries,
     })),
-    recentlyReadCount: await db.feedentry.count({
-      where: { isArchived: true },
-      orderBy: { updatedAt: "desc" },
-      take: 20,
-    }),
   }
 })
