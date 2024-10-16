@@ -9,6 +9,7 @@ import Button from "app/core/components/Button"
 import Loader from "app/core/components/Loader"
 import notify from "app/core/hooks/notify"
 import { useSharedState } from "app/core/hooks/store"
+import { defaultOptions } from "app/feedoptions"
 import getFeedoption from "app/feedoptions/queries/getFeedoption"
 import getFeedentries from "app/feeds/queries/getFeedentries"
 import { ALL_FEEDS_ID, RECENTLY_READ_ID } from "lib/config/feeds/feedIDs"
@@ -18,11 +19,6 @@ export const ItemsList = () => {
   const skipOffset = useRef(0)
 
   const baseBatchSize = 20
-
-  const defaultOptions = {
-    expand: false,
-    oldestFirst: true,
-  }
 
   const [settings] = useQuery(
     getFeedoption,

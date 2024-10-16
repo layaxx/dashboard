@@ -56,7 +56,7 @@ const UserSettings = () => {
         name="role"
         label="role"
         value={user?.role}
-        outerProps={{ "aria-disabled": true }}
+        outerProps={{ "aria-disabled": true, className: "mb-4" }}
         disabled
       />
     </Form>

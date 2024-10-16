@@ -12,7 +12,11 @@ export default resolver.pipe(
   resolver.authorize(),
   async ({ id, removeEntries }) => {
     if (removeEntries) {
-      await db.feedentry.deleteMany({ where: { feedId: id } })
+      await Promise.all([
+        db.feedentry.deleteMany({ where: { feedId: id } }),
+        db.feedLoadEvent.deleteMany({ where: { feedId: id } }),
+        db.feedoption.deleteMany({ where: { id } }),
+      ])
     }
     const feed = await db.feed.delete({ where: { id } })
 

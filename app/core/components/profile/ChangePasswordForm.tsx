@@ -49,6 +49,7 @@ const ChangePasswordForm = () => {
         type="password"
         name={"newPasswordConfirm"}
         required
+        outerProps={{ className: "mb-4" }}
       />
     </Form>
   )

@@ -41,6 +41,7 @@ export const LoginForm = (props: LoginFormProps) => {
           placeholder="Password"
           type="password"
           autoComplete="current-password"
+          outerProps={{ className: "mb-4" }}
         />
       </Form>
 

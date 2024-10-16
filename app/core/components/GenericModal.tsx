@@ -13,6 +13,7 @@ interface IProps {
   confirmButton?: IButton
   icon?: ReactChild
   title: ReactChild
+  drawFocusToCancelButton?: boolean
   children: ReactNode
 }
 
@@ -35,7 +36,7 @@ const GenericModal: React.FC<IProps> = ({ cancelButton, confirmButton, icon, tit
           "pb-20",
           "pt-4",
           "px-4",
-          "text-center"
+          "text-center",
         )}
         id="modal-backdrop"
         onClick={(event) => {
@@ -70,7 +71,7 @@ const GenericModal: React.FC<IProps> = ({ cancelButton, confirmButton, icon, tit
             "shadow-xl",
             "text-left",
             "transition-all",
-            "sm:w-full"
+            "sm:w-full",
           )}
         >
           <div className={clsx("bg-white", "sm:p-6", "pb-4", "sm:pb-4", "pt-5", "px-4")}>
@@ -89,7 +90,7 @@ const GenericModal: React.FC<IProps> = ({ cancelButton, confirmButton, icon, tit
                     "rounded-full",
                     "shrink-0",
                     "sm:w-10",
-                    "w-12"
+                    "w-12",
                   )}
                 >
                   {icon}
@@ -113,7 +114,7 @@ const GenericModal: React.FC<IProps> = ({ cancelButton, confirmButton, icon, tit
               "sm:flex-row-reverse",
               "px-4",
               "sm:px-6",
-              "py-3"
+              "py-3",
             )}
           >
             {confirmButton && (
