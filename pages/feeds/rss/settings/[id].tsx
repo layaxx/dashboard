@@ -33,8 +33,6 @@ export const getServerSideProps = gSSP<Props>(async ({ ctx, params }) => {
   try {
     const feed = await getFeed({ id: Number(params?.id), includeLoadEvents: true }, ctx)
 
-    console.log("feed", feed)
-
     if (feed && !feed.options) {
       feed.options = {
         ...defaultOptions,

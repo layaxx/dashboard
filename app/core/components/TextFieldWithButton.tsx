@@ -57,16 +57,13 @@ export const TextFieldWithButton = forwardRef<HTMLInputElement, TextFieldWithBut
                 "px-2",
                 "py-1",
                 "rounded-l",
-                "w-full"
+                "w-full",
               )}
             />
             <Button
               {...button}
-              notRounded
-              className={twMerge(
-                clsx("ml-0", "sm:ml-0", "mt-0", "mx-0", "rounded-r"),
-                button.className
-              )}
+              rounded="right"
+              className={twMerge(clsx("ml-0", "sm:ml-0", "mt-0", "mx-0"), button.className)}
             >
               {button.value}
             </Button>
@@ -80,7 +77,7 @@ export const TextFieldWithButton = forwardRef<HTMLInputElement, TextFieldWithBut
         )}
       </div>
     )
-  }
+  },
 )
 
 export default TextFieldWithButton

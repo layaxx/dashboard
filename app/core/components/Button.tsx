@@ -1,10 +1,18 @@
-import { ButtonHTMLAttributes, MouseEventHandler, PropsWithChildren, ReactChild } from "react"
+import {
+  ButtonHTMLAttributes,
+  MouseEventHandler,
+  PropsWithChildren,
+  ReactChild,
+  useContext,
+} from "react"
 import clsx from "clsx"
 import { Url } from "next/dist/shared/lib/router/router"
 import Link from "next/link"
 import { twMerge } from "tailwind-merge"
+import { ButtonGroupContext } from "./ButtonGroup"
 
 type ButtonVariant = "danger" | "success" | "light" | "primary"
+export type ButtonRoundedValue = "all" | "none" | "left" | "right"
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: any
@@ -12,8 +20,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   onClick?: MouseEventHandler<HTMLButtonElement>
   icon?: ReactChild
   submit?: boolean
-  notRounded?: boolean
   href?: Url
+  rounded?: ButtonRoundedValue
 }
 
 const Button = ({
@@ -23,8 +31,8 @@ const Button = ({
   onClick,
   icon,
   disabled,
-  notRounded,
   href,
+  rounded = "all",
   ...rest
 }: ButtonProps) => {
   const Wrapper = href
@@ -35,9 +43,17 @@ const Button = ({
       )
     : ({ children }: PropsWithChildren<{}>) => <>{children}</>
 
+  const context = useContext(ButtonGroupContext)
+  const isInsideButtonGroup = !!context
+  if (isInsideButtonGroup) {
+    rounded = context
+  }
+
   return (
     <Wrapper>
       <button
+        data-rounded={rounded}
+        data-ctx={context}
         {...rest}
         disabled={disabled}
         type={type}
@@ -53,7 +69,8 @@ const Button = ({
             "py-2",
             "focus:ring-2",
             "focus:ring-offset-2",
-            !notRounded && "rounded-md",
+            (rounded === "all" || rounded === "left") && "rounded-l-md",
+            (rounded === "all" || rounded === "right") && "rounded-r-md",
             "shadow-sm",
             disabled && "text-opacity-70",
             "text-sm",
@@ -72,6 +89,7 @@ const Button = ({
               "border-transparent",
             ],
             "w-auto",
+            isInsideButtonGroup && ["mx-0", "grow"],
           ),
           rest.className,
         )}

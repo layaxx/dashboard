@@ -1,44 +1,40 @@
-import { FC, ReactElement } from "react"
-import clsx from "clsx"
-import { twMerge } from "tailwind-merge"
+import { createContext, FC, ReactElement } from "react"
+import { ButtonRoundedValue } from "./Button"
 
-function isAButton(child: ReactElement | undefined | string): child is ReactElement {
-  return (
-    !!child &&
-    typeof child === "object" &&
-    typeof child.type !== "string" &&
-    child.type.name === "Button"
-  )
+export const ButtonGroupContext = createContext<ButtonRoundedValue | undefined>(undefined)
+
+const getRoundedValue = (index: number, length: number): ButtonRoundedValue => {
+  if (length === 1) return "all" // only one element, should be rounded
+
+  switch (index) {
+    case 0:
+      return "left" // first, i.e. left-most element, should be rounded on the left side
+    case length - 1:
+      return "right" // last, i.e. right-most element, should be rounded on the right side
+    default:
+      return "none" // middle elements should not be rounded
+  }
 }
 
 const ButtonGroup: FC<{
   children: Array<ReactElement | undefined | string>
   notRounded?: boolean
 }> = ({ children, notRounded }) => {
-  children = children.map((child, index) => {
-    return isAButton(child)
-      ? {
-          ...child,
-          props: {
-            ...child.props,
-            className: twMerge(
-              clsx(
-                "grow",
-                "sm:ml-0",
-                "mx-0",
-                !notRounded && [
-                  index === 0 && "rounded-l",
-                  index === children.length - 1 && "rounded-r",
-                ],
-              ),
-              child.props.className,
-            ),
-            notRounded: true,
-          },
-        }
-      : child
-  })
-  return <>{children}</>
+  if (notRounded) {
+    return <ButtonGroupContext.Provider value="none">{children}</ButtonGroupContext.Provider>
+  }
+
+  const elementCount = children.filter((child) => child).length
+
+  return (
+    <>
+      {children.map((child, index) => (
+        <ButtonGroupContext.Provider value={getRoundedValue(index, elementCount)} key={index}>
+          {child}
+        </ButtonGroupContext.Provider>
+      ))}
+    </>
+  )
 }
 
 export default ButtonGroup
