@@ -11,8 +11,9 @@ import Link from "next/link"
 import { twMerge } from "tailwind-merge"
 import { ButtonGroupContext } from "./ButtonGroup"
 
-type ButtonVariant = "danger" | "success" | "light" | "primary"
+type ButtonVariant = "danger" | "success" | "light" | "primary" | "secondary"
 export type ButtonRoundedValue = "all" | "none" | "left" | "right"
+export type ButtonSize = "sm" | "md" | "lg" | "xl"
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: any
@@ -22,6 +23,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   submit?: boolean
   href?: Url
   rounded?: ButtonRoundedValue
+  size?: ButtonSize
 }
 
 const Button = ({
@@ -33,6 +35,7 @@ const Button = ({
   disabled,
   href,
   rounded = "all",
+  size = "md",
   ...rest
 }: ButtonProps) => {
   const Wrapper = href
@@ -49,11 +52,13 @@ const Button = ({
     rounded = context
   }
 
+  if (!["md"].includes(size)) {
+    console.error("This button size is not yet implemented", size)
+  }
+
   return (
     <Wrapper>
       <button
-        data-rounded={rounded}
-        data-ctx={context}
         {...rest}
         disabled={disabled}
         type={type}
@@ -65,15 +70,15 @@ const Button = ({
             "inline-flex",
             "justify-center",
             "focus:outline-none",
-            "px-4",
-            "py-2",
             "focus:ring-2",
-            "focus:ring-offset-2",
             (rounded === "all" || rounded === "left") && "rounded-l-md",
             (rounded === "all" || rounded === "right") && "rounded-r-md",
             "shadow-sm",
             disabled && "text-opacity-70",
-            "text-sm",
+            size === "sm" && ["text-sm", "p-1"],
+            size === "md" && ["text-base", "px-4", "py-2"],
+            size === "lg" && ["text-base", "md:text-lg", "px-6", "py-3"],
+            size === "xl" && ["text-lg", "px-8", "py-4"],
             variant === "light" && [
               !disabled && "hover:bg-gray-100",
               "bg-white",
@@ -88,6 +93,27 @@ const Button = ({
               "text-white",
               "border-transparent",
             ],
+            variant === "success" && [
+              "bg-green-600",
+              !disabled && "hover:bg-green-700",
+              "focus:ring-green-500",
+              "text-white",
+              "border-transparent",
+            ],
+            variant === "primary" && [
+              "bg-primary",
+              !disabled && "hover:bg-violet-700",
+              "focus:ring-violet-500",
+              "text-white",
+              "border-transparent",
+            ],
+            variant === "secondary" && [
+              "bg-indigo-100",
+              !disabled && "hover:bg-indigo-200",
+              "focus:ring-indigo-300",
+              "text-indigo-700",
+              "border-transparent",
+            ],
             "w-auto",
             isInsideButtonGroup && ["mx-0", "grow"],
           ),
@@ -95,7 +121,19 @@ const Button = ({
         )}
         onClick={onClick}
       >
-        {icon && <span className={clsx("mr-2", "w-5")}>{icon}</span>}
+        {icon && (
+          <span
+            className={clsx(
+              size === "sm" && ["mr-1", "w-5"],
+              size === "md" && ["mr-2", "w-6"],
+              size === "lg" && ["mr-4", "w-6"],
+              size === "xl" && ["mr-6", "w-7"],
+              "my-auto",
+            )}
+          >
+            {icon}
+          </span>
+        )}
         {children}
       </button>
     </Wrapper>

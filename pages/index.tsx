@@ -1,7 +1,7 @@
 import { Suspense } from "react"
 import { BlitzPage, Routes } from "@blitzjs/next"
 import clsx from "clsx"
-import Link from "next/link"
+import Button from "app/core/components/Button"
 import UserInfo from "app/core/components/UserInfo"
 import Layout from "app/core/layouts/Layout"
 
@@ -16,7 +16,7 @@ const Home: BlitzPage = () => {
           "text-base",
           "text-gray-500",
           "sm:text-lg",
-          "md:text-xl"
+          "md:text-xl",
         )}
       >
         Login status:
@@ -33,59 +33,15 @@ const Home: BlitzPage = () => {
       >
         <UserInfo />
       </Suspense>
-      <div className={clsx("sm:flex", "md:justify-between", "sm:justify-center", "mt-8")}>
-        <div className={clsx("rounded-md", "shadow")}>
-          <Link
-            href={Routes.FeedsRSSPage()}
-            className={clsx(
-              "hover:bg-indigo-700",
-              "bg-primary",
-              "border",
-              "border-transparent",
-              "flex",
-              "font-medium",
-              "items-center",
-              "justify-center",
-              "md:px-10",
-              "px-8",
-              "py-3",
-              "md:py-4",
-              "rounded-md",
-              "text-base",
-              "md:text-lg",
-              "text-white",
-              "w-full"
-            )}
-          >
-            News Feed
-          </Link>
-        </div>
-        <div className={clsx("sm:ml-3", "sm:mt-0", "mt-3")}>
-          <Link
-            href={Routes.FeedsReadingPage()}
-            className={clsx(
-              "bg-indigo-100",
-              "hover:bg-indigo-200",
-              "border",
-              "border-transparent",
-              "flex",
-              "font-medium",
-              "items-center",
-              "justify-center",
-              "md:px-10",
-              "px-8",
-              "py-3",
-              "md:py-4",
-              "rounded-md",
-              "text-base",
-              "text-indigo-700",
-              "md:text-lg",
-              "w-full"
-            )}
-          >
-            Bookmarks
-          </Link>
-        </div>
+
+      <div className={clsx("flex", "flex-col", "md:flex-row", "gap-2", "md:gap-8", "mt-8")}>
+        <Button href={Routes.FeedsRSSPage()} variant="primary" size="lg" className="grow">
+          News Feed
+        </Button>
+
+        <Button href={Routes.FeedsReadingPage()} variant="secondary" size="lg" className="grow">
+          Bookmarks
+        </Button>
       </div>
     </div>
   )
