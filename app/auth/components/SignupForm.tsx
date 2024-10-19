@@ -1,6 +1,8 @@
 import { Routes } from "@blitzjs/next"
 import { useMutation } from "@blitzjs/rpc"
 import Link from "next/link"
+import { useRouter } from "next/router"
+import { getRedirectionParameters } from "../redirection"
 import signup from "app/auth/mutations/signup"
 import { Signup } from "app/auth/validations"
 import { Form, FORM_ERROR } from "app/core/components/Form"
@@ -12,10 +14,11 @@ type SignupFormProps = {
 
 export const SignupForm = (props: SignupFormProps) => {
   const [signupMutation] = useMutation(signup)
+  const router = useRouter()
+  const loginParameters = getRedirectionParameters(router)
 
   return (
     <div>
-      {" "}
       <Form
         submitText="Create Account"
         schema={Signup}
@@ -41,7 +44,7 @@ export const SignupForm = (props: SignupFormProps) => {
         />
       </Form>
       <div className="mt-4">
-        Or <Link href={Routes.LoginPage()}>Log In</Link>
+        Or <Link href={Routes.LoginPage(loginParameters)}>Log In</Link>
       </div>
     </div>
   )

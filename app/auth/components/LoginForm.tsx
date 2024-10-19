@@ -2,6 +2,8 @@ import { AuthenticationError, PromiseReturnType } from "blitz"
 import { Routes } from "@blitzjs/next"
 import { useMutation } from "@blitzjs/rpc"
 import Link from "next/link"
+import { useRouter } from "next/router"
+import { getRedirectionPath } from "../redirection"
 import login from "app/auth/mutations/login"
 import { Login } from "app/auth/validations"
 import { Form, FORM_ERROR } from "app/core/components/Form"
@@ -13,6 +15,14 @@ type LoginFormProps = {
 
 export const LoginForm = (props: LoginFormProps) => {
   const [loginMutation] = useMutation(login)
+  const router = useRouter()
+
+  let redirect: { next: string } | undefined
+  if (router.query.next) {
+    redirect = { next: getRedirectionPath(router.query.next) }
+  } else if (router.pathname !== Routes.LoginPage().pathname) {
+    redirect = { next: router.pathname }
+  }
 
   return (
     <div>
@@ -46,7 +56,7 @@ export const LoginForm = (props: LoginFormProps) => {
       </Form>
 
       <div className="mt-4">
-        Or <Link href={Routes.SignupPage()}>Sign Up</Link>
+        Or <Link href={Routes.SignupPage(redirect)}>Sign Up</Link>
       </div>
     </div>
   )

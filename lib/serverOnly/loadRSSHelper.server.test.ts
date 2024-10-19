@@ -135,6 +135,7 @@ describe("loadRSSHelpers#getTitleAndTTLFromFeed works as expected", () => {
 
     const [receivedTitle, receivedTTL] = await getTitleAndTTLFromFeed("url")
 
+    // eslint-disable-next-line no-magic-numbers
     expect(receivedTTL).toBe(40)
     expect(receivedTitle).toBe("title")
   })
@@ -161,7 +162,7 @@ describe("loadRSSHelpers#getTitleAndTTLFromFeed works as expected", () => {
 describe("loadRRSHelpers#loadFeed works as expected", () => {
   test("throws error for missing ctx", () => {
     return expect(loadFeed({} as Feed, false, undefined as unknown as Ctx)).rejects.toEqual(
-      new Error("Missing ctx info")
+      new Error("Missing ctx info"),
     )
   })
 
@@ -185,7 +186,7 @@ describe("loadRRSHelpers#loadFeed works as expected", () => {
     return expect(
       loadFeed({} as Feed, false, {
         session: { $authorize: () => true, $isAuthorized: () => true },
-      } as unknown as Ctx)
+      } as unknown as Ctx),
     ).resolves.toMatchObject({ status: LoadFeedStatus.ERROR })
   })
 
@@ -209,7 +210,7 @@ describe("loadRRSHelpers#loadFeed works as expected", () => {
     return expect(
       loadFeed({} as Feed, false, {
         session: { $authorize: () => true, $isAuthorized: () => true },
-      } as unknown as Ctx)
+      } as unknown as Ctx),
     ).resolves.toMatchObject({ status: LoadFeedStatus.SKIPPED })
   })
 
@@ -220,8 +221,8 @@ describe("loadRRSHelpers#loadFeed works as expected", () => {
         false,
         {
           session: { $authorize: () => true, $isAuthorized: () => true },
-        } as unknown as Ctx
-      )
+        } as unknown as Ctx,
+      ),
     ).resolves.toMatchObject({ status: LoadFeedStatus.SKIPPED })
   })
 
@@ -232,7 +233,7 @@ describe("loadRRSHelpers#loadFeed works as expected", () => {
     return expect(
       loadFeed({} as Feed, false, {
         session: { $authorize: () => true, $isAuthorized: () => true },
-      } as unknown as Ctx)
+      } as unknown as Ctx),
     ).resolves.toMatchObject({ status: LoadFeedStatus.ERROR })
   })
 
@@ -249,7 +250,7 @@ describe("loadRRSHelpers#loadFeed works as expected", () => {
     return expect(
       loadFeed({} as Feed, false, {
         session: { $authorize: () => true, $isAuthorized: () => true },
-      } as unknown as Ctx)
+      } as unknown as Ctx),
     ).resolves.toMatchObject({ status: LoadFeedStatus.ERROR })
   })
 })

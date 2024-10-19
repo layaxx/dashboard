@@ -57,7 +57,8 @@ const RSSPreviewPage: BlitzPage = () => {
     ).finally(() => setIsLoading(false))
   }
 
-  console.log("feedEntries", feedEntries)
+  // eslint-disable-next-line no-console
+  console.debug({ feedEntries })
 
   return (
     <>

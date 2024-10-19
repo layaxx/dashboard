@@ -4,7 +4,7 @@ import { FeedLoadEvent } from "db"
 
 const FeedErrors: React.FC<{ errors: FeedLoadEvent[] }> = ({ errors }) => {
   if (errors.length === 0) {
-    return <p>Great, there have been not errors with this feed in the past!</p>
+    return <p>Great, there have been no errors with this feed in the past!</p>
   }
 
   return (

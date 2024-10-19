@@ -69,24 +69,18 @@ const handler: NextApiHandler = async (request, response: ResponseWithSession) =
   let items: Feedentry[] = []
   try {
     items = (parsedFeed.entries?.map((item) => convertItem(item, { url, id: -1 })) ?? []).map(
-      ({ id, link, summary, text, title, feedId }, index) => {
-        if (index === 0) {
-          console.log({ text, after: cleanXSS(text) })
-        }
-
-        return {
-          id,
-          link,
-          summary: cleanXSS(summary),
-          text: cleanXSS(text),
-          title: cleanXSS(title),
-          feedId,
-          isArchived: false,
-          updatedAt: new Date(),
-          createdAt: new Date(),
-          preXSSHash: "",
-        }
-      },
+      ({ id, link, summary, text, title, feedId }) => ({
+        id,
+        link,
+        summary: cleanXSS(summary),
+        text: cleanXSS(text),
+        title: cleanXSS(title),
+        feedId,
+        isArchived: false,
+        updatedAt: new Date(),
+        createdAt: new Date(),
+        preXSSHash: "",
+      }),
     )
   } catch {
     const message = "Failed to process items for url " + url

@@ -38,6 +38,7 @@ const Layout: BlitzLayout<{ title?: string; heading: string; children: React.Rea
           </h1>
           <nav className="mt-4">
             {router.asPath
+              .replace(/\?.*/, "")
               .split("/")
               .filter((element, index) => index === 0 || element)
               .map((element, index, array) => {

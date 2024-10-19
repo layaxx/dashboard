@@ -60,3 +60,4 @@ Dockerfile.*
 
 **/*git-ignore*
 lib/config/version.ts
+dump.psql

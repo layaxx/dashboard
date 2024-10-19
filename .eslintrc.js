@@ -13,7 +13,7 @@ module.exports = {
     "no-eval": "error",
     "no-implied-eval": "error",
     "no-lonely-if": "error",
-    "no-magic-numbers": ["warn", { ignoreDefaultValues: true, ignore: [-1, 0, 1, 2] }],
+    "no-magic-numbers": ["warn", { ignoreDefaultValues: true, ignore: [-1, 0, 1, 2, 100] }],
     "no-nested-ternary": "warn",
     "no-unneeded-ternary": "warn",
     "no-unused-expressions": "error",
