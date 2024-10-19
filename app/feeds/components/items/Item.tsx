@@ -56,14 +56,14 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
     replace: (domNode) => {
       if (domNode instanceof Element && domNode.attribs.href && domNode.name === "a") {
         domNode.attribs = { target: "_blank", rel: "noopener", href: domNode.attribs.href }
-        if (domNode.attribs.href?.startsWith("/")) {
+        if (domNode.attribs.href?.startsWith("/") && !domNode.attribs.href?.startsWith("//")) {
           let basePath = ""
           try {
             basePath = new URL(item.link).origin
           } catch {
             console.error("Failed to get base path")
           }
-          console.info(`Prepending base path "${basePath}" to "${domNode.attribs.href}"`)
+          console.warn(`Prepending base path "${basePath}" to "${domNode.attribs.href}"`)
           domNode.attribs.href = basePath + domNode.attribs.href
         }
         return domNode
