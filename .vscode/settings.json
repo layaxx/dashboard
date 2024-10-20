@@ -39,5 +39,6 @@
   },
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "makefile.configureOnOpen": false
 }

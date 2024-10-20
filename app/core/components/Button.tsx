@@ -52,10 +52,6 @@ const Button = ({
     rounded = context
   }
 
-  if (!["md"].includes(size)) {
-    console.error("This button size is not yet implemented", size)
-  }
-
   return (
     <Wrapper>
       <button
