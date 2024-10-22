@@ -20,6 +20,7 @@ export interface FormProps<S extends z.ZodType<any, any>>
   onSubmit: FinalFormProps<z.infer<S>>["onSubmit"]
   initialValues?: FinalFormProps<z.infer<S>>["initialValues"]
   submitIcon?: ReactChild
+  keepDirtyOnReinitialize?: boolean
 }
 
 export function Form<S extends z.ZodType<any, any>>({
@@ -32,6 +33,7 @@ export function Form<S extends z.ZodType<any, any>>({
   resetText,
   deleteText,
   onDelete,
+  keepDirtyOnReinitialize = false,
   ...props
 }: FormProps<S>) {
   return (
@@ -39,6 +41,7 @@ export function Form<S extends z.ZodType<any, any>>({
       initialValues={initialValues}
       validate={validateZodSchema(schema)}
       onSubmit={onSubmit}
+      keepDirtyOnReinitialize={keepDirtyOnReinitialize}
       render={({ handleSubmit, form, submitting, submitError }) => {
         return (
           <form onSubmit={handleSubmit} {...props}>

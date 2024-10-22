@@ -1,19 +1,35 @@
 import { NotFoundError } from "blitz"
-import { Suspense, useState } from "react"
+import { Suspense, useRef, useState } from "react"
 import { BlitzPage, ErrorBoundary } from "@blitzjs/next"
 import clsx from "clsx"
+import dynamic from "next/dynamic"
 import Form from "app/core/components/Form"
 import Loader from "app/core/components/Loader"
+import SkeletonButton from "app/core/components/SkeletonButton"
 import TextFieldWithButton from "app/core/components/TextFieldWithButton"
 import Layout from "app/core/layouts/Layout"
 import LectureSearch from "app/univis/components/LectureSearch"
 
+export const LOCALSTORAGE_UNIVIS = "univis-searchTerms"
+const MAX_SEARCH_TERMS = 10
+
+const PastSearchTermsClient = dynamic(() => import("app/univis/components/PastSearchTerms"), {
+  ssr: false,
+  loading: () => (
+    <div className={clsx("flex", "gap-x-4")}>
+      {Array.from({ length: 3 }, (_, index) => index).map((key) => (
+        <SkeletonButton key={key} />
+      ))}
+    </div>
+  ),
+})
+
 const UnivisWrapper: BlitzPage = () => {
   const [searchText, setSearchText] = useState("")
+  const searchTerms = useRef<string[]>([])
 
   return (
     <div className={clsx("sm:text-center", "lg:text-left", "w-full")}>
-      <h1 className={clsx("font-bold", "mb-4", "text-2xl")}>UniVis Wrapper</h1>
       <p className="mb-4">
         This is a wrapper for the UniVis page of Otto-Friedrich Universität Bamberg with a focus on
         (mobile) usability.
@@ -22,14 +38,26 @@ const UnivisWrapper: BlitzPage = () => {
       <Form
         onSubmit={async (values) => {
           setSearchText(values.lecture)
+          if (!values.lecture) return
+
+          if (!Array.isArray(searchTerms.current)) searchTerms.current = []
+          const terms = searchTerms.current
+          if (!terms.includes(values.lecture)) {
+            if (terms.length >= MAX_SEARCH_TERMS) terms.pop()
+            terms.unshift(values.lecture)
+          }
+          window.localStorage.setItem(LOCALSTORAGE_UNIVIS, JSON.stringify(terms))
         }}
         initialValues={{ lecture: "" }}
+        keepDirtyOnReinitialize
       >
         <TextFieldWithButton
           name="lecture"
           label="Name of the lecture"
-          button={{ value: "search" }}
+          button={{ value: "search", type: "submit" }}
         />
+
+        <PastSearchTermsClient termsRef={searchTerms} />
       </Form>
 
       <ErrorBoundary
@@ -43,6 +71,12 @@ const UnivisWrapper: BlitzPage = () => {
         <Suspense fallback={<Loader />}>
           <LectureSearch searchTerm={searchText} />
         </Suspense>
+        {!searchText && (
+          <p className="mt-4">
+            You can start by typing (part of) the name of any event from UnivIS (such as lectures,
+            seminars, projects, etc.) in the search bar below or press one of the suggestions.
+          </p>
+        )}
       </ErrorBoundary>
     </div>
   )
