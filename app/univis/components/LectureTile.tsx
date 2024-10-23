@@ -24,7 +24,7 @@ const LectureTile: React.FC<{ lecture: Lecture; roomMap: Map<string, Room> }> = 
         ? dayjs(term.startdate).format("DD.MM.YY")
         : `${dayjs(term.startdate).format("DD.MM")} - ${dayjs(term.enddate).format("DD.MM.YY")}`
     } else {
-      const weekdayString = term?.repeat.split(" ").at(-1)
+      const weekdayString = term?.repeat?.split(" ").at(-1)
       const weekdayNumber = Number(weekdayString)
       date = dayjs().weekday(weekdayNumber).format("ddd")
     }

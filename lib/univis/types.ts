@@ -24,7 +24,7 @@ export type Term = {
   enddate?: string
   starttime?: string
   endtime?: string
-  repeat: string
+  repeat?: string
   room?: Room
 }
 

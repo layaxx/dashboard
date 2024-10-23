@@ -66,7 +66,8 @@ const UnivisWrapper: BlitzPage = () => {
       <ErrorBoundary
         fallbackRender={({ error }) => {
           console.error(error)
-          if (error instanceof NotFoundError) return <p>No lectures found</p>
+          if (error instanceof NotFoundError)
+            return <p className={clsx("font-bold", "mt-2")}>No lectures found</p>
           return <p>An Error occurred</p>
         }}
         resetKeys={[searchText]}
