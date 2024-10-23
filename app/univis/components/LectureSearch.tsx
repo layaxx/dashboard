@@ -19,6 +19,7 @@ const LectureSearch: React.FC<{ searchTerm: string }> = ({ searchTerm }) => {
       cacheTime,
     },
   )
+  console.log(result)
 
   const roomMap = new Map<string, Room>()
   if (result?.rooms) {
@@ -32,13 +33,9 @@ const LectureSearch: React.FC<{ searchTerm: string }> = ({ searchTerm }) => {
       {result?.lectures && result.lectures.length > 0 && (
         <>
           <h3 className={clsx("font-bold", "text-2xl")}>{result.lectures.length} lectures found</h3>
-          <div className={clsx("gap-x-4", "gap-y-8", "grid", "md:grid-cols-2")}>
+          <div className={clsx("gap-x-4", "gap-y-2", "md:gap-y-8", "grid", "md:grid-cols-2")}>
             {result.lectures.map((lecture) => (
-              <LectureTile
-                key={lecture._key}
-                lecture={lecture}
-                room={roomMap.get(lecture.terms?.term.room?.UnivISRef._key ?? "invalid")}
-              />
+              <LectureTile key={lecture._key} lecture={lecture} roomMap={roomMap} />
             ))}
           </div>
         </>

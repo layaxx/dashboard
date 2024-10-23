@@ -1,6 +1,7 @@
 import { NotFoundError } from "blitz"
 import { resolver } from "@blitzjs/rpc"
 import { UnivISClient } from "univis-api"
+import { Room } from "univis-api/dist/tsc/types"
 import { z } from "zod"
 import { Lecture } from "lib/univis/types"
 
@@ -16,5 +17,11 @@ export default resolver.pipe(resolver.zod(Input), async ({ lecture }) => {
 
   if (!lectures) throw new NotFoundError("No lectures found")
 
-  return { lectures, rooms: response.UnivIS.Room }
+  let rooms: Room[]
+  if (!response.UnivIS.Room) {
+    rooms = []
+  } else {
+    rooms = Array.isArray(response.UnivIS.Room) ? response.UnivIS.Room : [response.UnivIS.Room]
+  }
+  return { lectures: Array.isArray(lectures) ? lectures : [lectures], rooms }
 })

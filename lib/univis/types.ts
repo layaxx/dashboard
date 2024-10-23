@@ -19,15 +19,17 @@ type Room = {
   UnivISRef: UnivISReference
 }
 
-type Term = {
-  endtime: string
+export type Term = {
+  startdate?: string
+  enddate?: string
+  starttime?: string
+  endtime?: string
   repeat: string
   room?: Room
-  starttime: string
 }
 
 type Terms = {
-  term: Term
+  term: Term | Term[]
 }
 
 export type Lecture = {

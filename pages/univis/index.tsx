@@ -4,11 +4,11 @@ import { BlitzPage, ErrorBoundary } from "@blitzjs/next"
 import clsx from "clsx"
 import dynamic from "next/dynamic"
 import Form from "app/core/components/Form"
-import Loader from "app/core/components/Loader"
 import SkeletonButton from "app/core/components/SkeletonButton"
 import TextFieldWithButton from "app/core/components/TextFieldWithButton"
 import Layout from "app/core/layouts/Layout"
 import LectureSearch from "app/univis/components/LectureSearch"
+import LectureSearchSkeleton from "app/univis/components/LectureSearchSkeleton"
 
 export const LOCALSTORAGE_UNIVIS = "univis-searchTerms"
 const MAX_SEARCH_TERMS = 10
@@ -68,7 +68,7 @@ const UnivisWrapper: BlitzPage = () => {
         }}
         resetKeys={[searchText]}
       >
-        <Suspense fallback={<Loader />}>
+        <Suspense fallback={<LectureSearchSkeleton />}>
           <LectureSearch searchTerm={searchText} />
         </Suspense>
         {!searchText && (
