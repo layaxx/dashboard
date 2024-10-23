@@ -45,6 +45,9 @@ const UnivisWrapper: BlitzPage = () => {
           if (!terms.includes(values.lecture)) {
             if (terms.length >= MAX_SEARCH_TERMS) terms.pop()
             terms.unshift(values.lecture)
+          } else if (terms.at(0) !== values.lecture) {
+            terms.splice(terms.indexOf(values.lecture), 1)
+            terms.unshift(values.lecture)
           }
           window.localStorage.setItem(LOCALSTORAGE_UNIVIS, JSON.stringify(terms))
         }}

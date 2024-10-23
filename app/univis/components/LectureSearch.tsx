@@ -19,7 +19,6 @@ const LectureSearch: React.FC<{ searchTerm: string }> = ({ searchTerm }) => {
       cacheTime,
     },
   )
-  console.log(result)
 
   const roomMap = new Map<string, Room>()
   if (result?.rooms) {
