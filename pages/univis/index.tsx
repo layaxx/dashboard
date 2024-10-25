@@ -10,7 +10,7 @@ import Layout from "app/core/layouts/Layout"
 import LectureSearch from "app/univis/components/LectureSearch"
 import LectureSearchSkeleton from "app/univis/components/LectureSearchSkeleton"
 
-export const LOCALSTORAGE_UNIVIS = "univis-searchTerms"
+const LOCALSTORAGE_UNIVIS_LECTURES = "univis-searchTerms"
 const MAX_SEARCH_TERMS = 10
 
 const PastSearchTermsClient = dynamic(() => import("app/univis/components/PastSearchTerms"), {
@@ -36,31 +36,35 @@ const UnivisWrapper: BlitzPage = () => {
       </p>
 
       <Form
-        onSubmit={async (values) => {
-          setSearchText(values.lecture)
-          if (!values.lecture) return
+        onSubmit={async (values: { searchTerm: string }) => {
+          setSearchText(values.searchTerm)
+          if (!values.searchTerm) return
 
           if (!Array.isArray(searchTerms.current)) searchTerms.current = []
           const terms = searchTerms.current
-          if (!terms.includes(values.lecture)) {
+          if (!terms.includes(values.searchTerm)) {
             if (terms.length >= MAX_SEARCH_TERMS) terms.pop()
-            terms.unshift(values.lecture)
-          } else if (terms.at(0) !== values.lecture) {
-            terms.splice(terms.indexOf(values.lecture), 1)
-            terms.unshift(values.lecture)
+            terms.unshift(values.searchTerm)
+          } else if (terms.at(0) !== values.searchTerm) {
+            terms.splice(terms.indexOf(values.searchTerm), 1)
+            terms.unshift(values.searchTerm)
           }
-          window.localStorage.setItem(LOCALSTORAGE_UNIVIS, JSON.stringify(terms))
+          window.localStorage.setItem(LOCALSTORAGE_UNIVIS_LECTURES, JSON.stringify(terms))
         }}
         initialValues={{ lecture: "" }}
         keepDirtyOnReinitialize
       >
         <TextFieldWithButton
-          name="lecture"
+          name="searchTerm"
           label="Name of the lecture"
           button={{ value: "search", type: "submit" }}
         />
 
-        <PastSearchTermsClient termsRef={searchTerms} />
+        <PastSearchTermsClient
+          termsRef={searchTerms}
+          localStorageKey={LOCALSTORAGE_UNIVIS_LECTURES}
+          fallback={["xai", "uixd", "swe"]}
+        />
       </Form>
 
       <ErrorBoundary
