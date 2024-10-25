@@ -2,10 +2,24 @@ import clsx from "clsx"
 import dayjs from "dayjs"
 import weekday from "dayjs/plugin/weekday"
 import he from "he"
+import Link from "next/link"
 import { Room } from "univis-api/dist/tsc/types"
 import { Lecture, Term } from "lib/univis/types"
 
 dayjs.extend(weekday)
+
+const RenderRoom: React.FC<{ room: Room }> = ({ room }) => {
+  return (
+    <>
+      {" - "}
+      <Link href={`/univis/room/${room.id}`} className="underline">
+        {room.name && room.short && room.name !== room.short
+          ? `${he.decode(room.name)} (${he.decode(room.short)})`
+          : `${he.decode(room.short ?? room.name ?? "unknown room")}`}
+      </Link>
+    </>
+  )
+}
 
 const LectureTile: React.FC<{ lecture: Lecture; roomMap: Map<string, Room> }> = ({
   lecture,
@@ -13,9 +27,9 @@ const LectureTile: React.FC<{ lecture: Lecture; roomMap: Map<string, Room> }> = 
 }) => {
   const convertTerm = (
     term: Term | undefined,
-  ): { date: string; startTime?: string; endTime?: string; room: string } => {
+  ): { date: string; startTime?: string; endTime?: string; room?: Room } => {
     if (!term) {
-      return { date: "unknown date", room: "unknown room" }
+      return { date: "unknown date" }
     }
 
     let date: string = "unknown date"
@@ -30,20 +44,12 @@ const LectureTile: React.FC<{ lecture: Lecture; roomMap: Map<string, Room> }> = 
     }
 
     const room = roomMap.get(term?.room?.UnivISRef._key ?? "invalid")
-    let roomString
-    if (!room) {
-      roomString = "unknown room"
-    } else {
-      roomString =
-        room.name && room.short && room.name !== room.short
-          ? `${he.decode(room.name)} (${he.decode(room.short)})`
-          : `${he.decode(room.short ?? room.name ?? "unknown room")}`
-    }
+
     return {
       date,
       startTime: term?.starttime,
       endTime: term?.endtime,
-      room: roomString,
+      room,
     }
   }
 
@@ -58,7 +64,8 @@ const LectureTile: React.FC<{ lecture: Lecture; roomMap: Map<string, Room> }> = 
       </h4>
       {entries.map(({ date, startTime, endTime, room }) => (
         <p key={date + room}>
-          {date}, {startTime ?? "unknown time"}-{endTime ?? "unknown time"} - {room}
+          {date}, {startTime ?? "unknown time"}-{endTime ?? "unknown time"}
+          {room && <RenderRoom room={room} />}
         </p>
       ))}
     </div>

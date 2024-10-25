@@ -78,7 +78,7 @@ const UnivisWrapper: BlitzPage = () => {
         {!searchText && (
           <p className="mt-4">
             You can start by typing (part of) the name of any event from UnivIS (such as lectures,
-            seminars, projects, etc.) in the search bar below or press one of the suggestions.
+            seminars, projects, etc.) in the search bar above or press one of the suggestions.
           </p>
         )}
       </ErrorBoundary>
