@@ -11,16 +11,17 @@ type Props = { room: Room }
 const UnivisRoomPage: BlitzPage<Props> = ({ room }) => {
   return (
     <div className={clsx("sm:text-center", "lg:text-left", "w-full")}>
-      <p className="mb-4">
-        This is a wrapper for the UniVis page of Otto-Friedrich Universität Bamberg with a focus on
-        (mobile) usability.
-      </p>
-
       <h2 className={clsx("font-bold", "text-2xl")}>
         {he.decode(room.name)} ({he.decode(room.short)})
       </h2>
 
       <p>Capacity: {room.size ?? "unknown"}</p>
+
+      <iframe
+        // eslint-disable-next-line tailwindcss/no-arbitrary-value
+        className={clsx("h-[87rem]", "w-full")}
+        src={`https://univis.uni-bamberg.de/prg?search=rooms&show=plan&name=${room.short}`}
+      ></iframe>
     </div>
   )
 }
