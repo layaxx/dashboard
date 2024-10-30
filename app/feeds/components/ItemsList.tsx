@@ -24,7 +24,10 @@ export const ItemsList = () => {
   const [settings] = useQuery(
     getFeedoption,
     { id: activeFeedID! },
-    { enabled: !!activeFeedID, placeholderData: defaultOptions },
+    {
+      enabled: !!activeFeedID && ![ALL_FEEDS_ID, RECENTLY_READ_ID].includes(activeFeedID),
+      placeholderData: defaultOptions,
+    },
   )
 
   const orderBy: { createdAt: "asc" | "desc" } = {
