@@ -8,7 +8,7 @@
     "build": "blitz build",
     "start": "blitz start",
     "studio": "blitz prisma studio",
-    "lint": "tsc && eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
+    "lint": "tsc && eslint --ignore-path .gitignore --ext .js,.ts,.tsx . && blitz prisma format --check",
     "test": "jest",
     "test:watch": "jest --watch",
     "prepare": "husky",

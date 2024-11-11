@@ -1,6 +1,7 @@
-import { FeedEntryOrdering } from "db"
+import { FeedEntryOrdering, Feedoption, ImageHandling } from "db"
 
-export const defaultOptions: { expand: boolean; ordering: FeedEntryOrdering } = {
+export const defaultOptions: Omit<Feedoption, "id" | "createdAt" | "updatedAt"> = {
   expand: false,
   ordering: FeedEntryOrdering.NEWEST_FIRST,
+  imageHandling: ImageHandling.NONE,
 }

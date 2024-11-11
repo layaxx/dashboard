@@ -66,12 +66,13 @@ model Feed {
 }
 
 model Feedoption {
-  id        Int               @id
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
-  expand    Boolean           @default(false)
-  ordering  FeedEntryOrdering @default(NEWEST_FIRST)
-  feed      Feed              @relation(fields: [id], references: [id])
+  id            Int               @id
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  expand        Boolean           @default(false)
+  ordering      FeedEntryOrdering @default(NEWEST_FIRST)
+  imageHandling ImageHandling     @default(NONE)
+  feed          Feed              @relation(fields: [id], references: [id])
 }
 
 model Readlistentry {
@@ -134,4 +135,10 @@ enum FeedEntryOrdering {
   OLDEST_FIRST
   NEWEST_FIRST
   RANDOM
+}
+
+enum ImageHandling {
+  NONE
+  SUPPRESS
+  LIMIT_HEIGHT_10
 }

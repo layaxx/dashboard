@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { setQueryData, useMutation } from "@blitzjs/rpc"
-import { Feedentry, Feedoption } from "@prisma/client"
+import { Feedentry, Feedoption, ImageHandling } from "@prisma/client"
 import clsx from "clsx"
 import parse, { HTMLReactParserOptions, Element } from "html-react-parser"
 import ItemControls from "./ItemControls"
@@ -11,7 +11,7 @@ import getFeeds from "app/feeds/queries/getFeeds"
 
 type ItemProps = {
   item: Feedentry
-  settings: Pick<Feedoption, "expand">
+  settings: Pick<Feedoption, "expand" | "imageHandling">
   skipOffset?: React.MutableRefObject<number>
 }
 
@@ -54,6 +54,18 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
 
   const options: HTMLReactParserOptions = {
     replace: (domNode) => {
+      if (
+        settings.imageHandling !== ImageHandling.NONE &&
+        domNode instanceof Element &&
+        domNode.name === "img"
+      ) {
+        if (settings.imageHandling === ImageHandling.SUPPRESS) {
+          return <></>
+        } else if (settings.imageHandling === ImageHandling.LIMIT_HEIGHT_10) {
+          domNode.attribs.className = "h-40 my-0"
+          return domNode
+        }
+      }
       if (domNode instanceof Element && domNode.attribs.href && domNode.name === "a") {
         domNode.attribs = { target: "_blank", rel: "noopener", href: domNode.attribs.href }
         if (domNode.attribs.href?.startsWith("/") && !domNode.attribs.href?.startsWith("//")) {
