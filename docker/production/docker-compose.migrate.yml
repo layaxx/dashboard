@@ -1,0 +1,21 @@
+version: "3"
+
+name: dashboard-prod
+services:
+  app:
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  migrate:
+    build:
+      context: ../../
+      dockerfile: docker/production/migrate/Dockerfile
+    env_file: ../../.env.production.local
+    networks:
+      - backend
+    restart: "no"
+    depends_on:
+      db:
+        condition: service_healthy
+    entrypoint: ["yarn", "blitz", "prisma", "migrate", "deploy"]
