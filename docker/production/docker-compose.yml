@@ -25,7 +25,7 @@ services:
     image: postgres:12.4-alpine
     env_file: ../../.env.production.local
     healthcheck:
-      test: ["CMD", "pg_isready"]
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
       timeout: 5s
       interval: 10s
       retries: 5
