@@ -9,11 +9,11 @@ dayjs.extend(relativeTime)
 
 const ListElement = ({ text, isError }: { text: string; isError?: boolean }) => {
   return (
-    <li className="flex">
+    <li>
       <ExclamationTriangleIcon
-        className={clsx("h-6", isError ? "text-error" : "text-warning", "w-6")}
-      />{" "}
-      {text}
+        className={clsx("h-6", isError ? "text-error" : "text-warning", "inline", "mr-2", "w-6")}
+      />
+      <p className={clsx("break-words", "inline", "text-pretty")}>{text}</p>
     </li>
   )
 }
@@ -46,7 +46,8 @@ const StatusLoadItem: FC<StatusWithWarningsAndErrors> = ({
         "px-8",
         "py-4",
         "rounded-lg",
-        "shadow-lg"
+        "shadow-lg",
+        "w-full",
       )}
     >
       <div>
