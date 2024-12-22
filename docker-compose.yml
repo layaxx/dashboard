@@ -21,7 +21,7 @@ services:
       - backend
 
   dash-db:
-    image: postgres:12.4-alpine
+    image: postgres:17.2-alpine
     env_file: .env.local
     healthcheck:
       test: ["CMD", "pg_isready", "-q", "-d", "${POSTGRES_DB}", "-U", "${POSTGRES_USER}"]
