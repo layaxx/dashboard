@@ -970,10 +970,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@blitzjs/auth@2.0.9":
-  version "2.0.9"
-  resolved "https://registry.yarnpkg.com/@blitzjs/auth/-/auth-2.0.9.tgz#077982dfe92208190f87be7986c8a5ad8d0ae60b"
-  integrity sha512-JWc+NFfB1gY/PooY9Z+YYsBxM7VhoS+SC0K+tLizGRtkocO36rfQusSFJrzWM5G203ZPS6DXERr4rBO91mwAgA==
+"@blitzjs/auth@2.1.3":
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/@blitzjs/auth/-/auth-2.1.3.tgz#4dadfce65895b22924c52f8d6f5e785bc0d804f4"
+  integrity sha512-Q6VqeHr9pkA3/m4VjVRFQKMFeqITV2oJFOMCIVvJTEUsXoB9NO2aZKU0DvPrzhU5sd3Rnob15n0SPxHSLKKR3A==
   dependencies:
     "@types/b64-lite" "1.3.0"
     "@types/cookie-session" "2.0.44"
@@ -997,10 +997,10 @@
     supports-color "8.1.1"
     url "0.11.0"
 
-"@blitzjs/generator@2.0.9":
-  version "2.0.9"
-  resolved "https://registry.yarnpkg.com/@blitzjs/generator/-/generator-2.0.9.tgz#1ffb4a60d97940746899a08fc5a9c4131fe8376e"
-  integrity sha512-gTYQ0CzEgltlsB2S1EJIun6ksMFNSvWGZIPGYgq75/Whso892PzOz0zbCog033Npb2Ol67v/4kBsMQvLh0qQ0g==
+"@blitzjs/generator@2.1.3":
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/@blitzjs/generator/-/generator-2.1.3.tgz#83218f379ff03c7f8134addc697c5648fbacd15b"
+  integrity sha512-PStteR02V/Sd6FalmYy6tS6IB1grfcAPLlirJqURC3TSY3z9AIwvvhq0baelehJT0++Cq+1anksVmu1wDkgN0w==
   dependencies:
     "@babel/core" "7.12.10"
     "@babel/plugin-transform-typescript" "7.12.1"
@@ -1028,14 +1028,14 @@
     tslog "4.9.0"
     username "5.1.0"
     vinyl "2.2.1"
-    zod "3.20.2"
+    zod "3.23.8"
 
-"@blitzjs/next@2.0.9":
-  version "2.0.9"
-  resolved "https://registry.yarnpkg.com/@blitzjs/next/-/next-2.0.9.tgz#47018a746f004ee26c31f3826439d3237cfbf33c"
-  integrity sha512-+Gf4fHGakBzYxtGIl3R3RbDVW42MvmZWiIQ8uGlg+nakd2pMefo1sgi8zo5NmkfIHp0WvxFBZVM7E4Wa2k3jJw==
+"@blitzjs/next@2.1.3":
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/@blitzjs/next/-/next-2.1.3.tgz#58f9e63171b88dae44af0ce755a8d7faa88423b7"
+  integrity sha512-K4rAbTZ3ayxG9r9dZ/LfB/fttZqrAdHBPlowSsbd397bA9X1K/8erOESe1uR2RQD7w7jmCooCUKuKXWkQt6QOw==
   dependencies:
-    "@blitzjs/rpc" "2.0.9"
+    "@blitzjs/rpc" "2.1.3"
     "@types/hoist-non-react-statics" "3.3.1"
     copy-webpack-plugin "11.0.0"
     debug "4.3.3"
@@ -1044,10 +1044,10 @@
     superjson "1.11.0"
     supports-color "8.1.1"
 
-"@blitzjs/rpc@2.0.9":
-  version "2.0.9"
-  resolved "https://registry.yarnpkg.com/@blitzjs/rpc/-/rpc-2.0.9.tgz#40c1b6968253155df756c680ef90bc3967794c59"
-  integrity sha512-dPXL+Q7DMAYwp/DmTcBQoHbcjYcsRRtc+uN7lKuMOWkL+Q2l1+tZgufLsoqJB72JNB/63Ly5+pm/0LYHxRo+Gw==
+"@blitzjs/rpc@2.1.3":
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/@blitzjs/rpc/-/rpc-2.1.3.tgz#3009f27050b56a28e5816b58fd88e9f86ad1dbc9"
+  integrity sha512-y84PAq0amcqy0O8S7OnfFv1tl3reoe5lzlrUvqEsuyjTPUzbTMaq39v36C/IMREALAoHpuYM0v3MpPIA2Ht82w==
   dependencies:
     "@swc/core" "1.3.7"
     "@tanstack/react-query" "4.24.4"
@@ -1422,13 +1422,6 @@
   dependencies:
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
-
-"@mrleebo/prisma-ast@0.2.6":
-  version "0.2.6"
-  resolved "https://registry.yarnpkg.com/@mrleebo/prisma-ast/-/prisma-ast-0.2.6.tgz#654129c51fd0bcde4ab9be687e373bf8c3dd5a59"
-  integrity sha512-Df0gAGmws3sxNMmLviTarBL9znf84QVlVhlx4EPgArrnaVBy8tNQZAI9aSTJHzH0JGj9BVGa0Qz1g3hPt12Kxw==
-  dependencies:
-    chevrotain "^9.0.1"
 
 "@mrleebo/prisma-ast@0.4.1":
   version "0.4.1"
@@ -2778,13 +2771,13 @@ bl@^4.0.3:
     inherits "^2.0.4"
     readable-stream "^3.4.0"
 
-blitz@2.0.9:
-  version "2.0.9"
-  resolved "https://registry.yarnpkg.com/blitz/-/blitz-2.0.9.tgz#a81eb6a5690280f7d9d74c7c2153a645cbbf6605"
-  integrity sha512-oSRUI+ebC4PFMvJqPGd7pX8JNRM5jRTCRWt+HPvbPtO0ohs66pUbVkR47gI84Nlkm59/o4A5JkW1egNQmtzYVg==
+blitz@2.1.3:
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/blitz/-/blitz-2.1.3.tgz#776373db0a134a942b55ebb04a0f078d5590cc8b"
+  integrity sha512-oJEdrcPudDKRlHZ9aAral/DBtsCvQMwlcJR/vzYbNK25XzIhuXeybDLq1UNMnnx05nd5IdELdFGhNhKjroTYww==
   dependencies:
-    "@blitzjs/generator" "2.0.9"
-    "@mrleebo/prisma-ast" "0.2.6"
+    "@blitzjs/generator" "2.1.3"
+    "@mrleebo/prisma-ast" "0.4.1"
     "@types/global-agent" "2.1.1"
     arg "5.0.1"
     ast-types "0.14.2"
@@ -9711,11 +9704,6 @@ yoga-layout-prebuilt@^1.9.6:
   integrity sha512-YnOmtSbv4MTf7RGJMK0FvZ+KD8OEe/J5BNnR0GHhD8J/XcG/Qvxgszm0Un6FTHWW4uHlTgP0IztiXQnGyIR45g==
   dependencies:
     "@types/yoga-layout" "1.9.2"
-
-zod@3.20.2:
-  version "3.20.2"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-3.20.2.tgz#068606642c8f51b3333981f91c0a8ab37dfc2807"
-  integrity sha512-1MzNQdAvO+54H+EaK5YpyEy0T+Ejo/7YLHS93G3RnYWh5gaotGHwGeN/ZO687qEDU2y4CdStQYXVHIgrUl5UVQ==
 
 zod@3.23.8:
   version "3.23.8"
