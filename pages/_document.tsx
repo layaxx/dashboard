@@ -1,3 +1,4 @@
+import clsx from "clsx"
 import Document, { Html, Head, Main, NextScript } from "next/document"
 import { BlitzProvider } from "app/blitz-client"
 
@@ -12,7 +13,7 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head />
-        <body>
+        <body className={clsx("dark:bg-slate-800", "dark:text-gray-400", "text-gray-900")}>
           <BlitzProvider>
             <Main />
             <NextScript />

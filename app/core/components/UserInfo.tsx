@@ -31,7 +31,7 @@ const UserInfo = () => {
   )
 
   return (
-    <div className={clsx("flex", "h-10")}>
+    <div className={clsx("flex", "h-10", "dark:text-gray-300")}>
       <span className={clsx("font-bold", "w-1/2")}>{message}</span>
       <div className={clsx("flex", "h-10", "justify-between", "pl-3", "w-1/2")}>{buttons}</div>
     </div>
