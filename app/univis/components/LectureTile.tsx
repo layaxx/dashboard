@@ -58,7 +58,18 @@ const LectureTile: React.FC<{ lecture: Lecture; roomMap: Map<string, Room> }> = 
     : [convertTerm(lecture.terms?.term)]
 
   return (
-    <div className={clsx("border-purple-700", "border-t-4", "p-2", "rounded", "shadow-md")}>
+    <div
+      className={clsx(
+        "dark:bg-slate-700",
+        "border-purple-700",
+        "dark:border-purple-800",
+        "border-t-4",
+        "p-2",
+        "rounded",
+        "shadow-md",
+        "dark:text-slate-300",
+      )}
+    >
       <h4 className={clsx("font-bold", "text-lg")}>
         {he.decode(lecture.name)} - ({he.decode(lecture.type)})
       </h4>
