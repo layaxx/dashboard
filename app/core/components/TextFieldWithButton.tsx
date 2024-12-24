@@ -47,13 +47,19 @@ export const TextFieldWithButton = forwardRef<HTMLInputElement, TextFieldWithBut
               ref={reference}
               className={clsx(
                 "appearance-none",
+                "dark:bg-slate-700",
                 "border-2",
                 (props.disabled || props["aria-disabled"]) && "border-gray-400",
-                !pristine && valid && "border-green-700",
-                pristine && !(props.disabled || props["aria-disabled"]) && "border-purple-700",
-                touched && normalizedError && "border-red-700",
+                !pristine && valid && ["border-green-700", "dark:border-green-800"],
+                pristine &&
+                  !(props.disabled || props["aria-disabled"]) && [
+                    "border-purple-700",
+                    "dark:border-purple-800",
+                  ],
+                touched && normalizedError && ["border-red-700", "dark:border-red-800"],
                 "border-solid",
                 (props.disabled || props["aria-disabled"]) && "cursor-not-allowed",
+                "dark:focus:outline-none",
                 "px-2",
                 "py-1",
                 "rounded-l",
