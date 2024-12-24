@@ -21,7 +21,15 @@ const Layout: BlitzLayout<{ title?: string; heading: string; children: React.Rea
       </Head>
 
       <header
-        className={clsx("bg-slate-600", "md:px-12", "px-8", "py-10", "md:py-12", "text-gray-200")}
+        className={clsx(
+          "bg-slate-600",
+          "dark:bg-slate-700",
+          "md:px-12",
+          "px-8",
+          "py-10",
+          "md:py-12",
+          "text-gray-200",
+        )}
       >
         <div className={clsx("max-w-screen-2xl", "mx-auto")}>
           <h1

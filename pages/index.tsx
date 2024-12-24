@@ -14,6 +14,7 @@ const Home: BlitzPage = () => {
           "lg:mx-0",
           "sm:mx-auto",
           "text-base",
+          "dark:text-gray-400",
           "text-gray-500",
           "sm:text-lg",
           "md:text-xl",
@@ -25,8 +26,19 @@ const Home: BlitzPage = () => {
         fallback={
           <div className={clsx("max-w-sm", "mx-auto", "w-full")}>
             <div className={clsx("animate-pulse", "flex", "space-x-4")}>
-              <div className={clsx("bg-slate-200", "h-4", "mt-1", "rounded", "w-6/12")}></div>
-              <div className={clsx("bg-slate-200", "h-10", "rounded", "w-6/12")}></div>
+              <div
+                className={clsx(
+                  "bg-slate-200",
+                  "dark:bg-slate-700",
+                  "h-4",
+                  "mt-1",
+                  "rounded",
+                  "w-6/12",
+                )}
+              />
+              <div
+                className={clsx("bg-slate-200", "dark:bg-slate-700", "h-10", "rounded", "w-6/12")}
+              />
             </div>
           </div>
         }

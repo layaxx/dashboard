@@ -13,6 +13,7 @@ const SkeletonRow = ({ size, className }: Props) => (
       clsx(
         "animate-pulse",
         "bg-slate-200",
+        "dark:bg-slate-700",
         size === "sm" && "h-4",
         (size === undefined || size === "md") && "h-6",
         size === "lg" && "h-8",
