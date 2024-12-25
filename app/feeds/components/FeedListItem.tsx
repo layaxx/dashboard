@@ -10,14 +10,15 @@ export const FeedListItemWrapper: FC<LIProps> = ({ children, className, ...props
       className={twMerge(
         clsx(
           "hover:bg-slate-200",
+          "dark:hover:bg-slate-800",
           "border-l-4",
           "border-transparent",
           "cursor-pointer",
           "flex",
           "pl-2",
-          "py-1"
+          "py-1",
         ),
-        className
+        className,
       )}
       {...props}
     >
@@ -29,8 +30,8 @@ export const FeedListItemWrapper: FC<LIProps> = ({ children, className, ...props
 export const FeedListItemBadge: FC<LIProps> = ({ children, className, ...props }) => (
   <span
     className={twMerge(
-      clsx("bg-primary", "font-bold", "px-3", "rounded-xl", "text-white"),
-      className
+      clsx("bg-primary", "dark:bg-violet-500", "font-bold", "px-3", "rounded-xl", "text-white"),
+      className,
     )}
     {...props}
   >
@@ -50,7 +51,7 @@ const FeedListItem = ({ title, unreadCount, onClick, isActive, id }: Props) => {
   const otherProps = id ? { id } : {}
   return (
     <FeedListItemWrapper
-      className={clsx(isActive && "border-primary")}
+      className={clsx(isActive && ["border-primary", "dark:border-purple-500"])}
       {...otherProps}
       onClick={onClick}
     >

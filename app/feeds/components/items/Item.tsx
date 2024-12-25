@@ -91,11 +91,13 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
   }
 
   return (
-    <div key={item.id} className="border-b-2">
+    <div key={item.id} className={clsx("border-b-2", "dark:border-slate-600")}>
       <div
         className={clsx(
           "bg-slate-100",
           "hover:bg-slate-200",
+          "dark:hover:bg-slate-700",
+          "dark:bg-slate-800",
           "cursor-pointer",
           "flex",
           "font-medium",
@@ -103,7 +105,7 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
           "px-2",
           "rounded-sm",
           "sticky",
-          hasBeenRead && "text-gray-600",
+          hasBeenRead && ["text-gray-600", "dark:text-gray-400"],
           "text-lg",
           "top-0",
         )}
@@ -124,6 +126,7 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
           <div
             className={clsx(
               "lg:border-l-2",
+              "dark:lg:border-slate-600",
               "flex",
               "lg:flex-col",
               "font-normal",
@@ -141,7 +144,16 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
             <ItemInformation item={item} />
           </div>
         </div>
-        <div className={clsx("border-l-2", "flex", "py-4", "shrink-0", "text-gray-400")}>
+        <div
+          className={clsx(
+            "border-l-2",
+            "dark:border-slate-600",
+            "flex",
+            "py-4",
+            "shrink-0",
+            "text-gray-400",
+          )}
+        >
           <ItemControls item={item} read={read} unread={unread} hasBeenRead={hasBeenRead} />
         </div>
       </div>
@@ -156,6 +168,7 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
             "prose",
             "lg:px-10",
             "px-2",
+            "dark:text-slate-200",
           )}
         >
           {content}

@@ -39,7 +39,11 @@ const DashboardLayout = ({ items, feeds }: Props) => {
         {/*  eslint-disable-next-line tailwindcss/no-arbitrary-value */}
         <div className={clsx("overflow-x-clip", hideNavbar ? "w-full" : "w-[calc(100%-24rem)]")}>
           {hideNavbar && <Header hideNavbar={hideNavbar} setHideNavbar={setHideNavbarHandler} />}
-          <main className={clsx("bg-slate-100", "h-full", "overflow-y-scroll")}>{items}</main>
+          <main
+            className={clsx("bg-slate-100", "dark:bg-slate-800", "h-full", "overflow-y-scroll")}
+          >
+            {items}
+          </main>
         </div>
       </div>
     </>

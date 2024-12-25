@@ -41,7 +41,10 @@ const Controls: FC = () => {
           Settings
         </Button>
 
-        <Button icon={<PlusCircleIcon className="text-success" />} href={Routes.FeedsAddPage()}>
+        <Button
+          icon={<PlusCircleIcon className={clsx("dark:text-green-600", "text-success")} />}
+          href={Routes.FeedsAddPage()}
+        >
           Add
         </Button>
       </ButtonGroup>
