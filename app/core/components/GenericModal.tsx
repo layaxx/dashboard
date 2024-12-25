@@ -62,6 +62,7 @@ const GenericModal: React.FC<IProps> = ({ cancelButton, confirmButton, icon, tit
           className={clsx(
             "align-bottom",
             "sm:align-middle",
+            "dark:bg-slate-800",
             "bg-white",
             "inline-block",
             "sm:max-w-lg",
@@ -74,7 +75,17 @@ const GenericModal: React.FC<IProps> = ({ cancelButton, confirmButton, icon, tit
             "sm:w-full",
           )}
         >
-          <div className={clsx("bg-white", "sm:p-6", "pb-4", "sm:pb-4", "pt-5", "px-4")}>
+          <div
+            className={clsx(
+              "dark:bg-slate-600",
+              "bg-white",
+              "sm:p-6",
+              "pb-4",
+              "sm:pb-4",
+              "pt-5",
+              "px-4",
+            )}
+          >
             <div className={clsx("sm:flex", "sm:items-start")}>
               {icon && (
                 <div
@@ -98,7 +109,13 @@ const GenericModal: React.FC<IProps> = ({ cancelButton, confirmButton, icon, tit
               )}
               <div className={clsx("sm:ml-4", "sm:mt-0", "mt-3", "text-center", "sm:text-left")}>
                 <h3
-                  className={clsx("font-medium", "leading-6", "text-gray-900", "text-lg")}
+                  className={clsx(
+                    "font-medium",
+                    "leading-6",
+                    "dark:text-gray-200",
+                    "text-gray-900",
+                    "text-lg",
+                  )}
                   id="modal-title"
                 >
                   {title}
@@ -110,6 +127,7 @@ const GenericModal: React.FC<IProps> = ({ cancelButton, confirmButton, icon, tit
           <div
             className={clsx(
               "bg-gray-50",
+              "dark:bg-slate-700",
               "sm:flex",
               "sm:flex-row-reverse",
               "px-4",

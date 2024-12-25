@@ -13,7 +13,7 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head />
-        <body className={clsx("dark:bg-slate-800", "dark:text-gray-400", "text-gray-900")}>
+        <body className={clsx("dark:bg-slate-800", "dark:text-gray-300", "text-gray-900")}>
           <BlitzProvider>
             <Main />
             <NextScript />

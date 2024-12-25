@@ -42,6 +42,7 @@ const FeedReordering: React.FC<Props> = ({ feeds, refetch }) => {
         {feedList.map((feed) => (
           <div
             className={clsx(
+              "dark:bg-slate-700",
               "bg-white",
               "border-purple-700",
               "border-solid",
@@ -58,7 +59,7 @@ const FeedReordering: React.FC<Props> = ({ feeds, refetch }) => {
             <div>
               <Link
                 href={Routes.FeedsSettingsPage({ id: feed.id })}
-                className={clsx("font-semibold", "text-gray-800", "text-xl")}
+                className={clsx("font-semibold", "text-gray-800", "dark:text-slate-300", "text-xl")}
               >
                 {feed.name}
               </Link>
