@@ -13,14 +13,14 @@ interface IProps extends Feed {
 }
 
 const SettingsItem: FC<IProps> = ({ id, url, name, lastLoad, loadIntervall, isActive }) => {
-  const classNameTH = "text-left font-bold text-slate-600 md:w-96 table-cell"
-  const classNameTD = "pl-4 text-left table-cell"
+  const classNameTH = "text-left font-bold text-slate-600 dark:text-slate-400 md:w-96 table-cell"
+  const classNameTD = "pl-4 text-left table-cell dark:text-slate-200"
   const classNameTableRow = "table-row"
 
   return (
     <div
       className={clsx(
-        isActive ? "bg-white" : "bg-red-100",
+        isActive ? ["bg-white", "dark:bg-slate-700"] : ["bg-red-100", "dark:bg-red-900"],
         "border-purple-700",
         "border-solid",
         "border-t-4",
@@ -38,7 +38,7 @@ const SettingsItem: FC<IProps> = ({ id, url, name, lastLoad, loadIntervall, isAc
         <div className={clsx("flex", "flex-row", "flex-wrap")}>
           <Link
             href={Routes.FeedsSettingsPage({ id })}
-            className={clsx("font-semibold", "text-gray-800", "text-xl")}
+            className={clsx("font-semibold", "text-gray-800", "dark:text-slate-300", "text-xl")}
           >
             {!isActive && "[inactive] "}
             {name}

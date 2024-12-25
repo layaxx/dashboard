@@ -61,9 +61,9 @@ const StatusLoadItem: FC<StatusWithWarningsAndErrors> = ({
         <h2 className={clsx("font-semibold", "text-3xl", "dark:text-gray-300", "text-gray-800")}>
           {dayjs(loadTime).format("DD.MM.YYYY - HH:mm")}
         </h2>
-        <h3>{dayjs(loadTime).fromNow()}</h3>
+        <h3 className="dark:text-gray-400">{dayjs(loadTime).fromNow()}</h3>
 
-        <table className={clsx("dark:text-slate-300", "w-full")}>
+        <table className="w-full">
           <tbody>
             <tr>
               <th className="text-left" scope="row">

@@ -24,7 +24,7 @@ const FormField: FC<FormFieldProps> = ({
   const labelContent = required
     ? [
         label,
-        <span key="required-indicator" className={"text-red-700"}>
+        <span key="required-indicator" className={clsx("border-red-700", "dark:border-red-800")}>
           *
         </span>,
       ]
@@ -43,7 +43,9 @@ const FormField: FC<FormFieldProps> = ({
             type === "checkbox" && "justify-between",
             "mt-4",
             labelProps?.className,
-            meta.dirty && !meta.valid && !meta.modifiedSinceLastSubmit && "text-error",
+            meta.dirty &&
+              !meta.valid &&
+              !meta.modifiedSinceLastSubmit && ["border-red-700", "dark:border-red-800"],
           )}
         >
           <span className="min-w-36">{labelContent}</span>
@@ -54,8 +56,11 @@ const FormField: FC<FormFieldProps> = ({
             placeholder={placeholder}
             className={clsx(
               inputProps?.className,
-              "border-b-2",
+              "dark:bg-slate-700",
               type === "checkbox" ? "w-4" : "grow",
+              "border-b-2",
+              "dark:border-slate-500",
+              "dark:text-gray-200",
               "text-right",
             )}
           />

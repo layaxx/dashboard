@@ -28,9 +28,9 @@ const StatusCleanItem: FC<StatusClean> = ({ time, duration }) => {
         <h2 className={clsx("font-semibold", "text-3xl", "text-gray-800", "dark:text-slate-300")}>
           {dayjs(time).format("DD.MM.YYYY - HH:mm")}
         </h2>
-        <h3>{dayjs(time).fromNow()}</h3>
+        <h3 className="dark:text-gray-400">{dayjs(time).fromNow()}</h3>
 
-        <table className={clsx("dark:text-slate-300", "w-full")}>
+        <table className="w-full">
           <tbody>
             <tr>
               <th className="text-left" scope="row">

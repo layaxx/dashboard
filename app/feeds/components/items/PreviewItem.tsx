@@ -35,10 +35,12 @@ const PreviewItem = ({ item, settings, removeEntry }: ItemProps) => {
   const sharedClassName = "hover:text-primary px-1 w-8"
 
   return (
-    <div key={item.id} className="border-b-2">
+    <div key={item.id} className={clsx("border-b-2", "dark:border-slate-600")}>
       <div
         className={clsx(
           "hover:bg-slate-100",
+          "dark:bg-slate-700",
+          "dark:hover:bg-slate-800",
           "bg-white",
           "cursor-pointer",
           "flex",
@@ -46,9 +48,9 @@ const PreviewItem = ({ item, settings, removeEntry }: ItemProps) => {
           "px-2",
           "rounded-sm",
           "sticky",
-          hasBeenRead && "text-gray-500",
+          hasBeenRead && ["text-gray-500", "dark:text-gray-500"],
           "text-lg",
-          "top-0"
+          "top-0",
         )}
       >
         <span
@@ -64,21 +66,33 @@ const PreviewItem = ({ item, settings, removeEntry }: ItemProps) => {
         <span
           className={clsx(
             "border-l-2",
+            "dark:border-slate-600",
             "flex",
             "flex-col",
             "font-normal",
             "my-auto",
             "px-2",
             "shrink-0",
+            "dark:text-gray-300",
             "text-gray-400",
             "text-right",
             "text-sm",
-            "w-16"
+            "w-16",
           )}
         >
           <ItemInformation item={item} />
         </span>
-        <span className={clsx("border-l-2", "flex", "py-4", "shrink-0", "text-gray-400")}>
+        <span
+          className={clsx(
+            "border-l-2",
+            "dark:border-slate-600",
+            "flex",
+            "py-4",
+            "shrink-0",
+            "dark:text-gray-300",
+            "text-gray-400",
+          )}
+        >
           <span className={sharedClassName} onClick={() => removeEntry()}>
             <XMarkIcon />
           </span>
@@ -104,7 +118,8 @@ const PreviewItem = ({ item, settings, removeEntry }: ItemProps) => {
             "max-w-prose",
             "pb-5",
             "prose",
-            "px-2"
+            "px-2",
+            "dark:text-slate-300",
           )}
         >
           {content}

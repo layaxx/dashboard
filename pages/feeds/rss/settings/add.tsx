@@ -1,7 +1,7 @@
 import { BlitzPage } from "@blitzjs/next"
 import Head from "next/head"
 import Layout from "app/core/layouts/Layout"
-import SettingsForm from "app/feeds/components/settings/Form"
+import AddFeedForm from "app/feeds/components/settings/Form"
 
 const FeedsAddPage: BlitzPage = () => {
   return (
@@ -9,7 +9,7 @@ const FeedsAddPage: BlitzPage = () => {
       <Head>
         <title>Feeds - Add Feed</title>
       </Head>
-      <SettingsForm isCreate />
+      <AddFeedForm />
     </>
   )
 }
