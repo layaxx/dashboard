@@ -11,6 +11,7 @@ const StatusCleanItem: FC<StatusClean> = ({ time, duration }) => {
   return (
     <div
       className={clsx(
+        "dark:bg-slate-700",
         "bg-white",
         "border-purple-700",
         "border-solid",
@@ -20,16 +21,16 @@ const StatusCleanItem: FC<StatusClean> = ({ time, duration }) => {
         "px-8",
         "py-4",
         "rounded-lg",
-        "shadow-lg"
+        "shadow-lg",
       )}
     >
       <div>
-        <h2 className={clsx("font-semibold", "text-3xl", "text-gray-800")}>
+        <h2 className={clsx("font-semibold", "text-3xl", "text-gray-800", "dark:text-slate-300")}>
           {dayjs(time).format("DD.MM.YYYY - HH:mm")}
         </h2>
         <h3>{dayjs(time).fromNow()}</h3>
 
-        <table className="w-full">
+        <table className={clsx("dark:text-slate-300", "w-full")}>
           <tbody>
             <tr>
               <th className="text-left" scope="row">
