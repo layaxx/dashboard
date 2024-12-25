@@ -52,6 +52,29 @@ const seed = async () => {
   await db.readlistentry.createMany({
     data: Array.from({ length: numberOfFeeds }, () => ({ url: faker.internet.url() })),
   })
+
+  await db.statusClean.createMany({
+    data: Array.from({ length: 10 }, (_, index) => ({
+      time: dayjs().subtract(index, "day").toDate(),
+      duration: faker.number.float({ min: 100, max: 1000 }),
+    })),
+  })
+
+  await db.statusLoad.createMany({
+    data: Array.from({ length: 15 }, (_, index) => ({
+      loadTime: dayjs()
+        .subtract(index * 5, "minutes")
+        .toDate(),
+      loadDuration: faker.number.int({ min: 0, max: 100 }),
+      insertCount: faker.datatype.boolean() ? faker.number.int({ min: 0, max: 10 }) : 0,
+      updateCount: faker.datatype.boolean() ? faker.number.int({ min: 0, max: 5 }) : 0,
+      errors: faker.datatype.boolean({ probability: 0.75 })
+        ? []
+        : Array.from({ length: faker.number.int({ min: 1, max: 3 }) }, () =>
+            faker.lorem.sentence(),
+          ),
+    })),
+  })
 }
 
 export default seed
