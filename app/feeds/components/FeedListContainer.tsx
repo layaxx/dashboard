@@ -10,6 +10,7 @@ import FeedListItem from "./FeedListItem"
 import FeedListSkeleton from "./FeedListSkeleton"
 import countReadlistentries from "../readlistentries/queries/countReadlistentries"
 import QueryErrorBoundary from "app/core/components/QueryErrorBoundary"
+import { useSharedState } from "app/core/hooks/store"
 import { FEED_MODE } from "types"
 
 type Props = {
@@ -18,18 +19,33 @@ type Props = {
 
 export const FeedListContainer = ({ mode }: Props) => {
   const [readListCount] = useQuery(countReadlistentries, {}, { suspense: false })
-
   const router = useRouter()
 
+  const referenceID = "feed-list-container"
+
+  const [{ closeAside }] = useSharedState()
+  const closeIfNecessary = (isCrossPage = false) => {
+    const asideIsFullscreen =
+      window &&
+      (document.querySelector("#" + referenceID)?.clientWidth ?? 0) / window.innerWidth > 0.9
+    if (asideIsFullscreen) {
+      if (isCrossPage) {
+        localStorage.setItem("hideNavbar", "true")
+      } else {
+        closeAside()
+      }
+    }
+  }
+
   return (
-    <ul>
+    <ul id={referenceID}>
       <QueryErrorBoundary
         buttonProps={{ size: "sm" }}
         paragraphProps={{ className: clsx("break-words", "font-bold", "mb-2", "text-lg") }}
         containerProps={{ className: "m-2" }}
       >
         <Suspense fallback={<FeedListSkeleton />}>
-          <FeedList mode={mode} />
+          <FeedList mode={mode} closeIfNecessary={closeIfNecessary} />
         </Suspense>
       </QueryErrorBoundary>
 
@@ -39,6 +55,7 @@ export const FeedListContainer = ({ mode }: Props) => {
           unreadCount={readListCount ?? 0}
           isActive={mode === FEED_MODE.BOOKMARKS}
           onClick={() => {
+            closeIfNecessary(mode !== FEED_MODE.BOOKMARKS)
             router.push(Routes.FeedsReadingPage())
           }}
         />

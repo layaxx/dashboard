@@ -7,26 +7,16 @@ import {
 import clsx from "clsx"
 import Image from "next/legacy/image"
 import { toast } from "react-toastify"
+import NotificationButton, { NotificationButtonProps } from "./NotificationButton"
 
-export declare const STATUSES: {
-  none: "none"
-  info: "info"
-  success: "success"
-  loading: "loading"
-  warning: "warning"
-  error: "error"
-}
-export type Status = typeof STATUSES[keyof typeof STATUSES]
-
-export declare const POSITIONS: {
-  topCenter: "top-center"
-  topLeft: "top-left"
-  topRight: "top-right"
-  bottomCenter: "bottom-center"
-  bottomLeft: "bottom-left"
-  bottomRight: "bottom-right"
-}
-export type Position = typeof POSITIONS[keyof typeof POSITIONS]
+export type Status = "none" | "info" | "success" | "loading" | "warning" | "error"
+export type Position =
+  | "top-center"
+  | "top-left"
+  | "top-right"
+  | "bottom-center"
+  | "bottom-left"
+  | "bottom-right"
 
 export interface NotificationType {
   id: string
@@ -34,7 +24,7 @@ export interface NotificationType {
   message?: string
   status: Status
   position: Position
-  buttons: ButtonProps[]
+  buttons: NotificationButtonProps[]
   image?: string
   dismissAfter?: number
   dismissible?: boolean
@@ -42,44 +32,12 @@ export interface NotificationType {
   onDismiss?: (...arguments_: any[]) => void
   showDismissButton?: boolean
   allowHTML?: boolean
-  [index: string]: any
 }
 
 type Props = {
   notification: NotificationType
   closeToast?: () => void
 }
-
-type ButtonProps = {
-  name: string
-  onClick: React.MouseEventHandler<HTMLButtonElement>
-}
-
-const Button = ({ name: text, onClick }: ButtonProps) => (
-  <button
-    onClick={onClick}
-    className={clsx(
-      "border",
-      "border-transparent",
-      "flex",
-      "font-medium",
-      "items-center",
-      "justify-center",
-      "focus:outline-none",
-      "p-4",
-      "focus:ring-2",
-      "focus:ring-indigo-500",
-      "rounded-none",
-      "rounded-r-lg",
-      "hover:text-indigo-500",
-      "text-indigo-600",
-      "text-sm",
-      "w-full"
-    )}
-  >
-    {text}
-  </button>
-)
 
 const getIcon = (status: Status) => {
   switch (status) {
@@ -106,6 +64,7 @@ const Notification = ({ notification, closeToast }: Props) => {
   return (
     <div
       className={clsx(
+        "dark:bg-slate-700",
         "bg-white",
         "flex",
         "max-w-md",
@@ -114,7 +73,7 @@ const Notification = ({ notification, closeToast }: Props) => {
         "ring-black/5",
         notification.dismissible === false ? "rounded-lg" : "rounded-t-lg",
         "shadow-lg",
-        "w-96"
+        "w-96",
       )}
     >
       <div className={clsx("flex-1", "p-4", "w-0")}>
@@ -134,44 +93,29 @@ const Notification = ({ notification, closeToast }: Props) => {
           )}
 
           <div className={clsx("flex-1", "ml-3", "self-center")}>
-            <p className={clsx("font-medium", "text-gray-900", "text-sm")}>{notification.title}</p>
+            <p className={clsx("font-medium", "dark:text-gray-300", "text-gray-900", "text-sm")}>
+              {notification.title}
+            </p>
             {notification.message && (
-              <p className={clsx("mt-1", "text-gray-500", "text-sm")}>{notification.message}</p>
+              <p className={clsx("mt-1", "dark:text-gray-400", "text-gray-500", "text-sm")}>
+                {notification.message}
+              </p>
             )}
           </div>
         </div>
       </div>
 
-      <div className={clsx("border-gray-200", "border-l", "flex")}>
-        {notification.showDismissButton && <Button name="X" onClick={closeToast} />}
+      <div className={clsx("border-gray-200", "border-l-2", "dark:border-slate-500", "flex")}>
+        {notification.showDismissButton && <NotificationButton name="X" onClick={closeToast} />}
         {notification.buttons.map((button) => (
-          <button
+          <NotificationButton
+            key={button.name}
+            {...button}
             onClick={(event) => {
               button.onClick(event)
               closeToast?.call(this)
             }}
-            className={clsx(
-              "border",
-              "border-transparent",
-              "flex",
-              "font-medium",
-              "items-center",
-              "justify-center",
-              "focus:outline-none",
-              "p-4",
-              "focus:ring-2",
-              "focus:ring-indigo-500",
-              "rounded-none",
-              "rounded-r-lg",
-              "hover:text-indigo-500",
-              "text-indigo-600",
-              "text-sm",
-              "w-full"
-            )}
-            key={button.name}
-          >
-            {button.name}
-          </button>
+          />
         ))}
       </div>
     </div>
