@@ -11,6 +11,7 @@ const Header = ({ hideNavbar, setHideNavbar }: HeaderProps) => (
   <header
     className={clsx(
       "bg-slate-300",
+      "dark:bg-slate-700",
       "flex",
       "items-center",
       "justify-between",
@@ -18,6 +19,7 @@ const Header = ({ hideNavbar, setHideNavbar }: HeaderProps) => (
       "py-6",
       "rounded-r",
       "text-primary",
+      "dark:text-violet-400",
       "w-full",
     )}
     onClick={() => setHideNavbar((previous) => !previous)}
@@ -25,7 +27,16 @@ const Header = ({ hideNavbar, setHideNavbar }: HeaderProps) => (
     <div className={clsx("overflow-hidden", "w-full")}>
       <Suspense
         fallback={
-          <h1 className={clsx("animate-pulse", "bg-slate-200", "h-8", "text-2xl", "w-full")} />
+          <h1
+            className={clsx(
+              "animate-pulse",
+              "bg-slate-200",
+              "dark:bg-slate-600",
+              "h-8",
+              "text-2xl",
+              "w-full",
+            )}
+          />
         }
       >
         <DashboardGreeting />

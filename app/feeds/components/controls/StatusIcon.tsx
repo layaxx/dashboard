@@ -80,7 +80,9 @@ const StatusIcon: FC<StatusButtonProps> = () => {
   )
 
   if (isError || result.errors.length > 0) {
-    return <ExclamationCircleIcon className={clsx(!isError && "text-error")} />
+    return (
+      <ExclamationCircleIcon className={clsx(!isError && ["text-error", "dark:text-red-600"])} />
+    )
   }
 
   const isAverageLoadTimeTooLong =

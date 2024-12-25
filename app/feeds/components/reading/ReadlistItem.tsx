@@ -21,6 +21,7 @@ const ReadlistItem = ({ url, id, hide, unhide }: Props) => {
       <div
         className={clsx(
           "hover:bg-neutral-200",
+          "dark:hover:bg-slate-700",
           "cursor-pointer",
           "flex",
           "font-medium",
@@ -33,7 +34,16 @@ const ReadlistItem = ({ url, id, hide, unhide }: Props) => {
         <span className={clsx("grow", "py-4", "truncate")} title={url}>
           {url}
         </span>
-        <span className={clsx("border-l-2", "flex", "py-4", "shrink-0", "text-gray-400")}>
+        <span
+          className={clsx(
+            "border-l-2",
+            "dark:border-slate-600",
+            "flex",
+            "py-4",
+            "shrink-0",
+            "text-gray-400",
+          )}
+        >
           <span className={sharedClassName}>
             <XMarkIcon
               onClick={() => {

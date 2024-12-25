@@ -12,7 +12,9 @@ const FeedListSkeleton: FC = () => {
       </FeedListItemWrapper>
       {Array.from({ length: 3 }, (_, id) => (
         <FeedListItemWrapper key={id} className="h-8">
-          <span className={clsx("animate-pulse", "bg-slate-200", "h-6", "w-full")}></span>
+          <span
+            className={clsx("animate-pulse", "bg-slate-200", "dark:bg-slate-600", "h-6", "w-full")}
+          ></span>
         </FeedListItemWrapper>
       ))}
     </>

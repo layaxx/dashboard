@@ -30,7 +30,9 @@ const DashboardGreeting = React.memo(() => {
   const user = useCurrentUser()
 
   return (
-    <h1 className={clsx("font-bold", "text-2xl", "text-primary", "truncate")}>
+    <h1
+      className={clsx("font-bold", "text-2xl", "text-primary", "dark:text-violet-400", "truncate")}
+    >
       {greeting}, {user?.name ?? sanitizeEmail(user?.email)}!
     </h1>
   )

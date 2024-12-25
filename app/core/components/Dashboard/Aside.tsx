@@ -13,6 +13,7 @@ const Aside = ({ hideNavbar, setHideNavbar, feeds }: Props) => (
   <aside
     className={clsx(
       "bg-slate-300",
+      "dark:bg-slate-700",
       "flex",
       "flex-col",
       "h-full",
@@ -24,7 +25,7 @@ const Aside = ({ hideNavbar, setHideNavbar, feeds }: Props) => (
       "w-full",
     )}
   >
-    <section className={clsx("border-b", "border-primary", "w-full")}>
+    <section className={clsx("border-b", "border-primary", "dark:border-violet-400", "w-full")}>
       <Header hideNavbar={hideNavbar} setHideNavbar={setHideNavbar} />
     </section>
 
@@ -39,7 +40,17 @@ const Aside = ({ hideNavbar, setHideNavbar, feeds }: Props) => (
           "w-full",
         )}
       >
-        <p className={clsx("font-bold", "leading-4", "text-primary", "uppercase")}>Reader</p>
+        <p
+          className={clsx(
+            "font-bold",
+            "leading-4",
+            "text-primary",
+            "dark:text-violet-400",
+            "uppercase",
+          )}
+        >
+          Reader
+        </p>
         <div className={clsx("h-full", "overflow-y-auto", "pb-5", "pr-4", "py-2")}>{feeds}</div>
       </div>
     </section>
