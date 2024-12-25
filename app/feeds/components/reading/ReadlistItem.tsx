@@ -12,7 +12,7 @@ type Props = {
 }
 
 const ReadlistItem = ({ url, id, hide, unhide }: Props) => {
-  const sharedClassName = "hover:text-primary px-1 w-8"
+  const sharedClassName = "hover:text-primary hover:text-violet-500 px-1 w-8"
 
   const [updateEntry] = useMutation(updateReadlistentry)
 
@@ -48,7 +48,7 @@ const ReadlistItem = ({ url, id, hide, unhide }: Props) => {
             <XMarkIcon
               onClick={() => {
                 hide()
-                notifyPromise(updateEntry({ id, isArchived: true }), {
+                notifyPromise(updateEntry({ id, isArchived: false }), {
                   pending: { title: "Deleting entry" },
                   success: { title: "Deleted Entry" },
                   error: { title: "Failed to delete Entry" },

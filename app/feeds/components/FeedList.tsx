@@ -20,9 +20,10 @@ export const feedListOmit = {
 
 type Props = {
   mode: FEED_MODE
+  closeIfNecessary: Function
 }
 
-export const FeedList: FC<Props> = ({ mode }) => {
+export const FeedList: FC<Props> = ({ mode, closeIfNecessary }) => {
   const secondsInMinute = 60
   const milliSecondsInSecond = 1000
   const [{ feeds }] = useQuery(getFeeds, feedListOmit, {
@@ -33,32 +34,24 @@ export const FeedList: FC<Props> = ({ mode }) => {
 
   const showAllFeeds = false
 
-  const [{ activeFeedID, refetchItems, closeAside }, setState] = useSharedState()
-
-  const referenceID = "feed-list-item-0"
-
-  const closeIfNecessary = () => {
-    const asideIsFullscreen =
-      window &&
-      (document.querySelector("#" + referenceID)?.clientWidth ?? 0) / window.innerWidth > 0.9
-    if (asideIsFullscreen) closeAside()
-  }
+  const [{ activeFeedID, refetchItems }, setState] = useSharedState()
 
   const router = useRouter()
+
+  const isCrossPage = mode !== FEED_MODE.RSS
   return (
     <>
       {feeds && (
         <>
           <FeedListItem
             title="Recently Read"
-            id={referenceID}
             isActive={mode === FEED_MODE.RSS && activeFeedID === RECENTLY_READ_ID}
             onClick={() => {
-              if (mode === FEED_MODE.BOOKMARKS) {
+              if (isCrossPage) {
                 router.push(Routes.FeedsRSSPage())
               }
               setState((previous) => ({ ...previous, activeFeedID: RECENTLY_READ_ID }))
-              closeIfNecessary()
+              closeIfNecessary(isCrossPage)
             }}
           />
 
@@ -70,11 +63,11 @@ export const FeedList: FC<Props> = ({ mode }) => {
             )}
             isActive={mode === FEED_MODE.RSS && activeFeedID === ALL_FEEDS_ID}
             onClick={() => {
-              if (mode === FEED_MODE.BOOKMARKS) {
+              if (isCrossPage) {
                 router.push(Routes.FeedsRSSPage())
               }
               setState((previous) => ({ ...previous, activeFeedID: ALL_FEEDS_ID }))
-              closeIfNecessary()
+              closeIfNecessary(isCrossPage)
             }}
           />
 
@@ -88,16 +81,16 @@ export const FeedList: FC<Props> = ({ mode }) => {
                   title={title}
                   unreadCount={unreadCount}
                   onClick={() => {
-                    if (mode !== FEED_MODE.RSS) {
+                    if (isCrossPage) {
                       router.push(Routes.FeedsRSSPage())
                     }
                     if (isSelected) {
                       refetchItems()
-                      closeIfNecessary()
+                      closeIfNecessary(isCrossPage)
                     } else {
                       localStorage.setItem(LOCALSTORAGE_FEEDID, JSON.stringify(id))
                       setState((previous) => ({ ...previous, activeFeedID: id }))
-                      closeIfNecessary()
+                      closeIfNecessary(isCrossPage)
                     }
                   }}
                   key={id}

@@ -1,21 +1,17 @@
 "use client"
 import { useState } from "react"
-import { useMutation, useInfiniteQuery } from "@blitzjs/rpc"
-import { PlusIcon } from "@heroicons/react/24/solid"
+import { useInfiniteQuery } from "@blitzjs/rpc"
 import { Readlistentry } from "@prisma/client"
 import clsx from "clsx"
 import ReadlistItem from "./ReadlistItem"
 import Button from "app/core/components/Button"
-import Form from "app/core/components/Form"
-import LabeledTextField from "app/core/components/LabeledTextField"
 import Loader from "app/core/components/Loader"
-import createReadlistentry from "app/feeds/readlistentries/mutations/createReadlistentry"
 import getReadlistentries from "app/feeds/readlistentries/queries/getReadlistentries"
 
 export const ItemList = () => {
   const pageSize = 20
 
-  const [pages, { hasNextPage, fetchNextPage, isFetchingNextPage, refetch }] = useInfiniteQuery(
+  const [pages, { hasNextPage, fetchNextPage, isFetchingNextPage }] = useInfiniteQuery(
     getReadlistentries,
     (input) => {
       return {
@@ -31,27 +27,8 @@ export const ItemList = () => {
 
   const [toBeRemoved, setToBeRemoved] = useState<number[]>([])
 
-  const [addReadlistEntry] = useMutation(createReadlistentry)
-
   return (
     <>
-      <div className="md:px-10">
-        <Form
-          onSubmit={({ url }, form) =>
-            addReadlistEntry({ url }).then(() => {
-              refetch()
-              form.reset()
-            })
-          }
-          className={clsx("flex", "flex-wrap", "items-end")}
-        >
-          <LabeledTextField name="url" label="url" />
-          <Button icon={<PlusIcon />} type="submit">
-            Add a new item
-          </Button>
-        </Form>
-      </div>
-
       {pages.map(({ readlistentries }) =>
         readlistentries
           .filter(({ id }) => !toBeRemoved.includes(id))

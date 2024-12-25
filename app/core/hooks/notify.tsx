@@ -1,7 +1,7 @@
 import { ReactEventHandler } from "react"
 import dayjs from "dayjs"
 import { ToastOptions, toast } from "react-toastify"
-import Notification, { NotificationType, Position, Status } from "../components/Notification"
+import Notification, { NotificationType, Status } from "../components/Notification"
 
 type NotifyButton = {
   name: string
@@ -20,7 +20,7 @@ type NotifyOptions = {
 }
 
 function getNotificationProps(
-  options: { title: string; id: string } & NotifyOptions
+  options: { title: string; id: string } & NotifyOptions,
 ): NotificationType {
   return {
     title: options.title ?? "Information",
@@ -50,7 +50,7 @@ export default function notify(title: string, options?: NotifyOptions) {
       closeButton: false,
       toastId: id,
       ...options?.toastOptions,
-    }
+    },
   )
 }
 
@@ -77,7 +77,7 @@ export function notifyPromise(
     pending?: NotifyPromiseOptions
     success?: NotifyPromiseOptions
     error?: NotifyPromiseOptions
-  }
+  },
 ) {
   const id = options?.all?.id ?? dayjs().toISOString()
   const sharedProps = {
@@ -85,7 +85,7 @@ export function notifyPromise(
     image: options.all?.image ?? undefined,
     id,
     buttons: options.all?.buttons ?? [],
-    position: "top-right" as Position,
+    position: "top-right" as const,
   }
 
   return toast.promise(
@@ -146,7 +146,7 @@ export function notifyPromise(
       closeButton: false,
       toastId: id,
       icon: false,
-    }
+    },
   )
 }
 
@@ -157,7 +157,7 @@ export function notifyPromiseAdvanced<T>(
     pending?: NotifyPromiseOptions
     success?: (argument0: T) => Promise<NotifyPromiseOptions>
     error?: (argument0: T) => Promise<NotifyPromiseOptions>
-  }
+  },
 ) {
   const id = notify(options.all?.title ?? options.pending?.title ?? "Information", {
     status: "loading",

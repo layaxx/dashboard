@@ -2,7 +2,7 @@ import { forwardRef, ComponentPropsWithoutRef, PropsWithoutRef } from "react"
 import clsx from "clsx"
 import { useField, UseFieldConfig } from "react-final-form"
 import { twMerge } from "tailwind-merge"
-import Button from "./Button"
+import Button, { ButtonProps } from "./Button"
 
 export interface TextFieldWithButton extends PropsWithoutRef<JSX.IntrinsicElements["input"]> {
   /** Field name. */
@@ -14,7 +14,7 @@ export interface TextFieldWithButton extends PropsWithoutRef<JSX.IntrinsicElemen
   outerProps?: PropsWithoutRef<JSX.IntrinsicElements["div"]>
   labelProps?: ComponentPropsWithoutRef<"label">
   fieldProps?: UseFieldConfig<string>
-  button: PropsWithoutRef<JSX.IntrinsicElements["button"]>
+  button: PropsWithoutRef<Omit<ButtonProps, "children">>
 }
 
 export const TextFieldWithButton = forwardRef<HTMLInputElement, TextFieldWithButton>(

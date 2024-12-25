@@ -10,7 +10,7 @@ type ItemControlProps = {
 }
 
 const ItemControls = ({ item, read, unread, hasBeenRead }: ItemControlProps) => {
-  const sharedClassName = "hover:text-primary px-1 w-8"
+  const sharedClassName = "hover:text-primary hover:text-violet-500 px-1 w-8"
 
   return (
     <>
