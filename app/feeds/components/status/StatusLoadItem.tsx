@@ -11,7 +11,13 @@ const ListElement = ({ text, isError }: { text: string; isError?: boolean }) => 
   return (
     <li>
       <ExclamationTriangleIcon
-        className={clsx("h-6", isError ? "text-error" : "text-warning", "inline", "mr-2", "w-6")}
+        className={clsx(
+          "h-6",
+          isError ? ["text-error", "dark:text-red-600"] : "text-warning",
+          "inline",
+          "mr-2",
+          "w-6",
+        )}
       />
       <p className={clsx("break-words", "inline", "text-pretty")}>{text}</p>
     </li>
@@ -35,12 +41,13 @@ const StatusLoadItem: FC<StatusWithWarningsAndErrors> = ({
   return (
     <div
       className={clsx(
+        "dark:bg-slate-700",
         "bg-white",
-        hasErrors && "border-error",
-        "border-purple-700",
+        hasErrors && ["border-error", "dark:border-red-600"],
+        !hasErrors && "border-purple-700",
         "border-solid",
         "border-t-4",
-        hasWarnings && !hasErrors && "border-warning",
+        hasWarnings && !hasErrors && ["border-warning", "dark:border-orange-600"],
         "max-w-md",
         "my-12",
         "px-8",
@@ -51,12 +58,12 @@ const StatusLoadItem: FC<StatusWithWarningsAndErrors> = ({
       )}
     >
       <div>
-        <h2 className={clsx("font-semibold", "text-3xl", "text-gray-800")}>
+        <h2 className={clsx("font-semibold", "text-3xl", "dark:text-gray-300", "text-gray-800")}>
           {dayjs(loadTime).format("DD.MM.YYYY - HH:mm")}
         </h2>
         <h3>{dayjs(loadTime).fromNow()}</h3>
 
-        <table className="w-full">
+        <table className={clsx("dark:text-slate-300", "w-full")}>
           <tbody>
             <tr>
               <th className="text-left" scope="row">

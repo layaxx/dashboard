@@ -1,5 +1,5 @@
 "use client"
-import { FC } from "react"
+import { FC, useEffect, useState } from "react"
 import { useQuery } from "@blitzjs/rpc"
 import { ExclamationCircleIcon } from "@heroicons/react/24/solid"
 import clsx from "clsx"
@@ -10,10 +10,17 @@ import StatusTable from "./Table"
 import Loader from "app/core/components/Loader"
 import getStatusDetailed from "app/feeds/queries/getStatusDetailed"
 import { calculateErrorsAndWarnings, computeStatistics } from "lib/status"
-import tailwindConfig from "tailwind.config"
 
 const StatusOverview: FC = () => {
   const [result, { isLoading, isError }] = useQuery(getStatusDetailed, {})
+
+  const [isDarkMode, setMode] = useState(window.matchMedia("(prefers-color-scheme: dark)").matches)
+
+  useEffect(() => {
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", (event) => setMode(event.matches))
+  }, [])
 
   if (isLoading) {
     return <Loader />
@@ -28,7 +35,7 @@ const StatusOverview: FC = () => {
   }
 
   const statusWithWarnings = result.statusLoad.map((stat, index, array) =>
-    calculateErrorsAndWarnings(stat, array[index + 1]?.loadTime)
+    calculateErrorsAndWarnings(stat, array[index + 1]?.loadTime),
   )
 
   const statistics = computeStatistics(statusWithWarnings)
@@ -39,16 +46,14 @@ const StatusOverview: FC = () => {
         className={clsx("flex", "flex-row", "flex-wrap", "justify-around", "max-w-4xl", "mx-auto")}
       >
         <StatusChart
+          isDarkMode={isDarkMode}
           data={statusWithWarnings.map(
             ({ insertCount, updateCount, loadTime, hasErrors, hasWarnings }) => ({
               x: loadTime,
               insertCount,
               updateCount,
-              color:
-                (hasErrors && tailwindConfig.theme.extend.colors.error) ||
-                (hasWarnings && tailwindConfig.theme.extend.colors.warning) ||
-                tailwindConfig.theme.extend.colors.primary,
-            })
+              color: (hasErrors && "error") || (hasWarnings && "warning") || "default",
+            }),
           )}
         />
         <StatusTable {...statistics} />
