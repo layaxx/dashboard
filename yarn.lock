@@ -4158,8 +4158,8 @@ eslint-module-utils@^2.8.0:
     debug "^3.2.7"
 
 "eslint-plugin-classnames@https://github.com/layaxx/eslint-plugin-classnames":
-  version "1.0.1"
-  resolved "https://github.com/layaxx/eslint-plugin-classnames#8c4144ad6183ae8e96b45d970b671aba42cd5800"
+  version "1.0.2"
+  resolved "https://github.com/layaxx/eslint-plugin-classnames#548cc6c24dfd35ef6c72c9f7790236f29e9d2ec6"
 
 eslint-plugin-import@^2.22.1:
   version "2.29.1"
