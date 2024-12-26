@@ -166,9 +166,10 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
             "max-w-prose",
             "pb-5",
             "prose",
+            "dark:prose-invert",
+            "prose-slate",
             "lg:px-10",
             "px-2",
-            "dark:text-slate-200",
           )}
         >
           {content}
