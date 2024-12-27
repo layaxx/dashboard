@@ -52,7 +52,6 @@ const getIcon = (status: Status) => {
     case "loading":
       return <ArrowPathIcon className="animate-spin" />
 
-    case "none":
     default:
       return <></>
   }

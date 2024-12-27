@@ -23,7 +23,7 @@ let lastReload = -1
 const handleOnReload = async () => {
   notifyPromiseAdvanced(
     () =>
-      window.fetch("/api/loadRSS", {
+      globalThis.fetch("/api/loadRSS", {
         credentials: "include",
         headers: {
           "anti-csrf": getAntiCSRFToken(),

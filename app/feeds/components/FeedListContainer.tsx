@@ -25,9 +25,11 @@ export const FeedListContainer = ({ mode }: Props) => {
 
   const [{ closeAside }] = useSharedState()
   const closeIfNecessary = (isCrossPage = false) => {
+    const threshold = 0.9
+
     const asideIsFullscreen =
-      window &&
-      (document.querySelector("#" + referenceID)?.clientWidth ?? 0) / window.innerWidth > 0.9
+      globalThis.innerWidth &&
+      (document.querySelector("#" + referenceID)?.clientWidth ?? 0) / window.innerWidth > threshold
     if (asideIsFullscreen) {
       if (isCrossPage) {
         localStorage.setItem("hideNavbar", "true")

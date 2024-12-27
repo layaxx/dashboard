@@ -16,9 +16,9 @@ beforeAll(async () => {
   }
 
   const { ctx: contextAuthorized } = await createMockContext({ user: newUser, isAuthorized: true })
-  global.ctx = {}
-  global.ctx.authorized = contextAuthorized
+  globalThis.ctx = {}
+  globalThis.ctx.authorized = contextAuthorized
 
   const { ctx: contextNotAuthorized } = await createMockContext({ user: newUser })
-  global.ctx.notAuthorized = contextNotAuthorized
+  globalThis.ctx.notAuthorized = contextNotAuthorized
 })

@@ -55,9 +55,7 @@ export const loadFeed = async (
   }
 
   let items: Prisma.FeedentryUncheckedCreateInput[] = []
-  if (!content) {
-    console.warn("Received no content from " + feed.url, statusCode)
-  } else {
+  if (content) {
     setReaderOptions({ includeFullContent: true, descriptionMaxLen: summaryLength })
     setParserOptions({ trimValues: false })
 
@@ -86,6 +84,8 @@ export const loadFeed = async (
         errorMessage: formatErrorMessage(error),
       }
     }
+  } else {
+    console.warn("Received no content from " + feed.url, statusCode)
   }
 
   const { createdIds, updatedIds } = await updateDB(items, context)
@@ -254,9 +254,7 @@ export async function getIDSFromFeeds(feedUrls: string[]): Promise<Map<string, S
 
     const { content, headers, statusCode } = response
 
-    if (!content) {
-      console.warn("Received no content from " + url, statusCode)
-    } else {
+    if (content) {
       setReaderOptions({ includeFullContent: false, descriptionMaxLen: 0 })
       const parsedFeed = parseString(content)
       if (!parsedFeed) {
@@ -267,6 +265,8 @@ export async function getIDSFromFeeds(feedUrls: string[]): Promise<Map<string, S
         url,
         new Set(parsedFeed.entries?.map((item) => item.guid || item.id || item.link) ?? []),
       )
+    } else {
+      console.warn("Received no content from " + url, statusCode)
     }
   }
 

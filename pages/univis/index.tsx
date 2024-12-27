@@ -49,7 +49,7 @@ const UnivisWrapper: BlitzPage = () => {
             terms.splice(terms.indexOf(values.searchTerm), 1)
             terms.unshift(values.searchTerm)
           }
-          window.localStorage.setItem(LOCALSTORAGE_UNIVIS_LECTURES, JSON.stringify(terms))
+          globalThis.localStorage.setItem(LOCALSTORAGE_UNIVIS_LECTURES, JSON.stringify(terms))
         }}
         initialValues={{ lecture: "" }}
         keepDirtyOnReinitialize

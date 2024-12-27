@@ -14,10 +14,12 @@ import { calculateErrorsAndWarnings, computeStatistics } from "lib/status"
 const StatusOverview: FC = () => {
   const [result, { isLoading, isError }] = useQuery(getStatusDetailed, {})
 
-  const [isDarkMode, setMode] = useState(window.matchMedia("(prefers-color-scheme: dark)").matches)
+  const [isDarkMode, setMode] = useState(
+    globalThis.matchMedia("(prefers-color-scheme: dark)").matches,
+  )
 
   useEffect(() => {
-    window
+    globalThis
       .matchMedia("(prefers-color-scheme: dark)")
       .addEventListener("change", (event) => setMode(event.matches))
   }, [])

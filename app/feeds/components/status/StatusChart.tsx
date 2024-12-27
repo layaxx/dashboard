@@ -52,8 +52,7 @@ export default function StatusChart({ data, isDarkMode }: Props) {
     borderColor: colors.slate[isDarkMode ? "600" : "800"] + "90",
   }
   const maxCountSum = data.reduce(
-    (previous, { insertCount, updateCount }) =>
-      insertCount + updateCount > previous ? insertCount + updateCount : previous,
+    (previous, { insertCount, updateCount }) => Math.max(insertCount + updateCount, previous),
     1, // minimal value
   )
 
@@ -73,9 +72,9 @@ export default function StatusChart({ data, isDarkMode }: Props) {
               return `inserts: ${created}, updates: ${updated}`
             }
 
-            return !(raw as { hidden?: boolean; title: string } | undefined)?.hidden
-              ? (raw as { title: string }).title + " " + formattedValue
-              : ""
+            return (raw as { hidden?: boolean; title: string } | undefined)?.hidden
+              ? ""
+              : (raw as { title: string }).title + " " + formattedValue
           },
         },
       },

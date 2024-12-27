@@ -87,15 +87,15 @@ const FeedOptions: React.FC<{ feed: FeedWithEventsAndCount }> = ({ feed: initial
           }
 
           const action =
-            feed.options.id !== -1
-              ? updateFeedOption({
-                  id: feed.options!.id,
+            feed.options.id === -1
+              ? createFeedOption({
+                  id: feed.id,
                   expand: values.autoExpand,
                   ordering: values.ordering,
                   imageHandling: values.imageHandling,
                 })
-              : createFeedOption({
-                  id: feed.id,
+              : updateFeedOption({
+                  id: feed.options!.id,
                   expand: values.autoExpand,
                   ordering: values.ordering,
                   imageHandling: values.imageHandling,

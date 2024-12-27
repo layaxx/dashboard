@@ -69,7 +69,7 @@ const FeedsImportDataPage: BlitzPage = () => {
         resultDeleteFeedEntries.count,
         "Entries from",
         resultDeleteFeeds.count,
-        "Feeds."
+        "Feeds.",
       )
     }
     let failure = false
@@ -84,7 +84,7 @@ const FeedsImportDataPage: BlitzPage = () => {
         console.log("added Feed:", result.url)
         idLookup.set(feed.id, result.id)
         return result
-      })
+      }),
     ).catch((error) => {
       console.error(error)
       notify("Failed to Import Feeds.", { status: "error" })
@@ -123,17 +123,15 @@ const FeedsImportDataPage: BlitzPage = () => {
 
           console.log("added FeedEntry:", result.id)
           return result
-        }
-      )
+        },
+      ),
     ).catch((error) => {
       console.error(error)
       notify("Failed to Import Feedentries.", { status: "error" })
       failure = true
       return []
     })
-    if (failure) {
-      return
-    }
+    if (failure) return
 
     notify("Success!", {
       message: `Added ${feedEntries.length} Entries in ${feeds.length} Feeds.`,
@@ -169,7 +167,7 @@ const FeedsImportDataPage: BlitzPage = () => {
                         "border-4",
                         props.meta.submitError && "border-error",
                         "ml-auto",
-                        "text-left"
+                        "text-left",
                       )}
                       rows={4}
                       cols={50}

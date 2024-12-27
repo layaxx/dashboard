@@ -25,7 +25,7 @@ const FileReaderComponent: FC<Props> = ({ fileInputName, fileContentName, ...res
               change(fileContentName ?? "fileContent", text)
             })
             if (event.target?.files && event.target.files[0]) {
-              reader.readAsText(event.target.files[0])
+              reader.readAsText(event.target.files[0], "utf8")
             }
             props.input.onChange(event)
           }}

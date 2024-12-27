@@ -40,7 +40,7 @@ const handler: NextApiHandler = async (request, response: ResponseWithSession) =
   const { content, ok } = await fetchFromURL(url, true)
 
   if (!ok || !content) {
-    const message = (!ok ? "Received non-OK status from " : "Received no content from ") + url
+    const message = (ok ? "Received no content from " : "Received non-OK status from ") + url
     logger.error(message)
     response.statusCode = 500
     response.statusMessage = message

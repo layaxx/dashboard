@@ -5,9 +5,9 @@ import { ALL_FEEDS_ID } from "lib/config/feeds/feedIDs"
 export const LOCALSTORAGE_FEEDID = "activeFeedID"
 
 const activeFeedID =
-  typeof window !== "undefined"
-    ? JSON.parse(localStorage.getItem(LOCALSTORAGE_FEEDID) ?? "null") ?? -1
-    : ALL_FEEDS_ID
+  globalThis.localStorage === undefined
+    ? ALL_FEEDS_ID
+    : JSON.parse(localStorage.getItem(LOCALSTORAGE_FEEDID) ?? "null") ?? -1
 
 const initialState = {
   activeFeedID,

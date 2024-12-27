@@ -22,12 +22,12 @@ const FeedReordering: React.FC<Props> = ({ feeds, refetch }) => {
   const saveCurrentOrder = async () => {
     const newFeeds = await Promise.all(
       feedList.map(async (feed, index) => {
-        return feed.position !== index
-          ? updateFeed({
+        return feed.position === index
+          ? feed
+          : updateFeed({
               position: index,
               id: feed.id,
             })
-          : feed
       }),
     )
     setFeedList(newFeeds.filter((feed) => !!feed))

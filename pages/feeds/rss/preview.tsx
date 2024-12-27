@@ -22,13 +22,13 @@ const RSSPreviewPage: BlitzPage = () => {
       return { url: "not a valid URL" }
     }
 
-    const url = new URL("/api/previewRSS", window.location.toString())
+    const url = new URL("/api/previewRSS", globalThis.location.toString())
     url.searchParams.append("url", values.url)
 
     setIsLoading(true)
     notifyPromiseAdvanced(
       () =>
-        window.fetch(url, {
+        globalThis.fetch(url, {
           credentials: "include",
           headers: {
             "anti-csrf": getAntiCSRFToken(),

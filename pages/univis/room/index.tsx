@@ -49,7 +49,7 @@ const UnivisRoomsSearchPage: BlitzPage = () => {
             terms.splice(terms.indexOf(values.searchTerm), 1)
             terms.unshift(values.searchTerm)
           }
-          window.localStorage.setItem(LOCALSTORAGE_UNIVIS_ROOMS, JSON.stringify(terms))
+          globalThis.localStorage.setItem(LOCALSTORAGE_UNIVIS_ROOMS, JSON.stringify(terms))
         }}
         initialValues={{ room: "" }}
         keepDirtyOnReinitialize

@@ -1,4 +1,5 @@
 const maxLineCount = 200
+
 module.exports = {
   extends: ["blitz", "plugin:tailwindcss/recommended", "plugin:unicorn/recommended"],
   ignorePatterns: ["*.d.ts"],
@@ -65,7 +66,7 @@ module.exports = {
     "no-alert": "error",
     "no-console": ["warn", { allow: ["warn", "error"] }],
     "no-duplicate-imports": "error",
-    "tailwindcss/no-custom-classname": ["warn", { whitelist: [".*\\-primary"] }],
+    "tailwindcss/no-custom-classname": ["warn"],
     "tailwindcss/no-contradicting-classname": "error",
     "tailwindcss/enforces-shorthand": "warn",
     "tailwindcss/no-arbitrary-value": "error",
@@ -87,5 +88,6 @@ module.exports = {
         },
       },
     ],
+    "unicorn/switch-case-braces": ["warn", "avoid"],
   },
 }

@@ -4,8 +4,8 @@ import { useForm } from "react-final-form"
 import Button from "app/core/components/Button"
 
 const useLocalStorageSubscribe = (callback: any) => {
-  window.addEventListener("storage", callback)
-  return () => window.removeEventListener("storage", callback)
+  globalThis.addEventListener("storage", callback)
+  return () => globalThis.removeEventListener("storage", callback)
 }
 
 const PastSearchTerms: React.FC<{
@@ -14,7 +14,7 @@ const PastSearchTerms: React.FC<{
   fallback?: string[]
 }> = ({ termsRef, localStorageKey, fallback = [] }) => {
   const json = React.useSyncExternalStore(useLocalStorageSubscribe, () =>
-    window.localStorage.getItem(localStorageKey),
+    globalThis.localStorage.getItem(localStorageKey),
   )
 
   try {

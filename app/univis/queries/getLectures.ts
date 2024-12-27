@@ -18,10 +18,10 @@ export default resolver.pipe(resolver.zod(Input), async ({ lecture }) => {
   if (!lectures) throw new NotFoundError("No lectures found")
 
   let rooms: Room[]
-  if (!response.UnivIS.Room) {
-    rooms = []
-  } else {
+  if (response.UnivIS.Room) {
     rooms = Array.isArray(response.UnivIS.Room) ? response.UnivIS.Room : [response.UnivIS.Room]
+  } else {
+    rooms = []
   }
   return { lectures: Array.isArray(lectures) ? lectures : [lectures], rooms }
 })

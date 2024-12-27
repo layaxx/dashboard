@@ -24,7 +24,7 @@ const ButtonGroup: FC<{
     return <ButtonGroupContext.Provider value="none">{children}</ButtonGroupContext.Provider>
   }
 
-  const elementCount = children.filter((child) => child).length
+  const elementCount = children.filter(Boolean).length
 
   return (
     <>

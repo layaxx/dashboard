@@ -60,10 +60,11 @@ const seed = async () => {
     })),
   })
 
+  const minutesBetweenLoads = 5
   await db.statusLoad.createMany({
     data: Array.from({ length: 15 }, (_, index) => ({
       loadTime: dayjs()
-        .subtract(index * 5, "minutes")
+        .subtract(index * minutesBetweenLoads, "minutes")
         .toDate(),
       loadDuration: faker.number.int({ min: 0, max: 100 }),
       insertCount: faker.datatype.boolean() ? faker.number.int({ min: 0, max: 10 }) : 0,
