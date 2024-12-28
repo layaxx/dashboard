@@ -2,9 +2,9 @@
   "name": "dashboard",
   "version": "1.0.0",
   "scripts": {
-    "predev": "node scripts/writeVersion.js --dev",
+    "predev": "echo \"export default 'development'\" > lib/config/version.ts",
     "dev": "blitz dev",
-    "prebuild": "node scripts/writeVersion.js",
+    "prebuild": "echo \"export default '$(git rev-parse --short HEAD)'\" > lib/config/version.ts",
     "build": "blitz build",
     "start": "blitz start",
     "studio": "blitz prisma studio",
