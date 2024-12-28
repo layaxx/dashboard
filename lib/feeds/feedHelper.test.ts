@@ -114,15 +114,13 @@ describe("feedHelper#convertItem works as expected", () => {
   const feed = { id: 77, url: faker.internet.url() }
 
   test("throws if neither guid nor id nor link are provided", () => {
-    expect(() =>
-      convertItem({ content, description, published } as FeedEntry, feed as any),
-    ).toThrowError()
+    expect(() => convertItem({ content, description, published } as FeedEntry, feed)).toThrowError()
   })
 
   test("defines all required properties", () => {
     const result = convertItem(
       { content, description, link, published, title: faker.lorem.words(2) },
-      feed as any,
+      feed,
     )
 
     expect(result).toBeDefined()

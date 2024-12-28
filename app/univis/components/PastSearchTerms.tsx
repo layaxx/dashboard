@@ -3,7 +3,7 @@ import clsx from "clsx"
 import { useForm } from "react-final-form"
 import Button from "app/core/components/Button"
 
-const useLocalStorageSubscribe = (callback: any) => {
+const useLocalStorageSubscribe = (callback: () => void) => {
   globalThis.addEventListener("storage", callback)
   return () => globalThis.removeEventListener("storage", callback)
 }

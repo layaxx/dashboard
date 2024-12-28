@@ -4,7 +4,6 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  "jest.autoRun": "off",
   "cSpell.words": [
     "atalho",
     "blitzjs",

@@ -20,7 +20,7 @@ export const feedListOmit = {
 
 type Props = {
   mode: FEED_MODE
-  closeIfNecessary: Function
+  closeIfNecessary: (isCrossPage: boolean) => void
 }
 
 export const FeedList: FC<Props> = ({ mode, closeIfNecessary }) => {

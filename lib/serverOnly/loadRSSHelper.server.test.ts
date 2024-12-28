@@ -10,7 +10,7 @@ const mockFetch = jest.fn()
 
 jest.mock("node-fetch", () => ({
   __esModule: true,
-  default: (...props: any) => mockFetch(...props),
+  default: (...props: unknown[]) => mockFetch(...props),
   Headers: class Headers {
     headers = new Map()
 

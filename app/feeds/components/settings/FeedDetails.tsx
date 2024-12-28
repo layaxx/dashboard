@@ -1,7 +1,8 @@
 import React, { ReactNode, useState } from "react"
 import { invalidateQuery, useMutation, useQuery } from "@blitzjs/rpc"
 import dayjs from "dayjs"
-import { FormApi, SubmissionErrors } from "final-form"
+import { SubmissionErrors } from "final-form"
+import { z } from "zod"
 import SettingsTable from "./SettingsTable"
 import Form from "app/core/components/Form"
 import MinimalFormField from "app/core/components/MinimalFormField"
@@ -40,7 +41,13 @@ const FeedDetails: React.FC<{ feed: FeedWithEventsAndCount }> = ({ feed: initial
   return (
     <>
       <Form
-        onSubmit={(values: any, form: FormApi<any, Partial<any>>): SubmissionErrors | void => {
+        schema={z.object({
+          name: z.string(),
+          isActive: z.boolean(),
+          url: z.string(),
+          loadIntervall: z.number(),
+        })}
+        onSubmit={(values, form): SubmissionErrors | void => {
           if (form.getState().pristine) {
             return setIsEditing(false)
           }

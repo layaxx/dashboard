@@ -30,7 +30,8 @@ const QueryErrorBoundary: React.FC<PropsWithChildren<Props>> = ({
 
             if (
               error instanceof NotFoundError ||
-              (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") // Specific code for "record not found"
+              (error.constructor.name === Prisma.PrismaClientKnownRequestError.name &&
+                error.code === "P2025") // Specific code for "record not found"
             ) {
               content = "This was not found."
             }

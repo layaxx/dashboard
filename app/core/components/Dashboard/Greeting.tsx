@@ -6,7 +6,7 @@ const greeting = ((hour: number) => {
   let greetings: string[]
 
   const allGreetings = {
-    morning: ["Good morning", "Guten Morgen", "Rise and shine", "Morning", "Have a great day"], // eslint-disable-next-line sort-keys
+    morning: ["Good morning", "Guten Morgen", "Rise and shine", "Morning", "Have a great day"],
     day: ["Guten Tag", "Good afternoon", "Howdy", "Buenos dias", "G'day", "Hello there"],
     evening: ["Good evening", "Nice to see you", "Fancy seeing you here", "Hi there"],
   }
@@ -26,7 +26,7 @@ const greeting = ((hour: number) => {
 // Prevent chrome on mobile from converting email to a link
 const sanitizeEmail = (email?: string) => (email ? <a>{email}</a> : "Anon")
 
-const DashboardGreeting = React.memo(() => {
+const DashboardGreeting = () => {
   const user = useCurrentUser()
 
   return (
@@ -36,6 +36,6 @@ const DashboardGreeting = React.memo(() => {
       {greeting}, {user?.name ?? sanitizeEmail(user?.email)}!
     </h1>
   )
-})
+}
 
-export default DashboardGreeting
+export default React.memo(DashboardGreeting)

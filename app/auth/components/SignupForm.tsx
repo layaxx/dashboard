@@ -7,6 +7,7 @@ import signup from "app/auth/mutations/signup"
 import { Signup } from "app/auth/validations"
 import { Form, FORM_ERROR } from "app/core/components/Form"
 import { LabeledTextField } from "app/core/components/LabeledTextField"
+import { Prisma } from "db"
 
 type SignupFormProps = {
   onSuccess?: () => void
@@ -27,10 +28,14 @@ export const SignupForm = (props: SignupFormProps) => {
           try {
             await signupMutation(values)
             props.onSuccess?.()
-          } catch (error: any) {
-            return error.code === "P2002" && error.meta?.target?.includes("email")
+          } catch (error) {
+            return error instanceof Error &&
+              error instanceof Prisma.PrismaClientKnownRequestError &&
+              error.code === "P2002" &&
+              typeof error.meta?.target === "string" &&
+              error.meta?.target?.includes("email")
               ? { email: "This email is already being used" }
-              : { [FORM_ERROR]: error.toString() }
+              : { [FORM_ERROR]: error instanceof Error ? error.toString() : "unknown error" }
           }
         }}
       >

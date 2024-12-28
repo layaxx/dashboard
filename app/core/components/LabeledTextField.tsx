@@ -14,15 +14,17 @@ export interface LabeledTextFieldProps extends PropsWithoutRef<JSX.IntrinsicElem
   fieldProps?: UseFieldConfig<string>
 }
 
+// eslint-disable-next-line react/display-name
 export const LabeledTextField = forwardRef<HTMLInputElement, LabeledTextFieldProps>(
   ({ name, label, outerProps, fieldProps, labelProps, ...props }, reference) => {
     const {
       input,
       meta: { touched, error, submitError, submitting, pristine, valid },
-    } = useField(name, {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } = useField<any>(name, {
       parse:
         props.type === "number"
-          ? (Number as any)
+          ? Number
           : // Converting `""` to `null` ensures empty values will be set to null in the DB
             // eslint-disable-next-line unicorn/no-null
             (v) => (v === "" ? null : v),

@@ -3,6 +3,7 @@ import { Suspense, useRef, useState } from "react"
 import { BlitzPage, ErrorBoundary } from "@blitzjs/next"
 import clsx from "clsx"
 import dynamic from "next/dynamic"
+import { z } from "zod"
 import Form from "app/core/components/Form"
 import SkeletonButton from "app/core/components/SkeletonButton"
 import TextFieldWithButton from "app/core/components/TextFieldWithButton"
@@ -36,7 +37,8 @@ const UnivisRoomsSearchPage: BlitzPage = () => {
       </p>
 
       <Form
-        onSubmit={async (values: { searchTerm: string }) => {
+        schema={z.object({ searchTerm: z.string() })}
+        onSubmit={async (values) => {
           setSearchText(values.searchTerm)
           if (!values.searchTerm) return
 
@@ -51,7 +53,7 @@ const UnivisRoomsSearchPage: BlitzPage = () => {
           }
           globalThis.localStorage.setItem(LOCALSTORAGE_UNIVIS_ROOMS, JSON.stringify(terms))
         }}
-        initialValues={{ room: "" }}
+        initialValues={{ searchTerm: "" }}
         keepDirtyOnReinitialize
       >
         <TextFieldWithButton

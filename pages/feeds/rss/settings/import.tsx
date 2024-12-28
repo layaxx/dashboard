@@ -7,6 +7,7 @@ import dayjs from "dayjs"
 import { SubmissionErrors } from "final-form"
 import Head from "next/head"
 import { Field } from "react-final-form"
+import { z } from "zod"
 import Form from "app/core/components/Form"
 import notify from "app/core/hooks/notify"
 import Layout from "app/core/layouts/Layout"
@@ -18,7 +19,7 @@ import deleteAllFeeds from "app/feeds/mutations/deleteAllFeeds"
 
 type FormValues = {
   fileContent: string
-  file: string
+  file: unknown
   shouldDeleteBefore: boolean
 }
 
@@ -33,7 +34,7 @@ const FeedsImportDataPage: BlitzPage = () => {
   const submitHandler = async ({
     fileContent,
     shouldDeleteBefore,
-  }: FormValues): Promise<SubmissionErrors | void> => {
+  }: Omit<FormValues, "file">): Promise<SubmissionErrors | void> => {
     if (!fileContent) {
       return { file: "No file provided" }
     }
@@ -145,6 +146,11 @@ const FeedsImportDataPage: BlitzPage = () => {
       </Head>
       <div className="w-full">
         <Form
+          schema={z.object({
+            fileContent: z.string(),
+            shouldDeleteBefore: z.boolean(),
+            file: z.unknown(),
+          })}
           onSubmit={submitHandler}
           initialValues={{ file: undefined, shouldDeleteBefore: false, fileContent: "" }}
           submitText={"Import Data"}

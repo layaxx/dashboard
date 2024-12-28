@@ -34,12 +34,13 @@ export const LoginForm = (props: LoginFormProps) => {
           try {
             const user = await loginMutation(values)
             props.onSuccess?.(user)
-          } catch (error: any) {
+          } catch (error) {
             return error instanceof AuthenticationError
               ? { [FORM_ERROR]: "Sorry, those credentials are invalid" }
               : {
                   [FORM_ERROR]:
-                    "Sorry, we had an unexpected error. Please try again. - " + error.toString(),
+                    "Sorry, we had an unexpected error. Please try again. - " +
+                    (error instanceof Error ? error.toString() : "unknown error"),
                 }
           }
         }}

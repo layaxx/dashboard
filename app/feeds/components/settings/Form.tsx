@@ -2,6 +2,7 @@ import { Routes } from "@blitzjs/next"
 import { invoke, useMutation } from "@blitzjs/rpc"
 import clsx from "clsx"
 import { useRouter } from "next/router"
+import { z } from "zod"
 import Form from "app/core/components/Form"
 import FormField from "app/core/components/FormField"
 import notify, { notifyPromise } from "app/core/hooks/notify"
@@ -17,7 +18,6 @@ const AddFeedForm = () => {
     name: string
     url: string
     loadIntervall: number | string
-    isActive: boolean
   }) => {
     try {
       new URL(values.url)
@@ -84,6 +84,11 @@ const AddFeedForm = () => {
       )}
     >
       <Form
+        schema={z.object({
+          url: z.string().url(),
+          name: z.string(),
+          loadIntervall: z.number(),
+        })}
         onSubmit={submitHandler}
         initialValues={{ url: "", name: "", loadIntervall: 60 }}
         submitText={"Add new Feed"}

@@ -1,7 +1,8 @@
 import React, { ReactNode, useState } from "react"
 import { invalidateQuery, useMutation, useQuery } from "@blitzjs/rpc"
-import { FormApi, SubmissionErrors } from "final-form"
+import { SubmissionErrors } from "final-form"
 import { Field } from "react-final-form"
+import { z } from "zod"
 import SettingsTable from "./SettingsTable"
 import Form from "app/core/components/Form"
 import MinimalFormField from "app/core/components/MinimalFormField"
@@ -76,47 +77,47 @@ const FeedOptions: React.FC<{ feed: FeedWithEventsAndCount }> = ({ feed: initial
   ]
 
   return (
-    <>
-      <Form
-        onSubmit={(
-          values: typeof initialValues,
-          form: FormApi<any, Partial<any>>,
-        ): SubmissionErrors | void => {
-          if (form.getState().pristine) {
-            return setIsEditing(false)
-          }
+    <Form
+      schema={z.object({
+        autoExpand: z.boolean(),
+        ordering: z.enum(["OLDEST_FIRST", "NEWEST_FIRST", "RANDOM"]),
+        imageHandling: z.enum(["NONE", "SUPPRESS", "LIMIT_HEIGHT_10"]),
+      })}
+      onSubmit={(values, form): SubmissionErrors | void => {
+        if (form.getState().pristine) {
+          return setIsEditing(false)
+        }
 
-          const action =
-            feed.options.id === -1
-              ? createFeedOption({
-                  id: feed.id,
-                  expand: values.autoExpand,
-                  ordering: values.ordering,
-                  imageHandling: values.imageHandling,
-                })
-              : updateFeedOption({
-                  id: feed.options!.id,
-                  expand: values.autoExpand,
-                  ordering: values.ordering,
-                  imageHandling: values.imageHandling,
-                })
+        const action =
+          feed.options.id === -1
+            ? createFeedOption({
+                id: feed.id,
+                expand: values.autoExpand,
+                ordering: values.ordering,
+                imageHandling: values.imageHandling,
+              })
+            : updateFeedOption({
+                id: feed.options!.id,
+                expand: values.autoExpand,
+                ordering: values.ordering,
+                imageHandling: values.imageHandling,
+              })
 
-          notifyPromise(action, {
-            pending: { title: "Updating Options" },
-            success: { title: "Updated Options" },
-            error: { title: "Failed to update Options" },
-          })
-            .then(() => invalidateQuery(getFeed, { id: feed.id }))
-            .finally(() => setIsEditing(false))
-        }}
-        initialValues={initialValues}
-        submitText={isEditing ? "Save" : undefined}
-        resetText={isEditing ? "Cancel" : "Edit"}
-        onReset={() => setIsEditing((old) => !old)}
-      >
-        <SettingsTable rows={isEditing ? rowsEdit : rows} />
-      </Form>
-    </>
+        notifyPromise(action, {
+          pending: { title: "Updating Options" },
+          success: { title: "Updated Options" },
+          error: { title: "Failed to update Options" },
+        })
+          .then(() => invalidateQuery(getFeed, { id: feed.id }))
+          .finally(() => setIsEditing(false))
+      }}
+      initialValues={initialValues}
+      submitText={isEditing ? "Save" : undefined}
+      resetText={isEditing ? "Cancel" : "Edit"}
+      onReset={() => setIsEditing((old) => !old)}
+    >
+      <SettingsTable rows={isEditing ? rowsEdit : rows} />
+    </Form>
   )
 }
 

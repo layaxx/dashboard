@@ -4,6 +4,7 @@ import { BlitzPage } from "@blitzjs/next"
 import { Feedentry } from "@prisma/client"
 import clsx from "clsx"
 import Head from "next/head"
+import { z } from "zod"
 import Form from "app/core/components/Form"
 import Loader from "app/core/components/Loader"
 import TextFieldWithButton from "app/core/components/TextFieldWithButton"
@@ -67,7 +68,12 @@ const RSSPreviewPage: BlitzPage = () => {
       </Head>
 
       <div className="w-full">
-        <Form onSubmit={onSubmit} initialValues={{ url: "" }} className={clsx("mx-auto", "w-full")}>
+        <Form
+          schema={z.object({ url: z.string().url() })}
+          onSubmit={onSubmit}
+          initialValues={{ url: "" }}
+          className={clsx("mx-auto", "w-full")}
+        >
           <TextFieldWithButton
             name={"url"}
             label={"Feed URL"}

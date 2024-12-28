@@ -67,7 +67,7 @@ export default function StatusChart({ data, isDarkMode }: Props) {
         callbacks: {
           label: ({ raw, formattedValue, parsed }) => {
             if (parsed._stacks && parsed._stacks.y) {
-              const { 0: created, 1: updated, 2: _ } = parsed._stacks.y
+              const { 0: created, 1: updated } = parsed._stacks.y
 
               return `inserts: ${created}, updates: ${updated}`
             }

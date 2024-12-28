@@ -1,5 +1,5 @@
 import { validateZodSchema } from "blitz"
-import { ReactNode, PropsWithoutRef, ReactChild, MouseEventHandler } from "react"
+import { ReactNode, PropsWithoutRef, ReactChild, MouseEventHandler, FormEvent } from "react"
 import { Form as FinalForm, FormProps as FinalFormProps } from "react-final-form"
 import { z } from "zod"
 import Button from "./Button"
@@ -7,7 +7,7 @@ import ButtonGroup from "./ButtonGroup"
 
 export { FORM_ERROR } from "final-form"
 
-export interface FormProps<S extends z.ZodType<any, any>>
+export interface FormProps<S extends z.ZodType<unknown, z.ZodTypeDef>>
   extends Omit<PropsWithoutRef<JSX.IntrinsicElements["form"]>, "onSubmit"> {
   /** All your form fields */
   children?: ReactNode
@@ -23,6 +23,7 @@ export interface FormProps<S extends z.ZodType<any, any>>
   keepDirtyOnReinitialize?: boolean
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function Form<S extends z.ZodType<any, any>>({
   children,
   submitText,
@@ -73,7 +74,7 @@ export function Form<S extends z.ZodType<any, any>>({
                     onClick={(event) => {
                       form.reset()
                       if (props.onReset) {
-                        props.onReset(event as any)
+                        props.onReset(event as unknown as FormEvent<HTMLFormElement>)
                       }
                     }}
                     disabled={submitting}

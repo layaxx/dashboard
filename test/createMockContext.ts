@@ -23,7 +23,7 @@ export default async function createMockContext<C extends Ctx>({
   resOptions,
   isAuthorized,
 }: CreateMockContextOptions = {}) {
-  const mocks = httpMocks.createMocks<any, any>(reqOptions, resOptions)
+  const mocks = httpMocks.createMocks<never, never>(reqOptions, resOptions)
   const mockRequest: Request = mocks.req
   const mockResponse: Response<C> = mocks.res
 

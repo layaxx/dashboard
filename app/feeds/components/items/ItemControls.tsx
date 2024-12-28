@@ -4,8 +4,8 @@ import clsx from "clsx"
 
 type ItemControlProps = {
   item: Feedentry
-  read: Function
-  unread: Function
+  read: () => void
+  unread: () => void
   hasBeenRead: boolean
 }
 

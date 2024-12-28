@@ -3,6 +3,7 @@ import { BlitzPage, Routes } from "@blitzjs/next"
 import { invalidateQuery, useMutation } from "@blitzjs/rpc"
 import { PlusIcon } from "@heroicons/react/24/outline"
 import Head from "next/head"
+import { z } from "zod"
 import Form from "app/core/components/Form"
 import TextFieldWithButton from "app/core/components/TextFieldWithButton"
 import DashboardLayout from "app/core/layouts/DashboardLayout"
@@ -27,6 +28,7 @@ const FeedsReadingPage: BlitzPage = () => {
           <>
             <div className="md:px-10">
               <Form
+                schema={z.object({ url: z.string().url() })}
                 onSubmit={({ url }, form) =>
                   addReadlistEntry({ url }).then(() => {
                     invalidateQuery(getReadlistentries)

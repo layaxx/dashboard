@@ -9,7 +9,7 @@ import Link from "next/link"
 dayjs.extend(relativeTime)
 
 interface IProps extends Feed {
-  refetch: () => Promise<any | void>
+  refetch: () => Promise<unknown | void>
 }
 
 const SettingsItem: FC<IProps> = ({ id, url, name, lastLoad, loadIntervall, isActive }) => {

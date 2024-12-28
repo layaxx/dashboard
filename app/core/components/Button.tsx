@@ -3,6 +3,7 @@ import {
   MouseEventHandler,
   PropsWithChildren,
   ReactChild,
+  ReactNode,
   useContext,
 } from "react"
 import clsx from "clsx"
@@ -16,7 +17,7 @@ export type ButtonRoundedValue = "all" | "none" | "left" | "right"
 export type ButtonSize = "sm" | "md" | "lg" | "xl"
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  children: any
+  children: ReactNode
   variant?: ButtonVariant
   onClick?: MouseEventHandler<HTMLButtonElement>
   icon?: ReactChild
@@ -39,12 +40,12 @@ const Button = ({
   ...rest
 }: ButtonProps) => {
   const Wrapper = href
-    ? ({ children }: PropsWithChildren<{}>) => (
+    ? ({ children }: PropsWithChildren<unknown>) => (
         <Link href={href} passHref className="contents">
           {children}
         </Link>
       )
-    : ({ children }: PropsWithChildren<{}>) => <>{children}</>
+    : ({ children }: PropsWithChildren<unknown>) => <>{children}</>
 
   const context = useContext(ButtonGroupContext)
   const isInsideButtonGroup = !!context

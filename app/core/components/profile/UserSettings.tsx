@@ -1,5 +1,6 @@
 import { useMutation } from "@blitzjs/rpc"
 import { FORM_ERROR } from "final-form"
+import { z } from "zod"
 import Form from "../Form"
 import LabeledTextField from "../LabeledTextField"
 import changeProfileMutation from "app/auth/mutations/changeProfile"
@@ -13,12 +14,14 @@ const UserSettings = () => {
 
   return (
     <Form
+      schema={z.object({ name: z.string(), email: z.string().email() })}
       onSubmit={async ({ name, email }, form) => {
         const errors: { [key: string]: string } = {}
         const { valid, pristine } = form.getState()
         if (!pristine && valid) {
           try {
-            form.initialize(await changeProfile({ name, email }))
+            const result = await changeProfile({ name, email })
+            form.initialize({ name: result.name ?? "", email: result.email })
             notify("Successfully changed Profile Settings", { status: "success" })
           } catch (error) {
             if (error instanceof Error) {

@@ -4,7 +4,7 @@ import { useField, UseFieldConfig } from "react-final-form"
 import { twMerge } from "tailwind-merge"
 import Button, { ButtonProps } from "./Button"
 
-export interface TextFieldWithButton extends PropsWithoutRef<JSX.IntrinsicElements["input"]> {
+export interface ITextFieldWithButton extends PropsWithoutRef<JSX.IntrinsicElements["input"]> {
   /** Field name. */
   name: string
   /** Field label. */
@@ -17,15 +17,17 @@ export interface TextFieldWithButton extends PropsWithoutRef<JSX.IntrinsicElemen
   button: PropsWithoutRef<Omit<ButtonProps, "children">>
 }
 
-export const TextFieldWithButton = forwardRef<HTMLInputElement, TextFieldWithButton>(
+// eslint-disable-next-line react/display-name
+export const TextFieldWithButton = forwardRef<HTMLInputElement, ITextFieldWithButton>(
   ({ name, label, outerProps, fieldProps, labelProps, button, ...props }, reference) => {
     const {
       input,
       meta: { touched, error, submitError, submitting, pristine, valid },
-    } = useField(name, {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } = useField<any>(name, {
       parse:
         props.type === "number"
-          ? (Number as any)
+          ? Number
           : // Converting `""` to `null` ensures empty values will be set to null in the DB
             // eslint-disable-next-line unicorn/no-null
             (v) => (v === "" ? null : v),

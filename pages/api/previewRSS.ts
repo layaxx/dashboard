@@ -10,11 +10,13 @@ import { fetchFromURL } from "lib/serverOnly/loadRSSHelpers"
 
 const logger = BlitzLogger({ name: "/api/loadRSS" })
 
-export interface ResponseWithSession extends NextApiResponse<any> {
-  blitzCtx?: { session: { $authorize: Function; $isAuthorized: Function } }
+type ResponseType = { items: Feedentry[] }
+
+export interface ResponseWithSession<T> extends NextApiResponse<T> {
+  blitzCtx?: { session: { $authorize: () => void; $isAuthorized: () => boolean } }
 }
 
-const handler: NextApiHandler = async (request, response: ResponseWithSession) => {
+const handler: NextApiHandler = async (request, response: ResponseWithSession<ResponseType>) => {
   const session = await getSession(request, response)
 
   if (!session.userId) {

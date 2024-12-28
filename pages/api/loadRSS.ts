@@ -2,8 +2,9 @@ import { BlitzLogger } from "blitz"
 import { AuthenticatedSessionContext, getSession } from "@blitzjs/auth"
 import { Ctx, Routes } from "@blitzjs/next"
 import dayjs from "dayjs"
-import { NextApiResponse, NextApiHandler } from "next"
+import { NextApiHandler } from "next"
 import { performance } from "perf_hooks"
+import { ResponseWithSession } from "./previewRSS"
 import { api } from "app/blitz-server"
 import db, { FeedLoadEvent } from "db"
 import { LoadFeedStatus, Result } from "lib/feeds/types"
@@ -12,11 +13,12 @@ import { loadFeed } from "lib/serverOnly/loadRSSHelpers"
 
 const logger = BlitzLogger({ name: "/api/loadRSS" })
 
-export interface ResponseWithSession extends NextApiResponse<any> {
-  blitzCtx?: { session: { $authorize: Function; $isAuthorized: Function } }
-}
-
-const handler: NextApiHandler = async (request, response: ResponseWithSession) => {
+const handler: NextApiHandler = async (
+  request,
+  response: ResponseWithSession<
+    string | { results: Result[]; timeElapsed: number; errors: string[] }
+  >,
+) => {
   let session = await getSession(request, response)
 
   if (!session.userId) {

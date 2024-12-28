@@ -40,8 +40,7 @@ const GenericModal: React.FC<IProps> = ({ cancelButton, confirmButton, icon, tit
         )}
         id="modal-backdrop"
         onClick={(event) => {
-          // @ts-ignore
-          if (event.target.id === "modal-backdrop") {
+          if ("id" in event.target && event.target.id === "modal-backdrop") {
             cancelButton.handler(event)
           }
         }}

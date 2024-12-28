@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 /* eslint-disable no-console */
 const { execSync } = require("child_process")
 const fs = require("fs")
@@ -12,5 +13,5 @@ if (process.argv[2] === "--dev") {
 fs.writeFileSync(
   "./lib/config/version.ts",
   `const version = "${version}"
-export default version`
+export default version`,
 )

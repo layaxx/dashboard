@@ -28,8 +28,8 @@ export interface NotificationType {
   image?: string
   dismissAfter?: number
   dismissible?: boolean
-  onAdd?: (...arguments_: any[]) => void
-  onDismiss?: (...arguments_: any[]) => void
+  onAdd?: (...arguments_: unknown[]) => void
+  onDismiss?: (...arguments_: unknown[]) => void
   showDismissButton?: boolean
   allowHTML?: boolean
 }

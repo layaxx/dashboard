@@ -1,8 +1,5 @@
-/* eslint-disable sort-keys */
 import clsx from "clsx"
 import { Dayjs } from "dayjs"
-import Particles from "react-tsparticles"
-import options from "./particleOptions"
 
 type Props = {
   time: Dayjs
@@ -29,7 +26,6 @@ const FullscreenModal = ({ time, close }: Props) => {
       )}
       style={{ transition: "opacity 0.25s ease" }}
     >
-      <Particles id="tsparticles" options={options as any} />
       <div
         className={clsx(
           "caret-transparent",

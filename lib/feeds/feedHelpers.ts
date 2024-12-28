@@ -53,7 +53,7 @@ export function cleanXSS(string: string) {
   return xss(string, XSSOptions)
 }
 
-export const convertItem = (item: FeedEntry, feed: { id: number; url: string }): any => {
+export const convertItem = (item: FeedEntry, feed: { id: number; url: string }) => {
   const id = item.guid || item.id || item.link
 
   if (!id) {

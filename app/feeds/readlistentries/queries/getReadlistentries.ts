@@ -2,8 +2,10 @@ import { paginate } from "blitz"
 import { resolver } from "@blitzjs/rpc"
 import db, { Prisma } from "db"
 
-interface GetReadlistentriesInput
-  extends Pick<Prisma.ReadlistentryFindManyArgs, "where" | "orderBy" | "skip" | "take"> {}
+type GetReadlistentriesInput = Pick<
+  Prisma.ReadlistentryFindManyArgs,
+  "where" | "orderBy" | "skip" | "take"
+>
 
 export default resolver.pipe(
   resolver.authorize(),
@@ -31,5 +33,5 @@ export default resolver.pipe(
       hasMore,
       count,
     }
-  }
+  },
 )

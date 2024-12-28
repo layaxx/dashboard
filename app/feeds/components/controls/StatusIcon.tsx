@@ -19,7 +19,6 @@ type StatusButtonProps = {
 
 let lastReload = -1
 
-// eslint-disable-next-line unicorn/consistent-function-scoping
 const handleOnReload = async () => {
   notifyPromiseAdvanced(
     () =>

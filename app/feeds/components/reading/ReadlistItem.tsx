@@ -7,8 +7,8 @@ import updateReadlistentry from "app/feeds/readlistentries/mutations/updateReadl
 type Props = {
   url: string
   id: number
-  hide: Function
-  unhide: Function
+  hide: () => void
+  unhide: () => void
 }
 
 const ReadlistItem = ({ url, id, hide, unhide }: Props) => {
