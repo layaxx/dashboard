@@ -3,8 +3,9 @@ import { invoke, useMutation } from "@blitzjs/rpc"
 import clsx from "clsx"
 import { useRouter } from "next/router"
 import { z } from "zod"
-import Form from "app/core/components/Form"
-import FormField from "app/core/components/FormField"
+import Form from "app/core/components/form"
+import FormField from "app/core/components/form/fields/FormField"
+import LabeledTextField from "app/core/components/form/fields/LabeledTextField"
 import notify, { notifyPromise } from "app/core/hooks/notify"
 import createFeedMutation from "app/feeds/mutations/createFeed"
 import getTitleAndTTLQuery from "app/feeds/queries/getInfoFromFeedURL"
@@ -109,7 +110,7 @@ const AddFeedForm = () => {
             type="Text"
             placeholder="(can be auto-detected)"
           />
-          <FormField
+          <LabeledTextField
             name="loadIntervall"
             type="number"
             label="Load Intervall: "

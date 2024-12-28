@@ -2,7 +2,8 @@ import { forwardRef, ComponentPropsWithoutRef, PropsWithoutRef } from "react"
 import clsx from "clsx"
 import { useField, UseFieldConfig } from "react-final-form"
 import { twMerge } from "tailwind-merge"
-import Button, { ButtonProps } from "./Button"
+import Button, { ButtonProps } from "../../Button"
+import { makeParseFunction } from "lib/form"
 
 export interface ITextFieldWithButton extends PropsWithoutRef<JSX.IntrinsicElements["input"]> {
   /** Field name. */
@@ -19,18 +20,16 @@ export interface ITextFieldWithButton extends PropsWithoutRef<JSX.IntrinsicEleme
 
 // eslint-disable-next-line react/display-name
 export const TextFieldWithButton = forwardRef<HTMLInputElement, ITextFieldWithButton>(
-  ({ name, label, outerProps, fieldProps, labelProps, button, ...props }, reference) => {
+  (
+    { name, label, outerProps, fieldProps, labelProps, button, type = "text", ...props },
+    reference,
+  ) => {
     const {
       input,
       meta: { touched, error, submitError, submitting, pristine, valid },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } = useField<any>(name, {
-      parse:
-        props.type === "number"
-          ? Number
-          : // Converting `""` to `null` ensures empty values will be set to null in the DB
-            // eslint-disable-next-line unicorn/no-null
-            (v) => (v === "" ? null : v),
+      parse: makeParseFunction(type),
       ...fieldProps,
     })
 
@@ -67,6 +66,7 @@ export const TextFieldWithButton = forwardRef<HTMLInputElement, ITextFieldWithBu
                 "rounded-l",
                 "w-full",
               )}
+              type={type}
             />
             <Button
               {...button}

@@ -1,10 +1,12 @@
-import React, { FC, HTMLAttributes } from "react"
+import type { FC, HTMLAttributes } from "react"
 import clsx from "clsx"
 import { Field } from "react-final-form"
+import { makeParseFunction } from "lib/form"
 
 type FormFieldProps = {
   required?: boolean
   name: string
+  label: string
   type: string
   placeholder?: string
   labelProps?: HTMLAttributes<HTMLLabelElement>
@@ -12,6 +14,7 @@ type FormFieldProps = {
 }
 
 const FormField: FC<FormFieldProps> = ({
+  label,
   name,
   type,
   labelProps,
@@ -19,12 +22,20 @@ const FormField: FC<FormFieldProps> = ({
   required,
   placeholder,
 }) => {
+  const labelContent = required
+    ? [
+        label,
+        <span key="required-indicator" className={clsx("border-red-700", "dark:border-red-800")}>
+          *
+        </span>,
+      ]
+    : [label]
   return (
     <Field
       name={name}
       type={type}
+      parse={makeParseFunction(type)}
       render={({ input, meta }) => {
-        const showError = meta.dirty && !meta.valid && !meta.modifiedSinceLastSubmit
         return (
           <label
             {...labelProps}
@@ -33,28 +44,29 @@ const FormField: FC<FormFieldProps> = ({
               "flex-row",
               "flex-wrap",
               type === "checkbox" && "justify-between",
+              "mt-4",
               labelProps?.className,
-              showError && "text-error",
+              meta.dirty &&
+                !meta.valid &&
+                !meta.modifiedSinceLastSubmit && ["border-red-700", "dark:border-red-800"],
             )}
           >
+            <span className="min-w-36">{labelContent}</span>
             <input
               {...inputProps}
               {...input}
-              required={required}
               onChange={(event) => input.onChange(event)}
               placeholder={placeholder}
               className={clsx(
                 inputProps?.className,
+                "dark:bg-slate-700",
                 type === "checkbox" ? "w-4" : "grow",
-                showError && ["border-error", "border-b-2"],
+                "border-b-2",
+                "dark:border-slate-500",
+                "dark:text-gray-200",
+                "text-right",
               )}
             />
-            {showError && (
-              <>
-                {meta.error && meta.error}
-                {meta.submitError && meta.submitError}
-              </>
-            )}
           </label>
         )
       }}

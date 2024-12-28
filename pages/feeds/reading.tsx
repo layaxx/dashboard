@@ -4,8 +4,8 @@ import { invalidateQuery, useMutation } from "@blitzjs/rpc"
 import { PlusIcon } from "@heroicons/react/24/outline"
 import Head from "next/head"
 import { z } from "zod"
-import Form from "app/core/components/Form"
-import TextFieldWithButton from "app/core/components/TextFieldWithButton"
+import Form from "app/core/components/form"
+import TextFieldWithButton from "app/core/components/form/fields/TextFieldWithButton"
 import DashboardLayout from "app/core/layouts/DashboardLayout"
 import { FeedListContainer } from "app/feeds/components/FeedListContainer"
 import ItemSkeleton from "app/feeds/components/items/ItemSkeleton"
@@ -32,7 +32,8 @@ const FeedsReadingPage: BlitzPage = () => {
                 onSubmit={({ url }, form) =>
                   addReadlistEntry({ url }).then(() => {
                     invalidateQuery(getReadlistentries)
-                    form.reset()
+                    form.reset({ url: "" })
+                    form.resetFieldState("url")
                   })
                 }
               >

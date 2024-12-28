@@ -2,8 +2,8 @@ import { validateZodSchema } from "blitz"
 import { ReactNode, PropsWithoutRef, ReactChild, MouseEventHandler, FormEvent } from "react"
 import { Form as FinalForm, FormProps as FinalFormProps } from "react-final-form"
 import { z } from "zod"
-import Button from "./Button"
-import ButtonGroup from "./ButtonGroup"
+import Button from "../Button"
+import ButtonGroup from "../ButtonGroup"
 
 export { FORM_ERROR } from "final-form"
 
@@ -23,8 +23,7 @@ export interface FormProps<S extends z.ZodType<unknown, z.ZodTypeDef>>
   keepDirtyOnReinitialize?: boolean
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function Form<S extends z.ZodType<any, any>>({
+export function Form<S extends z.ZodType<unknown, z.ZodTypeDef>>({
   children,
   submitText,
   submitIcon,
