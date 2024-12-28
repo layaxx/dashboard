@@ -3,7 +3,7 @@ import { HTMLAttributes, PropsWithChildren } from "react"
 import { ErrorBoundary } from "@blitzjs/next"
 import { QueryErrorResetBoundary } from "@tanstack/react-query"
 import Button, { ButtonProps } from "./Button"
-import { Prisma } from "db"
+import { isKnownRequestError } from "db"
 
 type Props = {
   buttonProps?: Partial<ButtonProps>
@@ -30,8 +30,7 @@ const QueryErrorBoundary: React.FC<PropsWithChildren<Props>> = ({
 
             if (
               error instanceof NotFoundError ||
-              (error.constructor.name === Prisma.PrismaClientKnownRequestError.name &&
-                error.code === "P2025") // Specific code for "record not found"
+              (isKnownRequestError(error) && error.code === "P2025") // Specific code for "record not found"
             ) {
               content = "This was not found."
             }
