@@ -42,19 +42,10 @@ const UserSettings = () => {
       }}
       submitText="submit changes"
       resetText="reset"
+      initialValues={{ name: user?.name ?? "", email: user?.email ?? "" }}
     >
-      <LabeledTextField
-        label="email"
-        type="email"
-        fieldProps={{ initialValue: user?.email }}
-        name={"email"}
-      />
-      <LabeledTextField
-        label="name"
-        fieldProps={{ initialValue: user?.name ?? undefined }}
-        placeholder="username"
-        name={"name"}
-      />
+      <LabeledTextField label="email" type="email" name={"email"} />
+      <LabeledTextField label="name" placeholder="username" name={"name"} />
       <LabeledTextField
         name="role"
         label="role"

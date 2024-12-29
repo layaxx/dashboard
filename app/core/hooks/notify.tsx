@@ -1,23 +1,7 @@
-import { ReactEventHandler } from "react"
 import dayjs from "dayjs"
-import { ToastOptions, toast } from "react-toastify"
-import Notification, { NotificationType, Status } from "../components/Notification"
-
-type NotifyButton = {
-  name: string
-  onClick: ReactEventHandler
-}
-type NotifyOptions = {
-  message?: string
-  status?: Status
-  showDismissButton?: boolean
-  dismissAfter?: number | false
-  dismissible?: false
-  image?: string
-  buttons?: NotifyButton[]
-  id?: string
-  toastOptions?: ToastOptions
-}
+import { toast } from "react-toastify"
+import Notification, { NotificationType } from "../components/Notification"
+import { NotifyOptions, NotifyPromiseOptions, NotifyPromiseSharedOptions } from "lib/notify/types"
 
 function getNotificationProps(
   options: { title: string; id: string } & NotifyOptions,
@@ -52,22 +36,6 @@ export default function notify(title: string, options?: NotifyOptions) {
       ...options?.toastOptions,
     },
   )
-}
-
-type NotifyPromiseSharedOptions = {
-  title?: string
-  message?: string
-  id?: string
-  showDismissButton?: boolean
-  image?: string
-  buttons?: NotifyButton[]
-  dismissible?: false
-  dismissAfter?: number
-}
-
-type NotifyPromiseOptions = {
-  title?: string
-  message?: string
 }
 
 export function notifyPromise(

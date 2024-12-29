@@ -11,6 +11,8 @@ import updateFeedMutation from "app/feeds/mutations/updateFeed"
 import getFeed from "app/feeds/queries/getFeed"
 import { FeedWithEventsAndCount } from "lib/feeds/types"
 
+const minimumLoadInterval = 5
+
 const FeedDetails: React.FC<{ feed: FeedWithEventsAndCount }> = ({ feed: initialData }) => {
   const [isEditing, setIsEditing] = useState(false)
   const [updateFeed] = useMutation(updateFeedMutation)
@@ -45,7 +47,7 @@ const FeedDetails: React.FC<{ feed: FeedWithEventsAndCount }> = ({ feed: initial
           name: z.string(),
           isActive: z.boolean(),
           url: z.string(),
-          loadIntervall: z.number(),
+          loadIntervall: z.number().lte(minimumLoadInterval),
         })}
         onSubmit={(values, form): SubmissionErrors | void => {
           if (form.getState().pristine) {
@@ -62,10 +64,10 @@ const FeedDetails: React.FC<{ feed: FeedWithEventsAndCount }> = ({ feed: initial
             console.error("invalid URL")
             return { url: "Invalid URL" }
           }
-          // eslint-disable-next-line no-magic-numbers
-          if (values.loadIntervall < 5) {
-            console.error("Load interval must be at least 5")
-            return { loadIntervall: "Load interval must be at least 5" }
+
+          if (values.loadIntervall < minimumLoadInterval) {
+            console.error("Load interval must be at least " + minimumLoadInterval)
+            return { loadIntervall: "Load interval must be at least " + minimumLoadInterval }
           }
 
           notifyPromise(

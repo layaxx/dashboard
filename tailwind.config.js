@@ -1,7 +1,6 @@
 // tailwind.config.js
 module.exports = {
   content: ["{pages,app}/**/*.{js,ts,jsx,tsx}"],
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
   plugins: [require("@tailwindcss/typography")],
   theme: {
     extend: {

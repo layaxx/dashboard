@@ -7,7 +7,7 @@ import { getRedirectionPath } from "../redirection"
 import login from "app/auth/mutations/login"
 import { Login } from "app/auth/validations"
 import { Form, FORM_ERROR } from "app/core/components/form"
-import { LabeledTextField } from "app/core/components/form/fields/LabeledTextField"
+import LabeledTextField from "app/core/components/form/fields/LabeledTextField"
 
 type LoginFormProps = {
   onSuccess?: (user: PromiseReturnType<typeof login>) => void

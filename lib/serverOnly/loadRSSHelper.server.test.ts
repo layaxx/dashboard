@@ -135,7 +135,6 @@ describe("loadRSSHelpers#getTitleAndTTLFromFeed works as expected", () => {
 
     const [receivedTitle, receivedTTL] = await getTitleAndTTLFromFeed("url")
 
-    // eslint-disable-next-line no-magic-numbers
     expect(receivedTTL).toBe(40)
     expect(receivedTitle).toBe("title")
   })

@@ -6,7 +6,7 @@ import { getRedirectionParameters } from "../redirection"
 import signup from "app/auth/mutations/signup"
 import { Signup } from "app/auth/validations"
 import { Form, FORM_ERROR } from "app/core/components/form"
-import { LabeledTextField } from "app/core/components/form/fields/LabeledTextField"
+import LabeledTextField from "app/core/components/form/fields/LabeledTextField"
 import { isKnownRequestError } from "db"
 
 type SignupFormProps = {

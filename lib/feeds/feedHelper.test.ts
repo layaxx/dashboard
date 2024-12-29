@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers */
 import { faker } from "@faker-js/faker"
 import { FeedEntry } from "feed-reader"
 import {

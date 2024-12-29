@@ -12,9 +12,8 @@ import removeFeedMutation from "app/feeds/mutations/deleteFeed"
 import readAllItemsInFeedMutation from "app/feeds/mutations/readAllItemsInFeed"
 import { FeedWithEventsAndCount } from "lib/feeds/types"
 
-const Modal: ConfirmDialog<{ _ignored?: never }, boolean> = (props) => {
-  // eslint-disable-next-line unicorn/no-null
-  if (!props.show) return null
+const Modal: ConfirmDialog<Record<string, never>, boolean> = (props) => {
+  if (!props.show) return <></>
 
   return (
     <GenericModal

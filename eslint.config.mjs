@@ -64,7 +64,7 @@ const eslintConfig = [
         "warn",
         {
           ignoreDefaultValues: true,
-          ignore: [-1, 0, 1, 2, 100],
+          ignore: [-1, 0, 1, 2, 100, 1000],
         },
       ],
       "no-nested-ternary": "warn",
@@ -160,6 +160,8 @@ const eslintConfig = [
       "unicorn/switch-case-braces": ["warn", "avoid"],
     },
   },
+  { files: ["*.js"], rules: { "@typescript-eslint/no-require-imports": "off" } },
+  { files: ["**/*test.ts"], rules: { "no-magic-numbers": "off" } },
 ]
 
 export default eslintConfig

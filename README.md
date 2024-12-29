@@ -2,12 +2,6 @@
 
 # TODO
 
-For Docker deploy, db/schema.prisma must be changed to contain actual DB connection string instead of reference to env variable
-
-- [x] Prisma v3 -> v4
-- [ ] Ordering of feedentries
-- [x] links with target new tab
-- [x] deleteManyFeedEntrie (or read at least)
 - [ ] better logging
 
 This is a [Blitz.js](https://github.com/blitz-js/blitz) app.

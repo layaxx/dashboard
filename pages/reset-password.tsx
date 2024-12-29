@@ -5,7 +5,7 @@ import { useRouter } from "next/router"
 import resetPassword from "app/auth/mutations/resetPassword"
 import { ResetPassword } from "app/auth/validations"
 import { Form, FORM_ERROR } from "app/core/components/form"
-import { LabeledTextField } from "app/core/components/form/fields/LabeledTextField"
+import LabeledTextField from "app/core/components/form/fields/LabeledTextField"
 import Layout from "app/core/layouts/Layout"
 
 const ResetPasswordPage: BlitzPage = () => {

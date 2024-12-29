@@ -6,12 +6,11 @@ import { useSharedState } from "../hooks/store"
 
 type Props = { items: ReactChild; feeds: ReactChild }
 
+const loadFromLocalStorage = (): boolean =>
+  JSON.parse(localStorage.getItem("hideNavbar") ?? "false")
+
 const DashboardLayout = ({ items, feeds }: Props) => {
   const [_, setSharedState] = useSharedState()
-
-  // eslint-disable-next-line unicorn/consistent-function-scoping
-  const loadFromLocalStorage = (): boolean =>
-    JSON.parse(localStorage.getItem("hideNavbar") ?? "false")
 
   const [hideNavbar, setHideNavbar] = useState<boolean>(false)
 

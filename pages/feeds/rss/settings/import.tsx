@@ -1,10 +1,7 @@
 import { useState } from "react"
 import { BlitzPage } from "@blitzjs/next"
 import { useMutation } from "@blitzjs/rpc"
-import { Feed, Feedentry } from "@prisma/client"
 import clsx from "clsx"
-import dayjs from "dayjs"
-import { SubmissionErrors } from "final-form"
 import Head from "next/head"
 import { Field } from "react-final-form"
 import { z } from "zod"
@@ -12,10 +9,7 @@ import Form from "app/core/components/form"
 import notify from "app/core/hooks/notify"
 import Layout from "app/core/layouts/Layout"
 import FileReaderComponent from "app/feeds/components/settings/FileReader"
-import createFeed from "app/feeds/mutations/createFeed"
-import createFeedEntry from "app/feeds/mutations/createFeedEntry"
-import deleteAllFeedEntries from "app/feeds/mutations/deleteAllFeedEntries"
-import deleteAllFeeds from "app/feeds/mutations/deleteAllFeeds"
+import importFeeds from "app/feeds/mutations/importFeeds"
 
 type FormValues = {
   fileContent: string
@@ -24,35 +18,13 @@ type FormValues = {
 }
 
 const FeedsImportDataPage: BlitzPage = () => {
-  const [deleteFeedFunction] = useMutation(deleteAllFeeds)
-  const [deleteFeedEntryFunction] = useMutation(deleteAllFeedEntries)
-  const [createFeedFunction] = useMutation(createFeed)
-  const [createFeedEntryFunction] = useMutation(createFeedEntry)
-
   const [backup, setBackup] = useState("")
+  const [importData] = useMutation(importFeeds)
 
   const submitHandler = async ({
     fileContent,
     shouldDeleteBefore,
-  }: Omit<FormValues, "file">): Promise<SubmissionErrors | void> => {
-    if (!fileContent) {
-      return { file: "No file provided" }
-    }
-    let parsedContent
-    try {
-      parsedContent = JSON.parse(fileContent)
-    } catch {
-      return { fileContent: "Failed to parse JSON." }
-    }
-    if (!parsedContent.feeds) {
-      console.error("No feeds in provided file")
-      return { fileContent: "No feeds in provided file" }
-    }
-    if (!parsedContent.feedEntries) {
-      console.error("No feedEntries in provided file")
-      return { fileContent: "No feedEntries in provided file" }
-    }
-
+  }: Pick<FormValues, "fileContent" | "shouldDeleteBefore">) => {
     if (shouldDeleteBefore) {
       // make Backup for safety
       const exportResponse = await fetch("/api/export")
@@ -61,82 +33,18 @@ const FeedsImportDataPage: BlitzPage = () => {
         return
       }
       setBackup(await exportResponse.text())
-
-      const resultDeleteFeedEntries = await deleteFeedEntryFunction({ confirm: shouldDeleteBefore })
-      const resultDeleteFeeds = await deleteFeedFunction({ confirm: shouldDeleteBefore })
-
-      console.log(
-        "Deleted",
-        resultDeleteFeedEntries.count,
-        "Entries from",
-        resultDeleteFeeds.count,
-        "Feeds.",
-      )
-    }
-    let failure = false
-    const idLookup = new Map()
-    const feeds = await Promise.all(
-      parsedContent.feeds.map(async (feed: Feed) => {
-        const result = await createFeedFunction({
-          name: feed.name,
-          url: feed.url,
-          loadIntervall: feed.loadIntervall,
-        })
-        console.log("added Feed:", result.url)
-        idLookup.set(feed.id, result.id)
-        return result
-      }),
-    ).catch((error) => {
-      console.error(error)
-      notify("Failed to Import Feeds.", { status: "error" })
-      failure = true
-      return []
-    })
-
-    if (failure) {
-      return
     }
 
-    const feedEntries = await Promise.all(
-      parsedContent.feedEntries.map(
-        async ({
-          createdAt,
-          feedId,
-          id,
-          isArchived,
-          link,
-          summary,
-          text,
-          title,
-          updatedAt,
-        }: Feedentry) => {
-          const result = await createFeedEntryFunction({
-            createdAt: dayjs(createdAt).toISOString(),
-            feedId: idLookup.get(feedId),
-            id,
-            isArchived,
-            link,
-            summary,
-            text,
-            title,
-            updatedAt: dayjs(updatedAt).toISOString(),
-          })
-
-          console.log("added FeedEntry:", result.id)
-          return result
-        },
-      ),
-    ).catch((error) => {
-      console.error(error)
-      notify("Failed to Import Feedentries.", { status: "error" })
-      failure = true
-      return []
-    })
-    if (failure) return
-
-    notify("Success!", {
-      message: `Added ${feedEntries.length} Entries in ${feeds.length} Feeds.`,
-    })
+    try {
+      await importData({ fileContent, shouldDeleteBefore })
+      notify("Successfully imported data", { status: "success" })
+      return {}
+    } catch (error) {
+      notify("Failed to import data", {
+        status: "error",
+        message: error instanceof Error ? error.toString() : undefined,
+      })
+    }
   }
 
   return (
