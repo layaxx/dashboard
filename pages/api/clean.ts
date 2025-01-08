@@ -7,6 +7,8 @@ import { api } from "app/blitz-server"
 import db from "db"
 import { getIDSFromFeeds } from "lib/serverOnly/loadRSSHelpers"
 
+const maximumEntriesToBeDeleted = 30_000
+
 const logger = BlitzLogger({ name: "/api/clean" })
 
 const handler = async (request: NextApiRequest, response: NextApiResponse) => {
@@ -31,6 +33,7 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
     orderBy: { createdAt: "desc" },
     skip: 25,
   })
+  statusLoadToBeDeleted.length = Math.min(statusLoadToBeDeleted.length, maximumEntriesToBeDeleted)
   const { count: countStatusLoadDeleted } = await db.statusLoad.deleteMany({
     where: { id: { in: statusLoadToBeDeleted.map((status) => status.id) } },
   })
@@ -40,6 +43,7 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
     orderBy: { createdAt: "desc" },
     skip: 25,
   })
+  statusCleanToBeDeleted.length = Math.min(statusCleanToBeDeleted.length, maximumEntriesToBeDeleted)
   const { count: countStatusCleanDeleted } = await db.statusClean.deleteMany({
     where: { id: { in: statusCleanToBeDeleted.map((status) => status.id) } },
   })
@@ -58,16 +62,18 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
   // eslint-disable-next-line unicorn/prefer-spread
   const stillOnlineIDs = await getIDSFromFeeds(Array.from(urlsToBeChecked))
 
+  const entryIDsToBeDeleted = entriesToBeDeleted
+    .filter(
+      (entry) =>
+        !stillOnlineIDs.get(entry.feed.url) || !stillOnlineIDs.get(entry.feed.url)!.has(entry.id),
+    )
+    .map((entry) => entry.id)
+  entryIDsToBeDeleted.length = Math.min(entryIDsToBeDeleted.length, maximumEntriesToBeDeleted)
+
   const { count: countEntriesDeleted } = await db.feedentry.deleteMany({
     where: {
       id: {
-        in: entriesToBeDeleted
-          .filter(
-            (entry) =>
-              !stillOnlineIDs.get(entry.feed.url) ||
-              !stillOnlineIDs.get(entry.feed.url)!.has(entry.id)
-          )
-          .map((entry) => entry.id),
+        in: entryIDsToBeDeleted,
       },
     },
   })
@@ -94,8 +100,8 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
         duration,
       },
       undefined,
-      2
-    )
+      2,
+    ),
   )
 }
 export default api(handler)
