@@ -14,5 +14,5 @@ export default resolver.pipe(
     const feedoption = await db.feedoption.deleteMany({ where: { id } })
 
     return feedoption
-  }
+  },
 )

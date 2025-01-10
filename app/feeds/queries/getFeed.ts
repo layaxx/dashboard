@@ -1,7 +1,7 @@
 import { NotFoundError } from "blitz"
 import { resolver } from "@blitzjs/rpc"
 import { z } from "zod"
-import { defaultOptions } from "app/feedoptions"
+import { defaultOptions } from "app/feeds/feedoptions"
 import db from "db"
 
 const GetFeed = z.object({
