@@ -4,6 +4,7 @@ import { ErrorBoundary } from "@blitzjs/next"
 import { QueryErrorResetBoundary } from "@tanstack/react-query"
 import Button, { ButtonProps } from "./Button"
 import { isKnownRequestError } from "db"
+import { reportErrorWebhook } from "lib/reportErrorWebhook"
 
 type Props = {
   buttonProps?: Partial<ButtonProps>
@@ -23,6 +24,8 @@ const QueryErrorBoundary: React.FC<PropsWithChildren<Props>> = ({
         <ErrorBoundary
           fallbackRender={({ error, resetErrorBoundary }) => {
             let content = `Something went wrong (${error.name})`
+
+            reportErrorWebhook({ error, boundary: "QueryErrorBoundary" })
 
             if (error instanceof AuthenticationError) {
               content = "You may not access this."

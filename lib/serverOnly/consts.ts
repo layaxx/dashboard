@@ -1,2 +1,4 @@
 export const HTTP_OK = 200
 export const HTTP_FORBIDDEN = 403
+export const HTTP_SERVICE_UNAVAILABLE = 503
+export const HTTP_INTERNAL_SERVER_ERROR = 500

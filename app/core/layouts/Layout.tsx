@@ -5,6 +5,7 @@ import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import CustomErrorFallback from "./CustomErrorFallback"
+import { reportErrorWebhook } from "lib/reportErrorWebhook"
 
 const Layout: BlitzLayout<{ title?: string; heading: string; children: React.ReactNode }> = ({
   title,
@@ -76,9 +77,11 @@ const Layout: BlitzLayout<{ title?: string; heading: string; children: React.Rea
         )}
       >
         <ErrorBoundary
-          fallbackRender={({ error, resetErrorBoundary }) => (
-            <CustomErrorFallback error={error} resetErrorBoundary={resetErrorBoundary} />
-          )}
+          fallbackRender={({ error, resetErrorBoundary }) => {
+            reportErrorWebhook({ error, boundary: "LayoutChildrenBoundary" })
+
+            return <CustomErrorFallback error={error} resetErrorBoundary={resetErrorBoundary} />
+          }}
         >
           {children}
         </ErrorBoundary>

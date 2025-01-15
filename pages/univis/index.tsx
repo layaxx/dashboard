@@ -10,6 +10,7 @@ import SkeletonButton from "app/core/components/SkeletonButton"
 import Layout from "app/core/layouts/Layout"
 import LectureSearch from "app/univis/components/LectureSearch"
 import LectureSearchSkeleton from "app/univis/components/LectureSearchSkeleton"
+import { reportErrorWebhook } from "lib/reportErrorWebhook"
 
 const LOCALSTORAGE_UNIVIS_LECTURES = "univis-searchTerms"
 const MAX_SEARCH_TERMS = 10
@@ -71,6 +72,7 @@ const UnivisWrapper: BlitzPage = () => {
 
       <ErrorBoundary
         fallbackRender={({ error }) => {
+          reportErrorWebhook({ error, boundary: "LectureErrorBoundary" })
           console.error(error)
           if (error instanceof NotFoundError)
             return <p className={clsx("font-bold", "mt-2")}>No lectures found</p>

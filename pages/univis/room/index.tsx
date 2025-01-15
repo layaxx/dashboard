@@ -10,6 +10,7 @@ import SkeletonButton from "app/core/components/SkeletonButton"
 import Layout from "app/core/layouts/Layout"
 import RoomSearch from "app/univis/components/RoomSearch"
 import RoomSearchSkeleton from "app/univis/components/RoomSearchSkeleton"
+import { reportErrorWebhook } from "lib/reportErrorWebhook"
 
 const LOCALSTORAGE_UNIVIS_ROOMS = "univis-searchTerms-room"
 const MAX_SEARCH_TERMS = 10
@@ -71,6 +72,7 @@ const UnivisRoomsSearchPage: BlitzPage = () => {
 
       <ErrorBoundary
         fallbackRender={({ error }) => {
+          reportErrorWebhook({ error, boundary: "RoomErrorBoundary" })
           console.error(error)
           if (error instanceof NotFoundError)
             return <p className={clsx("font-bold", "mt-2")}>No rooms found</p>
