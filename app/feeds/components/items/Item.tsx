@@ -112,15 +112,12 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
       >
         <div
           className={clsx("flex", "flex-col-reverse", "lg:flex-row", "overflow-hidden", "w-full")}
+          onClick={() => {
+            setIsExpanded((previous) => !previous)
+            if (!hasBeenRead) read()
+          }}
         >
-          <div
-            className={clsx("grow", "pb-2", "pr-2", "lg:py-4", "truncate")}
-            onClick={() => {
-              setIsExpanded((previous) => !previous)
-              if (!hasBeenRead) read()
-            }}
-            title={item.title}
-          >
+          <div className={clsx("grow", "pb-2", "pr-2", "lg:py-4", "truncate")} title={item.title}>
             {item.title}
           </div>
           <div
