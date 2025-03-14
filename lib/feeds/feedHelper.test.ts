@@ -118,7 +118,7 @@ describe("feedHelper#convertItem works as expected", () => {
 
   test("defines all required properties", () => {
     const result = convertItem(
-      { content, description, link, published, title: faker.lorem.words(2) },
+      { id: "someID", content, description, link, published, title: faker.lorem.words(2) },
       feed,
     )
 

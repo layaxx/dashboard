@@ -10,15 +10,19 @@
     "blitzjs",
     "chartjs",
     "classname",
+    "Colada",
     "datasource",
+    "david",
     "domutils",
     "Enriqueta",
+    "extractus",
     "feedentries",
     "Feedentries",
     "feedentry",
     "FEEDID",
     "feedoption",
     "feedoptions",
+    "fefes",
     "HEALTHCHECK",
     "heroicons",
     "Intervall",
@@ -33,7 +37,8 @@
     "sortablejs",
     "tailwindcss",
     "tsparticles",
-    "unhide"
+    "unhide",
+    "Wittmann"
   ],
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
