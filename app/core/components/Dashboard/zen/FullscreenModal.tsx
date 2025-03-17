@@ -22,7 +22,7 @@ const FullscreenModal = ({ time, close }: Props) => {
         "left-0",
         "top-0",
         "w-full",
-        "z-50",
+        "z-50"
       )}
       style={{ transition: "opacity 0.25s ease" }}
     >
@@ -37,7 +37,7 @@ const FullscreenModal = ({ time, close }: Props) => {
           "text-9xl",
           "text-center",
           "text-white",
-          "w-full",
+          "w-full"
         )}
         style={{ backgroundColor: "#" + time.format("HHmmss") }}
       >

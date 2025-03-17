@@ -16,9 +16,9 @@ export const FeedListItemWrapper: FC<LIProps> = ({ children, className, ...props
           "cursor-pointer",
           "flex",
           "pl-2",
-          "py-1",
+          "py-1"
         ),
-        className,
+        className
       )}
       {...props}
     >
@@ -31,7 +31,7 @@ export const FeedListItemBadge: FC<LIProps> = ({ children, className, ...props }
   <span
     className={twMerge(
       clsx("bg-primary", "dark:bg-violet-500", "font-bold", "px-3", "rounded-xl", "text-white"),
-      className,
+      className
     )}
     {...props}
   >

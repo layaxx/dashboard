@@ -15,7 +15,7 @@ function RootErrorFallback({ error, resetErrorBoundary, getLayout }: ICustomErro
     return getLayout(
       <div className={clsx(["w-full", "max-w-96"])}>
         <LoginForm onSuccess={resetErrorBoundary} />
-      </div>,
+      </div>
     )
   } else if (error instanceof AuthorizationError) {
     return (

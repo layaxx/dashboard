@@ -22,7 +22,7 @@ const Aside = ({ hideNavbar, setHideNavbar, feeds }: Props) => (
       "justify-start",
       "shrink-0",
       "sm:w-96",
-      "w-full",
+      "w-full"
     )}
   >
     <section className={clsx("border-b", "border-primary", "dark:border-violet-400", "w-full")}>
@@ -37,7 +37,7 @@ const Aside = ({ hideNavbar, setHideNavbar, feeds }: Props) => (
           "h-full",
           "overflow-y-hidden",
           "pl-4",
-          "w-full",
+          "w-full"
         )}
       >
         <p
@@ -46,7 +46,7 @@ const Aside = ({ hideNavbar, setHideNavbar, feeds }: Props) => (
             "leading-4",
             "text-primary",
             "dark:text-violet-400",
-            "uppercase",
+            "uppercase"
           )}
         >
           Reader

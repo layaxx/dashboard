@@ -54,7 +54,7 @@ const RSSPreviewPage: BlitzPage = () => {
             status: "success",
           }
         },
-      },
+      }
     ).finally(() => setIsLoading(false))
   }
 

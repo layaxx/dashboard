@@ -17,7 +17,7 @@ const handler: NextApiHandler = async (
   request,
   response: ResponseWithSession<
     string | { results: Result[]; timeElapsed: number; errors: string[] }
-  >,
+  >
 ) => {
   let session = await getSession(request, response)
 
@@ -48,7 +48,7 @@ const handler: NextApiHandler = async (
       result: await loadFeed(feed, force, {
         session,
       } as Ctx),
-    })),
+    }))
   )
 
   const timeStampAfterLoad = performance.now()
@@ -58,7 +58,7 @@ const handler: NextApiHandler = async (
   let updateCount = 0
   let insertCount = 0
   for (const { result, feed } of results.filter(
-    ({ result }) => result.status !== LoadFeedStatus.SKIPPED,
+    ({ result }) => result.status !== LoadFeedStatus.SKIPPED
   )) {
     events.push({
       feedId: feed.id,

@@ -47,7 +47,7 @@ const handleOnReload = async () => {
           message: errors,
         }
       },
-    },
+    }
   )
 }
 
@@ -69,13 +69,13 @@ const StatusIcon: FC<StatusButtonProps> = () => {
             `Reloading due to ${JSON.stringify({
               targetTimeBetweenLoads,
               minutesSinceLastLoad: data.minutesSinceLastLoad,
-            })}`,
+            })}`
           )
           lastReload = Date.now()
           handleOnReload().finally(() => invalidateQuery(getStatus))
         }
       },
-    },
+    }
   )
 
   if (isError || result.errors.length > 0) {

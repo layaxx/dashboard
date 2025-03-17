@@ -46,11 +46,11 @@ export default resolver.pipe(
             url: feed.url,
             loadIntervall: feed.loadIntervall,
           },
-          context,
+          context
         )
         idLookup.set(feed.id, result.id)
         return result
-      }),
+      })
     )
 
     const feedEntries = await Promise.all(
@@ -78,14 +78,14 @@ export default resolver.pipe(
               title,
               updatedAt: dayjs(updatedAt).toISOString(),
             },
-            context,
+            context
           )
 
           return result
-        },
-      ),
+        }
+      )
     )
 
     return { feeds, feedEntries }
-  },
+  }
 )

@@ -17,7 +17,7 @@ const Home: BlitzPage = () => {
           "dark:text-gray-400",
           "text-gray-500",
           "sm:text-lg",
-          "md:text-xl",
+          "md:text-xl"
         )}
       >
         Login status:
@@ -33,7 +33,7 @@ const Home: BlitzPage = () => {
                   "h-4",
                   "mt-1",
                   "rounded",
-                  "w-6/12",
+                  "w-6/12"
                 )}
               />
               <div

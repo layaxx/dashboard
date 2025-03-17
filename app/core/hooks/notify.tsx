@@ -4,7 +4,7 @@ import Notification, { NotificationType } from "../components/Notification"
 import { NotifyOptions, NotifyPromiseOptions, NotifyPromiseSharedOptions } from "lib/notify/types"
 
 function getNotificationProps(
-  options: { title: string; id: string } & NotifyOptions,
+  options: { title: string; id: string } & NotifyOptions
 ): NotificationType {
   return {
     title: options.title ?? "Information",
@@ -34,7 +34,7 @@ export default function notify(title: string, options?: NotifyOptions) {
       closeButton: false,
       toastId: id,
       ...options?.toastOptions,
-    },
+    }
   )
 }
 
@@ -45,7 +45,7 @@ export function notifyPromise(
     pending?: NotifyPromiseOptions
     success?: NotifyPromiseOptions
     error?: NotifyPromiseOptions
-  },
+  }
 ) {
   const id = options?.all?.id ?? dayjs().toISOString()
   const sharedProps = {
@@ -114,7 +114,7 @@ export function notifyPromise(
       closeButton: false,
       toastId: id,
       icon: false,
-    },
+    }
   )
 }
 
@@ -125,7 +125,7 @@ export function notifyPromiseAdvanced<T>(
     pending?: NotifyPromiseOptions
     success?: (argument0: T) => Promise<NotifyPromiseOptions>
     error?: (argument0: T) => Promise<NotifyPromiseOptions>
-  },
+  }
 ) {
   const id = notify(options.all?.title ?? options.pending?.title ?? "Information", {
     status: "loading",

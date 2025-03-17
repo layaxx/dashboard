@@ -138,7 +138,7 @@ describe("getTitleAndTTLFromFeed works as expected", () => {
         expect(actualTTL).toBeGreaterThan(30)
         expect(actualTTL).toBeLessThan(40)
       }
-    },
+    }
   )
 })
 

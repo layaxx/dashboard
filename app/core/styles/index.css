@@ -10,7 +10,6 @@
   font-display: swap;
 }
 
-
 @layer components {
   .hero {
     @apply w-full text-[#333];

@@ -26,5 +26,5 @@ export default resolver.pipe(
     })
 
     return feed
-  },
+  }
 )

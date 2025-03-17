@@ -59,7 +59,7 @@ export const FeedList: FC<Props> = ({ mode, closeIfNecessary }) => {
             title={"All Feeds"}
             unreadCount={feeds.reduce(
               (accumulator: number, current) => accumulator + current.unreadCount,
-              0,
+              0
             )}
             isActive={mode === FEED_MODE.RSS && activeFeedID === ALL_FEEDS_ID}
             onClick={() => {

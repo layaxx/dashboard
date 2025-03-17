@@ -28,7 +28,7 @@ const ReadlistItem = ({ url, id, hide, unhide }: Props) => {
           "lg:px-10",
           "px-2",
           "rounded-sm",
-          "text-lg",
+          "text-lg"
         )}
       >
         <span className={clsx("grow", "py-4", "truncate")} title={url}>
@@ -41,7 +41,7 @@ const ReadlistItem = ({ url, id, hide, unhide }: Props) => {
             "flex",
             "py-4",
             "shrink-0",
-            "text-gray-400",
+            "text-gray-400"
           )}
         >
           <span className={sharedClassName}>

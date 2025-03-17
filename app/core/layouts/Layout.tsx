@@ -29,7 +29,7 @@ const Layout: BlitzLayout<{ title?: string; heading: string; children: React.Rea
           "px-8",
           "py-10",
           "md:py-12",
-          "text-gray-200",
+          "text-gray-200"
         )}
       >
         <div className={clsx("max-w-screen-2xl", "mx-auto")}>
@@ -40,7 +40,7 @@ const Layout: BlitzLayout<{ title?: string; heading: string; children: React.Rea
               "sm:text-5xl",
               "md:text-6xl",
               "text-gray-100",
-              "tracking-tight",
+              "tracking-tight"
             )}
           >
             <span className={clsx("block", "xl:inline")}>{heading}</span>
@@ -73,7 +73,7 @@ const Layout: BlitzLayout<{ title?: string; heading: string; children: React.Rea
           "md:px-8",
           "py-4",
           "md:py-8",
-          "w-full",
+          "w-full"
         )}
       >
         <ErrorBoundary

@@ -86,7 +86,7 @@ const FeedDetails: React.FC<{ feed: FeedWithEventsAndCount }> = ({ feed: initial
               pending: { title: "Updating Feed" },
               success: { title: "Updated Feed" },
               error: { title: "Failed to update Feed" },
-            },
+            }
           )
             .then(() => invalidateQuery(getFeed, { id: feed.id }))
             .finally(() => setIsEditing(false))

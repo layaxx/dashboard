@@ -55,7 +55,7 @@ const TextFieldWithButton = forwardRef<HTMLInputElement, ITextFieldWithButton>(
                       "px-2",
                       "py-1",
                       "rounded-l",
-                      "w-full",
+                      "w-full"
                     )}
                     type={type}
                   />
@@ -79,7 +79,7 @@ const TextFieldWithButton = forwardRef<HTMLInputElement, ITextFieldWithButton>(
         }}
       />
     )
-  },
+  }
 )
 
 TextFieldWithButton.displayName = "TextFieldWithButton"

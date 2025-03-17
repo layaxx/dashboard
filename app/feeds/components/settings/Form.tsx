@@ -63,7 +63,7 @@ const AddFeedForm = () => {
           status: "error",
         })
         console.error(error)
-      },
+      }
     )
   }
 
@@ -81,7 +81,7 @@ const AddFeedForm = () => {
         "py-4",
         "rounded-lg",
         "shadow-lg",
-        "w-full",
+        "w-full"
       )}
     >
       <Form

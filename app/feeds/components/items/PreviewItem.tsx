@@ -50,7 +50,7 @@ const PreviewItem = ({ item, settings, removeEntry }: ItemProps) => {
           "sticky",
           hasBeenRead && ["text-gray-500", "dark:text-gray-500"],
           "text-lg",
-          "top-0",
+          "top-0"
         )}
       >
         <span
@@ -77,7 +77,7 @@ const PreviewItem = ({ item, settings, removeEntry }: ItemProps) => {
             "text-gray-400",
             "text-right",
             "text-sm",
-            "w-16",
+            "w-16"
           )}
         >
           <ItemInformation item={item} />
@@ -90,7 +90,7 @@ const PreviewItem = ({ item, settings, removeEntry }: ItemProps) => {
             "py-4",
             "shrink-0",
             "dark:text-gray-300",
-            "text-gray-400",
+            "text-gray-400"
           )}
         >
           <span className={sharedClassName} onClick={() => removeEntry()}>
@@ -119,7 +119,7 @@ const PreviewItem = ({ item, settings, removeEntry }: ItemProps) => {
             "pb-5",
             "prose",
             "px-2",
-            "dark:text-slate-300",
+            "dark:text-slate-300"
           )}
         >
           {content}

@@ -8,7 +8,7 @@
     "build": "blitz build",
     "start": "blitz start",
     "studio": "blitz prisma studio",
-    "lint": "tsc && eslint . && blitz prisma format --check",
+    "lint": "tsc && eslint . && prettier . --check && blitz prisma format --check",
     "test": "jest",
     "test:watch": "jest --watch",
     "prepare": "husky",
@@ -21,7 +21,9 @@
   },
   "prettier": {
     "semi": false,
-    "printWidth": 100
+    "printWidth": 100,
+    "tabWidth": 2,
+    "trailingComma": "es5"
   },
   "lint-staged": {
     "*.{js,ts,tsx}": [

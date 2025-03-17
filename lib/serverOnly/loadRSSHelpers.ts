@@ -19,7 +19,7 @@ dayjs.extend(utc)
 export const loadFeed = async (
   feed: Feed,
   forceReload: boolean,
-  context: Ctx,
+  context: Ctx
 ): Promise<LoadFeedResult> => {
   if (!context) {
     throw new Error("Missing ctx info")
@@ -107,7 +107,7 @@ export const loadFeed = async (
 
 export async function updateDB(
   items: Prisma.FeedentryUncheckedCreateInput[],
-  context: Ctx,
+  context: Ctx
 ): Promise<{
   createdIds: string[]
   updatedIds: string[]
@@ -119,11 +119,11 @@ export async function updateDB(
 
   const existingEntryIds = new Set(alreadyExistingEntries.map((entry) => entry.id))
   const existingNonArchivedEntryIds = new Set(
-    alreadyExistingEntries.filter((entry) => !entry.isArchived).map((entry) => entry.id),
+    alreadyExistingEntries.filter((entry) => !entry.isArchived).map((entry) => entry.id)
   )
 
   const itemsToBeCreated: Prisma.FeedentryUncheckedCreateInput[] = items.filter(
-    (item) => !existingEntryIds.has(item.id),
+    (item) => !existingEntryIds.has(item.id)
   )
 
   const createdItems = await invokeWithCtx(
@@ -132,7 +132,7 @@ export async function updateDB(
       skipDuplicates: true,
       data: itemsToBeCreated,
     },
-    context,
+    context
   )
 
   const itemsToBeUpdated = items
@@ -157,13 +157,13 @@ export async function updateDB(
     })
     .filter(
       (value): value is Prisma.FeedentryUncheckedUpdateInput =>
-        !!value && !!value.id && !!value.text && !!value.updatedAt,
+        !!value && !!value.id && !!value.text && !!value.updatedAt
     )
 
   await Promise.all(
     itemsToBeUpdated.map(async (input) => {
       return invokeWithCtx(updateFeedentry, { input, select: { id: true } }, context)
-    }),
+    })
   )
 
   return {
@@ -175,7 +175,7 @@ export async function updateDB(
 export async function fetchFromURL(
   url: string,
   force: boolean,
-  feed?: Feed,
+  feed?: Feed
 ): Promise<{ content: string | undefined; headers: Headers; statusCode: number; ok: boolean }> {
   const headersRequest = new Headers({
     Accept: "text/xml",
@@ -187,7 +187,7 @@ export async function fetchFromURL(
     } else if (feed) {
       headersRequest.append(
         "If-Modified-Since",
-        dayjs(feed.lastLoad).utc().format("ddd, DD MM YYYY HH:mm:ss [GMT]"),
+        dayjs(feed.lastLoad).utc().format("ddd, DD MM YYYY HH:mm:ss [GMT]")
       )
     }
   }
@@ -201,7 +201,7 @@ export async function fetchFromURL(
 }
 
 export async function getTitleAndTTLFromFeed(
-  url: string,
+  url: string
 ): Promise<[string | undefined, number | undefined]> {
   let content: string | undefined, ok: boolean, headers: Headers
   try {
@@ -263,7 +263,7 @@ export async function getIDSFromFeeds(feedUrls: string[]): Promise<Map<string, S
       }
       result.set(
         url,
-        new Set(parsedFeed.entries?.map((item) => item.guid || item.id || item.link) ?? []),
+        new Set(parsedFeed.entries?.map((item) => item.guid || item.id || item.link) ?? [])
       )
     } else {
       console.warn("Received no content from " + url, statusCode)

@@ -17,7 +17,7 @@ const LectureSearch: React.FC<{ searchTerm: string }> = ({ searchTerm }) => {
       refetchOnReconnect: false,
       refetchOnWindowFocus: false,
       cacheTime,
-    },
+    }
   )
 
   const roomMap = new Map<string, Room>()

@@ -48,7 +48,7 @@ const LabeledTextField = forwardRef<HTMLInputElement, LabeledTextFieldProps>(
                     "px-2",
                     "py-1",
                     "rounded-md",
-                    "w-full",
+                    "w-full"
                   )}
                   type={type}
                 />
@@ -64,7 +64,7 @@ const LabeledTextField = forwardRef<HTMLInputElement, LabeledTextFieldProps>(
         }}
       />
     )
-  },
+  }
 )
 
 LabeledTextField.displayName = "LabeledTextField"

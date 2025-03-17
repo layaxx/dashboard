@@ -21,5 +21,5 @@ export default resolver.pipe(
     const feed = await db.feed.update({ data, where: { id } })
 
     return feed
-  },
+  }
 )

@@ -15,7 +15,7 @@ const StatusOverview: FC = () => {
   const [result, { isLoading, isError }] = useQuery(getStatusDetailed, {})
 
   const [isDarkMode, setMode] = useState(
-    globalThis.matchMedia("(prefers-color-scheme: dark)").matches,
+    globalThis.matchMedia("(prefers-color-scheme: dark)").matches
   )
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const StatusOverview: FC = () => {
   }
 
   const statusWithWarnings = result.statusLoad.map((stat, index, array) =>
-    calculateErrorsAndWarnings(stat, array[index + 1]?.loadTime),
+    calculateErrorsAndWarnings(stat, array[index + 1]?.loadTime)
   )
 
   const statistics = computeStatistics(statusWithWarnings)
@@ -55,7 +55,7 @@ const StatusOverview: FC = () => {
               insertCount,
               updateCount,
               color: (hasErrors && "error") || (hasWarnings && "warning") || "default",
-            }),
+            })
           )}
         />
         <StatusTable {...statistics} />

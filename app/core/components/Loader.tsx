@@ -8,7 +8,7 @@ const Loader = () => (
       "mx-auto",
       "text-primary",
       "dark:text-violet-600",
-      "w-5",
+      "w-5"
     )}
     xmlns="http://www.w3.org/2000/svg"
     fill="none"

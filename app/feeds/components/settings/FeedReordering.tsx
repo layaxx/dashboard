@@ -28,7 +28,7 @@ const FeedReordering: React.FC<Props> = ({ feeds, refetch }) => {
               position: index,
               id: feed.id,
             })
-      }),
+      })
     )
     setFeedList(newFeeds.filter((feed) => !!feed))
     await refetch()
@@ -52,7 +52,7 @@ const FeedReordering: React.FC<Props> = ({ feeds, refetch }) => {
               "py-4",
               "rounded-lg",
               "shadow-lg",
-              "w-full",
+              "w-full"
             )}
             key={feed.id}
           >

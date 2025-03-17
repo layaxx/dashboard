@@ -22,7 +22,7 @@ export const ItemList = () => {
     },
     {
       getNextPageParam: ({ nextPage }) => nextPage,
-    },
+    }
   )
 
   const [toBeRemoved, setToBeRemoved] = useState<number[]>([])
@@ -42,7 +42,7 @@ export const ItemList = () => {
                 setToBeRemoved((previous) => previous.filter((argument) => argument !== id))
               }
             />
-          )),
+          ))
       )}
 
       <Button

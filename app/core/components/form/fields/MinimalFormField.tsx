@@ -36,7 +36,7 @@ const FormField: FC<FormFieldProps> = ({
               "flex-wrap",
               type === "checkbox" && "justify-between",
               labelProps?.className,
-              showError && "text-error",
+              showError && "text-error"
             )}
           >
             <input
@@ -48,7 +48,7 @@ const FormField: FC<FormFieldProps> = ({
               className={clsx(
                 inputProps?.className,
                 type === "checkbox" ? "w-4" : "grow",
-                showError && ["border-error", "border-b-2"],
+                showError && ["border-error", "border-b-2"]
               )}
             />
             {showError && (

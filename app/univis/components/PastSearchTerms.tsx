@@ -14,7 +14,7 @@ const PastSearchTerms: React.FC<{
   fallback?: string[]
 }> = ({ termsRef, localStorageKey, fallback = [] }) => {
   const json = React.useSyncExternalStore(useLocalStorageSubscribe, () =>
-    globalThis.localStorage.getItem(localStorageKey),
+    globalThis.localStorage.getItem(localStorageKey)
   )
 
   try {

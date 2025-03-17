@@ -40,7 +40,7 @@ const FeedHistoryEntry: React.FC<{ event: FeedLoadEvent }> = ({ event }) => {
 
 const FeedHistory: React.FC<{ loadEvents: FeedLoadEvent[] }> = ({ loadEvents }) => {
   const relevantEvents = loadEvents.filter(
-    ({ createdIds, updatedIds }) => createdIds.length > 0 || updatedIds.length > 0,
+    ({ createdIds, updatedIds }) => createdIds.length > 0 || updatedIds.length > 0
   )
   return (
     <div>

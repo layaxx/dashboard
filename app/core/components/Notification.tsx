@@ -72,7 +72,7 @@ const Notification = ({ notification, closeToast }: Props) => {
         "ring-black/5",
         notification.dismissible === false ? "rounded-lg" : "rounded-t-lg",
         "shadow-lg",
-        "w-96",
+        "w-96"
       )}
     >
       <div className={clsx("flex-1", "p-4", "w-0")}>

@@ -65,7 +65,7 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
   const entryIDsToBeDeleted = entriesToBeDeleted
     .filter(
       (entry) =>
-        !stillOnlineIDs.get(entry.feed.url) || !stillOnlineIDs.get(entry.feed.url)!.has(entry.id),
+        !stillOnlineIDs.get(entry.feed.url) || !stillOnlineIDs.get(entry.feed.url)!.has(entry.id)
     )
     .map((entry) => entry.id)
   entryIDsToBeDeleted.length = Math.min(entryIDsToBeDeleted.length, maximumEntriesToBeDeleted)
@@ -100,8 +100,8 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
         duration,
       },
       undefined,
-      2,
-    ),
+      2
+    )
   )
 }
 export default api(handler)

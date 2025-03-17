@@ -12,7 +12,7 @@ const ItemSkeleton = () => (
       "dark:border-slate-600",
       "h-16",
       "top-0",
-      "w-full",
+      "w-full"
     )}
   />
 )

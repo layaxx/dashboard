@@ -18,7 +18,7 @@ describe("feedHelper#idAsLinkIfSensible works as expected", () => {
     "returns undefined for invalid URLs",
     (invalidURL) => {
       expect(idAsLinkIfSensible(invalidURL)).toBeUndefined()
-    },
+    }
   )
 
   test.each([
@@ -68,7 +68,7 @@ describe("feedHelper#getContentFromParsedItem works as expected", () => {
 
   test("fallback if neither content nor title available", () => {
     expect(getContentFromParsedItem({ ...itemSharedProperties })).toBe(
-      "Neither Title nor content provided",
+      "Neither Title nor content provided"
     )
   })
 })
@@ -93,13 +93,13 @@ describe("feedHelper#getSummaryFromParsedItem works as expected", () => {
         ...itemSharedProperties,
         content,
         description,
-      }),
+      })
     ).toBe(description)
   })
 
   test("takes first part of content as fallback", () => {
     expect(getSummaryFromParsedItem({ ...itemSharedProperties, content })).toBe(
-      content.slice(0, summaryLength) + "...",
+      content.slice(0, summaryLength) + "..."
     )
   })
 })
@@ -119,7 +119,7 @@ describe("feedHelper#convertItem works as expected", () => {
   test("defines all required properties", () => {
     const result = convertItem(
       { id: "someID", content, description, link, published, title: faker.lorem.words(2) },
-      feed,
+      feed
     )
 
     expect(result).toBeDefined()

@@ -30,7 +30,7 @@ const SettingsItem: FC<IProps> = ({ id, url, name, lastLoad, loadIntervall, isAc
         "py-4",
         "rounded-lg",
         "shadow-lg",
-        "w-full",
+        "w-full"
       )}
       id={"feed-" + String(id)}
     >

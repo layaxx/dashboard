@@ -16,7 +16,7 @@ const ListElement = ({ text, isError }: { text: string; isError?: boolean }) => 
           isError ? ["text-error", "dark:text-red-600"] : "text-warning",
           "inline",
           "mr-2",
-          "w-6",
+          "w-6"
         )}
       />
       <p className={clsx("break-words", "inline", "text-pretty")}>{text}</p>
@@ -54,7 +54,7 @@ const StatusLoadItem: FC<StatusWithWarningsAndErrors> = ({
         "py-4",
         "rounded-lg",
         "shadow-lg",
-        "w-full",
+        "w-full"
       )}
     >
       <div>

@@ -31,7 +31,7 @@ const NotificationButton = ({ name: text, onClick }: NotificationButtonProps) =>
       "text-primary",
       "dark:text-slate-300",
       "text-sm",
-      "w-full",
+      "w-full"
     )}
   >
     {text}

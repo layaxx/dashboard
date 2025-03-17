@@ -1,5 +1,5 @@
 export function makeParseFunction(
-  type: string,
+  type: string
 ): (value: string, name: string) => string | number | null {
   if (type === "number") return (v) => (v === "" ? "" : Number(v))
 

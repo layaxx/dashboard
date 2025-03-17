@@ -48,7 +48,7 @@ const FormField: FC<FormFieldProps> = ({
               labelProps?.className,
               meta.dirty &&
                 !meta.valid &&
-                !meta.modifiedSinceLastSubmit && ["border-red-700", "dark:border-red-800"],
+                !meta.modifiedSinceLastSubmit && ["border-red-700", "dark:border-red-800"]
             )}
           >
             <span className="min-w-36">{labelContent}</span>
@@ -64,7 +64,7 @@ const FormField: FC<FormFieldProps> = ({
                 "border-b-2",
                 "dark:border-slate-500",
                 "dark:text-gray-200",
-                "text-right",
+                "text-right"
               )}
             />
           </label>

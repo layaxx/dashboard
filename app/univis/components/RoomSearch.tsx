@@ -18,7 +18,7 @@ const RoomSearch: React.FC<{ searchTerm: string }> = ({ searchTerm }) => {
       refetchOnReconnect: false,
       refetchOnWindowFocus: false,
       cacheTime,
-    },
+    }
   )
 
   return (

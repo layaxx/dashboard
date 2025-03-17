@@ -21,7 +21,7 @@ const StatusCleanItem: FC<StatusClean> = ({ time, duration }) => {
         "px-8",
         "py-4",
         "rounded-lg",
-        "shadow-lg",
+        "shadow-lg"
       )}
     >
       <div>

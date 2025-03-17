@@ -27,7 +27,7 @@ export const ItemsList = () => {
     {
       enabled: !!activeFeedID && ![ALL_FEEDS_ID, RECENTLY_READ_ID].includes(activeFeedID),
       placeholderData: defaultOptions,
-    },
+    }
   )
 
   const orderBy: { createdAt: "asc" | "desc" } = {
@@ -57,7 +57,7 @@ export const ItemsList = () => {
         console.error(error)
         notify("Error fetching items", { status: "error" })
       },
-    },
+    }
   )
 
   const [recentlyReadResult] = useQuery(
@@ -72,7 +72,7 @@ export const ItemsList = () => {
         console.error(error)
         notify("Error fetching items", { status: "error" })
       },
-    },
+    }
   )
 
   if (activeFeedID === RECENTLY_READ_ID && recentlyReadResult?.feedentries) {
@@ -96,7 +96,7 @@ export const ItemsList = () => {
               settings={settings || defaultOptions}
               skipOffset={skipOffset}
             />
-          )),
+          ))
         )}
 
       <Button

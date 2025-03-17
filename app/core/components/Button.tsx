@@ -127,9 +127,9 @@ const Button = ({
               "border-transparent",
             ],
             "w-auto",
-            isInsideButtonGroup && ["mx-0", "grow"],
+            isInsideButtonGroup && ["mx-0", "grow"]
           ),
-          rest.className,
+          rest.className
         )}
         onClick={onClick}
       >
@@ -140,7 +140,7 @@ const Button = ({
               size === "md" && ["mr-2", "w-6"],
               size === "lg" && ["mr-4", "w-6"],
               size === "xl" && ["mr-6", "w-7"],
-              "my-auto",
+              "my-auto"
             )}
           >
             {icon}

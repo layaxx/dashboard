@@ -81,7 +81,7 @@ const FeedsImportDataPage: BlitzPage = () => {
                         "border-4",
                         props.meta.submitError && "border-error",
                         "ml-auto",
-                        "text-left",
+                        "text-left"
                       )}
                       rows={4}
                       cols={50}

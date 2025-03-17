@@ -20,7 +20,7 @@ const Header = ({ hideNavbar, setHideNavbar }: HeaderProps) => (
       "rounded-r",
       "text-primary",
       "dark:text-violet-400",
-      "w-full",
+      "w-full"
     )}
     onClick={() => setHideNavbar((previous) => !previous)}
   >
@@ -34,7 +34,7 @@ const Header = ({ hideNavbar, setHideNavbar }: HeaderProps) => (
               "dark:bg-slate-600",
               "h-8",
               "text-2xl",
-              "w-full",
+              "w-full"
             )}
           />
         }

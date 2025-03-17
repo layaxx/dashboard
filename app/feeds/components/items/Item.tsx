@@ -43,8 +43,8 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
                 }) ?? [],
             }
           },
-          { refetch: false },
-        ).catch(() => setHasBeenRead(!isRead)),
+          { refetch: false }
+        ).catch(() => setHasBeenRead(!isRead))
       )
     }
   }
@@ -107,7 +107,7 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
           "sticky",
           hasBeenRead && ["text-gray-600", "dark:text-gray-400"],
           "text-lg",
-          "top-0",
+          "top-0"
         )}
       >
         <div
@@ -135,7 +135,7 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
               "text-gray-400",
               "text-right",
               "text-sm",
-              "lg:w-16",
+              "lg:w-16"
             )}
           >
             <ItemInformation item={item} />
@@ -148,7 +148,7 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
             "flex",
             "py-4",
             "shrink-0",
-            "text-gray-400",
+            "text-gray-400"
           )}
         >
           <ItemControls item={item} read={read} unread={unread} hasBeenRead={hasBeenRead} />
@@ -166,7 +166,7 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
             "dark:prose-invert",
             "prose-slate",
             "lg:px-10",
-            "px-2",
+            "px-2"
           )}
         >
           {content}

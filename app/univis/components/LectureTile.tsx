@@ -26,7 +26,7 @@ const LectureTile: React.FC<{ lecture: Lecture; roomMap: Map<string, Room> }> = 
   roomMap,
 }) => {
   const convertTerm = (
-    term: Term | undefined,
+    term: Term | undefined
   ): { date: string; startTime?: string; endTime?: string; room?: Room } => {
     if (!term) {
       return { date: "unknown date" }
@@ -67,7 +67,7 @@ const LectureTile: React.FC<{ lecture: Lecture; roomMap: Map<string, Room> }> = 
         "p-2",
         "rounded",
         "shadow-md",
-        "dark:text-slate-300",
+        "dark:text-slate-300"
       )}
     >
       <h4 className={clsx("font-bold", "text-lg")}>

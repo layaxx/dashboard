@@ -11,7 +11,7 @@ import { FeedWithEventsAndCount } from "lib/feeds/types"
 
 const FeedsSettingsPageContent: React.FC<{ feed: FeedWithEventsAndCount }> = ({ feed }) => {
   const errors: FeedLoadEvent[] = feed.loadEvents.filter((event) =>
-    Boolean(Array.isArray(event.errors) && event.errors.length > 0),
+    Boolean(Array.isArray(event.errors) && event.errors.length > 0)
   )
 
   return (

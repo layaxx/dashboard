@@ -19,5 +19,5 @@ export default resolver.pipe(
     return await db.feed.create({
       data: { name, url, loadIntervall, position, lastLoad: dayjs(0).toDate() },
     })
-  },
+  }
 )

@@ -53,7 +53,7 @@ export default function StatusChart({ data, isDarkMode }: Props) {
   }
   const maxCountSum = data.reduce(
     (previous, { insertCount, updateCount }) => Math.max(insertCount + updateCount, previous),
-    1, // minimal value
+    1 // minimal value
   )
 
   const options: ChartOptions<"bar"> = {

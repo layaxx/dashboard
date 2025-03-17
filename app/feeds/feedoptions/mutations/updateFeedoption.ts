@@ -16,5 +16,5 @@ export default resolver.pipe(
     const feedoption = await db.feedoption.update({ data, where: { id } })
 
     return feedoption
-  },
+  }
 )

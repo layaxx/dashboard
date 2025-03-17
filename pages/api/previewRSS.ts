@@ -82,7 +82,7 @@ const handler: NextApiHandler = async (request, response: ResponseWithSession<Re
         updatedAt: new Date(),
         createdAt: new Date(),
         preXSSHash: "",
-      }),
+      })
     )
   } catch {
     const message = "Failed to process items for url " + url

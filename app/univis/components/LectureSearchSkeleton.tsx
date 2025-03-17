@@ -12,7 +12,7 @@ const LectureSearchSkeleton: React.FC = () => {
             "dark:bg-slate-500",
             "h-6",
             "inline-block",
-            "w-6",
+            "w-6"
           )}
         />{" "}
         lectures found

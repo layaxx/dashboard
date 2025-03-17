@@ -17,7 +17,7 @@ const SettingsFormSkeleton = () => {
         "py-4",
         "rounded-lg",
         "shadow-lg",
-        "w-full",
+        "w-full"
       )}
     >
       <SkeletonRow size="lg" />

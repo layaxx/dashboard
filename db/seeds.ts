@@ -39,7 +39,7 @@ const seed = async () => {
       title: getFeedNamePrefix(feedIndex) + "Entry " + index + ": " + faker.lorem.words(2),
       text: faker.lorem.paragraphs(
         { min: 1, max: 100 },
-        faker.datatype.boolean() ? "<br/>\n" : "\n",
+        faker.datatype.boolean() ? "<br/>\n" : "\n"
       ),
       feedId: feed.id,
       createdAt: dayjs()
@@ -72,7 +72,7 @@ const seed = async () => {
       errors: faker.datatype.boolean({ probability: 0.75 })
         ? []
         : Array.from({ length: faker.number.int({ min: 1, max: 3 }) }, () =>
-            faker.lorem.sentence(),
+            faker.lorem.sentence()
           ),
     })),
   })

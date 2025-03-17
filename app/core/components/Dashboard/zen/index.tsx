@@ -35,7 +35,7 @@ const Zen: React.FC = () => {
         "text-3xl",
         "text-center",
         "text-white",
-        "w-full",
+        "w-full"
       )}
       style={{ backgroundColor: "#" + time.format("HHmmss") }}
       onClick={() => setIsFullscreen((pre) => !pre)}

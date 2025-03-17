@@ -10,7 +10,7 @@ const LectureTileSkeleton: React.FC = () => {
         "border-t-4",
         "p-2",
         "rounded",
-        "shadow-md",
+        "shadow-md"
       )}
     >
       <SkeletonRow className={clsx("dark:bg-slate-600", "mb-3")} />

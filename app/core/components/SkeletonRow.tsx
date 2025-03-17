@@ -18,9 +18,9 @@ const SkeletonRow = ({ size, className }: Props) => (
         (size === undefined || size === "md") && "h-6",
         size === "lg" && "h-8",
         "mb-2",
-        "w-full",
+        "w-full"
       ),
-      className,
+      className
     )}
   />
 )

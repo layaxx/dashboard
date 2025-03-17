@@ -36,7 +36,7 @@ const GenericModal: React.FC<IProps> = ({ cancelButton, confirmButton, icon, tit
           "pb-20",
           "pt-4",
           "px-4",
-          "text-center",
+          "text-center"
         )}
         id="modal-backdrop"
         onClick={(event) => {
@@ -71,7 +71,7 @@ const GenericModal: React.FC<IProps> = ({ cancelButton, confirmButton, icon, tit
             "shadow-xl",
             "text-left",
             "transition-all",
-            "sm:w-full",
+            "sm:w-full"
           )}
         >
           <div
@@ -82,7 +82,7 @@ const GenericModal: React.FC<IProps> = ({ cancelButton, confirmButton, icon, tit
               "pb-4",
               "sm:pb-4",
               "pt-5",
-              "px-4",
+              "px-4"
             )}
           >
             <div className={clsx("sm:flex", "sm:items-start")}>
@@ -100,7 +100,7 @@ const GenericModal: React.FC<IProps> = ({ cancelButton, confirmButton, icon, tit
                     "rounded-full",
                     "shrink-0",
                     "sm:w-10",
-                    "w-12",
+                    "w-12"
                   )}
                 >
                   {icon}
@@ -113,7 +113,7 @@ const GenericModal: React.FC<IProps> = ({ cancelButton, confirmButton, icon, tit
                     "leading-6",
                     "dark:text-gray-200",
                     "text-gray-900",
-                    "text-lg",
+                    "text-lg"
                   )}
                   id="modal-title"
                 >
@@ -131,7 +131,7 @@ const GenericModal: React.FC<IProps> = ({ cancelButton, confirmButton, icon, tit
               "sm:flex-row-reverse",
               "px-4",
               "sm:px-6",
-              "py-3",
+              "py-3"
             )}
           >
             {confirmButton && (
