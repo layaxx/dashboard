@@ -9,9 +9,8 @@ import MinimalFormField from "app/core/components/form/fields/MinimalFormField"
 import { notifyPromise } from "app/core/hooks/notify"
 import updateFeedMutation from "app/feeds/mutations/updateFeed"
 import getFeed from "app/feeds/queries/getFeed"
+import { MINIMUM_LOAD_INTERVAL_MINUTES } from "lib/feeds/feedHelpers"
 import { FeedWithEventsAndCount } from "lib/feeds/types"
-
-const minimumLoadInterval = 5
 
 const FeedDetails: React.FC<{ feed: FeedWithEventsAndCount }> = ({ feed: initialData }) => {
   const [isEditing, setIsEditing] = useState(false)
@@ -47,7 +46,7 @@ const FeedDetails: React.FC<{ feed: FeedWithEventsAndCount }> = ({ feed: initial
           name: z.string(),
           isActive: z.boolean(),
           url: z.string(),
-          loadIntervall: z.number().lte(minimumLoadInterval),
+          loadIntervall: z.number().gte(MINIMUM_LOAD_INTERVAL_MINUTES),
         })}
         onSubmit={(values, form): SubmissionErrors | void => {
           if (form.getState().pristine) {
@@ -65,9 +64,11 @@ const FeedDetails: React.FC<{ feed: FeedWithEventsAndCount }> = ({ feed: initial
             return { url: "Invalid URL" }
           }
 
-          if (values.loadIntervall < minimumLoadInterval) {
-            console.error("Load interval must be at least " + minimumLoadInterval)
-            return { loadIntervall: "Load interval must be at least " + minimumLoadInterval }
+          if (values.loadIntervall < MINIMUM_LOAD_INTERVAL_MINUTES) {
+            console.error("Load interval must be at least " + MINIMUM_LOAD_INTERVAL_MINUTES)
+            return {
+              loadIntervall: "Load interval must be at least " + MINIMUM_LOAD_INTERVAL_MINUTES,
+            }
           }
 
           notifyPromise(

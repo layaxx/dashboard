@@ -2,11 +2,12 @@ import { resolver } from "@blitzjs/rpc"
 import dayjs from "dayjs"
 import { z } from "zod"
 import db from "db"
+import { MINIMUM_LOAD_INTERVAL_MINUTES } from "lib/feeds/feedHelpers"
 
 const CreateFeed = z.object({
   name: z.string(),
   url: z.string(),
-  loadIntervall: z.number(),
+  loadIntervall: z.number().gte(MINIMUM_LOAD_INTERVAL_MINUTES),
 })
 
 export default resolver.pipe(
@@ -18,5 +19,5 @@ export default resolver.pipe(
     return await db.feed.create({
       data: { name, url, loadIntervall, position, lastLoad: dayjs(0).toDate() },
     })
-  }
+  },
 )

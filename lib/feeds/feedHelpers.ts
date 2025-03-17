@@ -3,6 +3,8 @@ import type { FeedEntry } from "feed-reader"
 import xss, { IFilterXSSOptions, whiteList } from "xss"
 import summaryLength from "lib/config/feeds/summaryLength"
 
+export const MINIMUM_LOAD_INTERVAL_MINUTES = 5
+
 export function idAsLinkIfSensible(id: string | undefined): string | undefined {
   try {
     new URL(id ?? "not a valid url")
