@@ -970,10 +970,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@blitzjs/auth@2.1.3":
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/@blitzjs/auth/-/auth-2.1.3.tgz#4dadfce65895b22924c52f8d6f5e785bc0d804f4"
-  integrity sha512-Q6VqeHr9pkA3/m4VjVRFQKMFeqITV2oJFOMCIVvJTEUsXoB9NO2aZKU0DvPrzhU5sd3Rnob15n0SPxHSLKKR3A==
+"@blitzjs/auth@2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@blitzjs/auth/-/auth-2.2.2.tgz#bd50a4a164ed58b0963d31c744a9e40ac0e93b62"
+  integrity sha512-3BGr2y46QEOSGw7sJT08J59jTtm4b4irpSh+JF4WA2UQxhe8ufd5ZbZmIDsFKxoQixBjv7OfO34R/bERtoCpPA==
   dependencies:
     "@types/b64-lite" "1.3.0"
     "@types/cookie-session" "2.0.44"
@@ -997,10 +997,10 @@
     supports-color "8.1.1"
     url "0.11.0"
 
-"@blitzjs/generator@2.1.3":
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/@blitzjs/generator/-/generator-2.1.3.tgz#83218f379ff03c7f8134addc697c5648fbacd15b"
-  integrity sha512-PStteR02V/Sd6FalmYy6tS6IB1grfcAPLlirJqURC3TSY3z9AIwvvhq0baelehJT0++Cq+1anksVmu1wDkgN0w==
+"@blitzjs/generator@2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@blitzjs/generator/-/generator-2.2.2.tgz#58d0332b4299e076e1e2cf814abafab9f72fc451"
+  integrity sha512-0CUbJdSi1SjDNnXhp6idlesxu9haXvJwXMceV6f7n/oDfgIqUGEPYn3X37YY4riI1GX50WLCDFKLb9mvREiqBw==
   dependencies:
     "@babel/core" "7.12.10"
     "@babel/plugin-transform-typescript" "7.12.1"
@@ -1030,12 +1030,12 @@
     vinyl "2.2.1"
     zod "3.23.8"
 
-"@blitzjs/next@2.1.3":
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/@blitzjs/next/-/next-2.1.3.tgz#58f9e63171b88dae44af0ce755a8d7faa88423b7"
-  integrity sha512-K4rAbTZ3ayxG9r9dZ/LfB/fttZqrAdHBPlowSsbd397bA9X1K/8erOESe1uR2RQD7w7jmCooCUKuKXWkQt6QOw==
+"@blitzjs/next@2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@blitzjs/next/-/next-2.2.2.tgz#7e669a8a35e140cd556e89d23bcc04bebb48a19a"
+  integrity sha512-sHYEyuT9a6dH7ZriuediS2Rcm9ANlyJ18sPpWx89/wBDRQHS4i8x3NGxvE86UI+V/MaYShTc1vytK5Zu7lyHwg==
   dependencies:
-    "@blitzjs/rpc" "2.1.3"
+    "@blitzjs/rpc" "2.2.2"
     "@types/hoist-non-react-statics" "3.3.1"
     copy-webpack-plugin "11.0.0"
     debug "4.3.3"
@@ -1044,10 +1044,10 @@
     superjson "1.11.0"
     supports-color "8.1.1"
 
-"@blitzjs/rpc@2.1.3":
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/@blitzjs/rpc/-/rpc-2.1.3.tgz#3009f27050b56a28e5816b58fd88e9f86ad1dbc9"
-  integrity sha512-y84PAq0amcqy0O8S7OnfFv1tl3reoe5lzlrUvqEsuyjTPUzbTMaq39v36C/IMREALAoHpuYM0v3MpPIA2Ht82w==
+"@blitzjs/rpc@2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@blitzjs/rpc/-/rpc-2.2.2.tgz#b33ff3cd0de1fcc98bec25462173470215fb0dc0"
+  integrity sha512-B07W8GID7EA/PZzsED4kvFtdVfDoptuAS65u5xD1c41RWpJbcTrLOKjaViyCZuH4OBryMbls9FCRKJNqEmSfRQ==
   dependencies:
     "@swc/core" "1.3.7"
     "@tanstack/react-query" "4.24.4"
@@ -1777,14 +1777,15 @@
   dependencies:
     defer-to-connect "^2.0.0"
 
-"@tailwindcss/typography@0.5.1":
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/@tailwindcss/typography/-/typography-0.5.1.tgz#486248a9426501f11a9b0295f7cfc0eb29659c46"
-  integrity sha512-AmSzZSgLhHKlILKduU+PKBTHL6c+al82syZlRid1xgmlWwXagLigO+O++B4C0scpMfzW//f/3YCRcwwEHWoU3w==
+"@tailwindcss/typography@0.5.16":
+  version "0.5.16"
+  resolved "https://registry.yarnpkg.com/@tailwindcss/typography/-/typography-0.5.16.tgz#a926c8f44d5c439b2915e231cad80058850047c6"
+  integrity sha512-0wDLwCVF5V3x3b1SGXPCDcdsbDHMBe+lkFzBRaHeLvNi+nrrnZ1lA18u+OTWO8iSWU2GxUOCvlXtDuqftc1oiA==
   dependencies:
     lodash.castarray "^4.4.0"
     lodash.isplainobject "^4.0.6"
     lodash.merge "^4.6.2"
+    postcss-selector-parser "6.0.10"
 
 "@tanstack/query-core@4.24.4":
   version "4.24.4"
@@ -2896,12 +2897,12 @@ bl@^4.0.3:
     inherits "^2.0.4"
     readable-stream "^3.4.0"
 
-blitz@2.1.3:
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/blitz/-/blitz-2.1.3.tgz#776373db0a134a942b55ebb04a0f078d5590cc8b"
-  integrity sha512-oJEdrcPudDKRlHZ9aAral/DBtsCvQMwlcJR/vzYbNK25XzIhuXeybDLq1UNMnnx05nd5IdELdFGhNhKjroTYww==
+blitz@2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/blitz/-/blitz-2.2.2.tgz#2377486700adbe7fb847ad37237e3744faed6e04"
+  integrity sha512-JI96Lo3vWJ1+rypjbaj4+P7J843ls73iWYZ1z8mRaFRhRBPfYPr+LztafZiJeJGXYXpw1hLNknffYmsK6/FLCA==
   dependencies:
-    "@blitzjs/generator" "2.1.3"
+    "@blitzjs/generator" "2.2.2"
     "@mrleebo/prisma-ast" "0.4.1"
     "@types/global-agent" "2.1.1"
     arg "5.0.1"
@@ -3720,10 +3721,10 @@ data-view-byte-offset@^1.0.1:
     es-errors "^1.3.0"
     is-data-view "^1.0.1"
 
-dayjs@1.11.11:
-  version "1.11.11"
-  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.11.tgz#dfe0e9d54c5f8b68ccf8ca5f72ac603e7e5ed59e"
-  integrity sha512-okzr3f11N6WuqYtZSvm+F776mB41wRZMhKP+hc34YdW+KmtYYK9iqvHSwo2k9FEH3fhGXvOPV6yz2IcSrfRUDg==
+dayjs@1.11.13:
+  version "1.11.13"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.13.tgz#92430b0139055c3ebb60150aa13e860a4b5a366c"
+  integrity sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==
 
 debug@3.2.7, debug@^3.2.7:
   version "3.2.7"
@@ -3978,10 +3979,10 @@ domhandler@5.0.3, domhandler@^5.0.2, domhandler@^5.0.3:
   dependencies:
     domelementtype "^2.3.0"
 
-domutils@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/domutils/-/domutils-3.1.0.tgz#c47f551278d3dc4b0b1ab8cbb42d751a6f0d824e"
-  integrity sha512-H78uMmQtI2AhgDJjWeQmHwJJ2bLPD3GMmO7Zja/ZZh84wkm+4ut+IUnUdRa8uCGX88DiVx1j6FRe1XfxEgjEZA==
+domutils@^3.2.1:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/domutils/-/domutils-3.2.2.tgz#edbfe2b668b0c1d97c24baf0f1062b132221bc78"
+  integrity sha512-6kZKyUajlDuqlHKVX1w7gyslj9MPIXzIFiz/rGu35uC1wMi+kMhQwGhl4lt9unC9Vb9INnY9Z3/ZA3+FhASLaw==
   dependencies:
     dom-serializer "^2.0.0"
     domelementtype "^2.3.0"
@@ -4080,10 +4081,15 @@ enquirer@^2.3.6:
     ansi-colors "^4.1.1"
     strip-ansi "^6.0.1"
 
-entities@^4.2.0, entities@^4.5.0:
+entities@^4.2.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/entities/-/entities-4.5.0.tgz#5d268ea5e7113ec74c4d033b79ea5a35a488fb48"
   integrity sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==
+
+entities@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/entities/-/entities-6.0.0.tgz#09c9e29cb79b0a6459a9b9db9efb418ac5bb8e51"
+  integrity sha512-aKstq2TDOndCn4diEyp9Uq/Flu2i1GlLkc6XIDQSDMuaFE3OPW5OphLCyQ5SpSJZTb4reN+kTcYru5yIfXoRPw==
 
 envinfo@7.8.1:
   version "7.8.1"
@@ -5530,13 +5536,13 @@ hosted-git-info@^2.1.4:
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.8.9.tgz#dffc0bf9a21c02209090f2aa69429e1414daf3f9"
   integrity sha512-mxIDAb9Lsm6DoOJ7xH+5+X4y1LU/4Hi50L9C5sIswK3JzULS4bwk1FvjdBgvYR4bzT4tuUQiC15FE2f5HbLvYw==
 
-html-dom-parser@5.0.8:
-  version "5.0.8"
-  resolved "https://registry.yarnpkg.com/html-dom-parser/-/html-dom-parser-5.0.8.tgz#540057d8eb7ff28c9fd45fa9eead374c34dae20c"
-  integrity sha512-vuWiX9EXgu8CJ5m9EP5c7bvBmNSuQVnrY8tl0z0ZX96Uth1IPlYH/8W8VZ/hBajFf18EN+j2pukbCNd01HEd1w==
+html-dom-parser@5.0.13:
+  version "5.0.13"
+  resolved "https://registry.yarnpkg.com/html-dom-parser/-/html-dom-parser-5.0.13.tgz#36b25b3ad05dc71741e9cd200ff276cdf8e3831d"
+  integrity sha512-B7JonBuAfG32I7fDouUQEogBrz3jK9gAuN1r1AaXpED6dIhtg/JwiSRhjGL7aOJwRz3HU4efowCjQBaoXiREqg==
   dependencies:
     domhandler "5.0.3"
-    htmlparser2 "9.1.0"
+    htmlparser2 "10.0.0"
 
 html-encoding-sniffer@^3.0.0:
   version "3.0.0"
@@ -5555,25 +5561,25 @@ html-escaper@^2.0.0:
   resolved "https://registry.yarnpkg.com/html-escaper/-/html-escaper-2.0.2.tgz#dfd60027da36a36dfcbe236262c00a5822681453"
   integrity sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg==
 
-html-react-parser@5.1.10:
-  version "5.1.10"
-  resolved "https://registry.yarnpkg.com/html-react-parser/-/html-react-parser-5.1.10.tgz#e65bf68df9b505756680d2cae842f7add3da5305"
-  integrity sha512-gV22PvLij4wdEdtrZbGVC7Zy2OVWnQ0bYhX63S196ZRSx4+K0TuutCreHSXr+saUia8KeKB+2TYziVfijpH4Tw==
+html-react-parser@5.2.2:
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/html-react-parser/-/html-react-parser-5.2.2.tgz#a4159c14f08c06280ff793ce35f872c2283227cb"
+  integrity sha512-yA5012CJGSFWYZsgYzfr6HXJgDap38/AEP4ra8Cw+WHIi2ZRDXRX/QVYdumRf1P8zKyScKd6YOrWYvVEiPfGKg==
   dependencies:
     domhandler "5.0.3"
-    html-dom-parser "5.0.8"
+    html-dom-parser "5.0.13"
     react-property "2.0.2"
-    style-to-js "1.1.12"
+    style-to-js "1.1.16"
 
-htmlparser2@9.1.0:
-  version "9.1.0"
-  resolved "https://registry.yarnpkg.com/htmlparser2/-/htmlparser2-9.1.0.tgz#cdb498d8a75a51f739b61d3f718136c369bc8c23"
-  integrity sha512-5zfg6mHUoaer/97TxnGpxmbR7zJtPwIYFMZ/H5ucTlPZhKvtum05yiPK3Mgai3a0DyVxv7qYqoweaEd2nrYQzQ==
+htmlparser2@10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/htmlparser2/-/htmlparser2-10.0.0.tgz#77ad249037b66bf8cc99c6e286ef73b83aeb621d"
+  integrity sha512-TwAZM+zE5Tq3lrEHvOlvwgj1XLWQCtaaibSN11Q+gGBAS7Y1uZSWwXXRe4iF6OXnaq1riyQAPFOBtYc77Mxq0g==
   dependencies:
     domelementtype "^2.3.0"
     domhandler "^5.0.3"
-    domutils "^3.1.0"
-    entities "^4.5.0"
+    domutils "^3.2.1"
+    entities "^6.0.0"
 
 http-cache-semantics@^4.0.0:
   version "4.1.1"
@@ -5732,10 +5738,10 @@ ink@3.2.0:
     ws "^7.5.5"
     yoga-layout-prebuilt "^1.9.6"
 
-inline-style-parser@0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/inline-style-parser/-/inline-style-parser-0.2.3.tgz#e35c5fb45f3a83ed7849fe487336eb7efa25971c"
-  integrity sha512-qlD8YNDqyTKTyuITrDOffsl6Tdhv+UC4hcdAVuQsK4IMQ99nSgd1MIA/Q+jQYoh9r3hVUXhYh7urSRmXPkW04g==
+inline-style-parser@0.2.4:
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/inline-style-parser/-/inline-style-parser-0.2.4.tgz#f4af5fe72e612839fcd453d989a586566d695f22"
+  integrity sha512-0aO8FkhNZlj/ZIbNi7Lxxr12obT7cL1moPfE4tg1LkX7LlLfC6DeX4l2ZEud1ukP9jNQyNnfzQVqwbwmAATY4Q==
 
 internal-slot@^1.0.5:
   version "1.0.6"
@@ -8105,6 +8111,14 @@ postcss-nested@^6.0.1:
   dependencies:
     postcss-selector-parser "^6.0.11"
 
+postcss-selector-parser@6.0.10:
+  version "6.0.10"
+  resolved "https://registry.yarnpkg.com/postcss-selector-parser/-/postcss-selector-parser-6.0.10.tgz#79b61e2c0d1bfc2602d549e11d0876256f8df88d"
+  integrity sha512-IQ7TZdoaqbT+LCpShg46jnZVlhWD2w6iQYAcYXfHARZ7X1t/UGhhceQDs5X0cGqKvYlHNOuv7Oa1xmb0oQuA3w==
+  dependencies:
+    cssesc "^3.0.0"
+    util-deprecate "^1.0.2"
+
 postcss-selector-parser@^6.0.11, postcss-selector-parser@^6.0.6:
   version "6.0.15"
   resolved "https://registry.yarnpkg.com/postcss-selector-parser/-/postcss-selector-parser-6.0.15.tgz#11cc2b21eebc0b99ea374ffb9887174855a01535"
@@ -9104,10 +9118,10 @@ sodium-native@^3.1.1:
   dependencies:
     node-gyp-build "^4.3.0"
 
-sortablejs@1.15.2:
-  version "1.15.2"
-  resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.15.2.tgz#4e9f7bda4718bd1838add9f1866ec77169149809"
-  integrity sha512-FJF5jgdfvoKn1MAKSdGs33bIqLi3LmsgVTliuX6iITj834F+JRQZN90Z93yql8h0K2t0RwDPBmxwlbZfDcxNZA==
+sortablejs@1.15.6:
+  version "1.15.6"
+  resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.15.6.tgz#ff93699493f5b8ab8d828f933227b4988df1d393"
+  integrity sha512-aNfiuwMEpfBM/CN6LY0ibyhxPfPbyFeBTYJKCvzkJ2GkUpazIt3H+QIPAMHwqQ7tMKaHz1Qj+rJJCqljnf4p3A==
 
 source-map-js@^1.0.2:
   version "1.0.2"
@@ -9472,19 +9486,19 @@ strnum@^1.1.1:
   resolved "https://registry.yarnpkg.com/strnum/-/strnum-1.1.2.tgz#57bca4fbaa6f271081715dbc9ed7cee5493e28e4"
   integrity sha512-vrN+B7DBIoTTZjnPNewwhx6cBA/H+IS7rfW68n7XxC1y7uoiGQBxaKzqucGUgavX15dJgiGztLJ8vxuEzwqBdA==
 
-style-to-js@1.1.12:
-  version "1.1.12"
-  resolved "https://registry.yarnpkg.com/style-to-js/-/style-to-js-1.1.12.tgz#112dd054231e71643514013a4475d4649bb2b581"
-  integrity sha512-tv+/FkgNYHI2fvCoBMsqPHh5xovwiw+C3X0Gfnss/Syau0Nr3IqGOJ9XiOYXoPnToHVbllKFf5qCNFJGwFg5mg==
+style-to-js@1.1.16:
+  version "1.1.16"
+  resolved "https://registry.yarnpkg.com/style-to-js/-/style-to-js-1.1.16.tgz#e6bd6cd29e250bcf8fa5e6591d07ced7575dbe7a"
+  integrity sha512-/Q6ld50hKYPH3d/r6nr117TZkHR0w0kGGIVfpG9N6D8NymRPM9RqCUv4pRpJ62E5DqOYx2AFpbZMyCPnjQCnOw==
   dependencies:
-    style-to-object "1.0.6"
+    style-to-object "1.0.8"
 
-style-to-object@1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/style-to-object/-/style-to-object-1.0.6.tgz#0c28aed8be1813d166c60d962719b2907c26547b"
-  integrity sha512-khxq+Qm3xEyZfKd/y9L3oIWQimxuc4STrQKtQn8aSDRHb8mFgpukgX1hdzfrMEW6JCjyJ8p89x+IUMVnCBI1PA==
+style-to-object@1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/style-to-object/-/style-to-object-1.0.8.tgz#67a29bca47eaa587db18118d68f9d95955e81292"
+  integrity sha512-xT47I/Eo0rwJmaXC4oilDGDWLohVhR6o/xAQcPQN8q6QBuZVL8qMYL85kLmST5cPjAorwvqIA4qXTRQoYHaL6g==
   dependencies:
-    inline-style-parser "0.2.3"
+    inline-style-parser "0.2.4"
 
 styled-jsx@5.1.1:
   version "5.1.1"
