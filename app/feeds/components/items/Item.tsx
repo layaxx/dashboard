@@ -158,6 +158,7 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
       {isExpanded && (
         <article
           className={clsx(
+            "break-words",
             "prose-p:font-serif",
             "font-serif",
             "max-w-prose",
