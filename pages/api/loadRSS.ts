@@ -88,9 +88,9 @@ const handler: NextApiHandler = async (
           data: {
             feedId: feed.id,
             id: `disable-${feed.id}-${new Date().getMilliseconds()}`,
-            title: "Feed Disabled",
-            text: "Feed disabled due to too many consecutive failed loads",
-            summary: "Feed disabled due to too many consecutive failed loads",
+            title: `Feed ${feed.id} Disabled`,
+            text: `Loading from ${feed.url} disabled due to too many consecutive failed loads`,
+            summary: "Loading from ${feed.url} disabled due to too many consecutive failed loads",
             link: Routes.FeedsStatusPage().pathname,
           },
         })
