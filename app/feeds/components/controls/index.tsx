@@ -8,6 +8,7 @@ import Button from "app/core/components/Button"
 import ButtonGroup from "app/core/components/ButtonGroup"
 import Loader from "app/core/components/Loader"
 import { useSharedState } from "app/core/hooks/store"
+import { ALL_FEEDS_ID } from "lib/config/feeds/feedIDs"
 
 const Controls: FC = () => {
   const [{ activeFeedID }] = useSharedState()
@@ -32,7 +33,7 @@ const Controls: FC = () => {
 
         <Button
           href={
-            hasAttached
+            hasAttached && activeFeedID !== ALL_FEEDS_ID
               ? Routes.FeedsSettingsPage({ id: activeFeedID })
               : Routes.FeedsSettingsOverviewPage()
           }

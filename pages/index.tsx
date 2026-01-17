@@ -46,6 +46,13 @@ const Home: BlitzPage = () => {
         <UserInfo />
       </Suspense>
 
+      {process.env.NEXT_PUBLIC_IS_DEMO_MODE === "true" && (
+        <div>
+          <p className="font-bold">Demo Mode Active</p>
+          <p>You can log in with the demo account (demo@example.com, demo).</p>
+        </div>
+      )}
+
       <div className={clsx("flex", "flex-col", "md:flex-row", "gap-2", "md:gap-8", "mt-8")}>
         <Button href={Routes.FeedsRSSPage()} variant="primary" size="lg" className="grow">
           News Feed

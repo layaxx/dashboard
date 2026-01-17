@@ -3,8 +3,6 @@ import { faker } from "@faker-js/faker"
 import dayjs from "dayjs"
 import db from "db"
 
-const getFeedNamePrefix = (index: number) => "Feed " + (index + 1) + ": "
-
 const seed = async () => {
   await db.$reset()
 
@@ -17,40 +15,38 @@ const seed = async () => {
     },
   })
 
-  const numberOfFeeds = 5
-  const numberOfEntriesPerFeed = 40
-
-  const feedData = Array.from({ length: numberOfFeeds }, (_, index) => {
-    return {
-      name: getFeedNamePrefix(index) + faker.internet.userName(),
-      position: index,
-      loadIntervall: 15,
-      url: faker.internet.url({ appendSlash: false }).replaceAll(/(\.\w+)$/g, ".invalid"), // prevent accidental requests to real servers
-      lastLoad: faker.date.past(),
-    }
+  await db.user.create({
+    data: {
+      email: "demo@example.com",
+      name: "Demo Account",
+      role: "USER",
+      hashedPassword: await SecurePassword.hash("demo"),
+    },
   })
-  const feeds = await db.feed.createManyAndReturn({ data: feedData })
 
-  const entriesData = feeds.flatMap((feed, feedIndex) => {
-    return Array.from({ length: numberOfEntriesPerFeed }, (_, index) => ({
-      id: String(feedIndex * numberOfEntriesPerFeed + index), // ensure unique id
-      link: faker.internet.url(),
-      summary: faker.lorem.paragraph(),
-      title: getFeedNamePrefix(feedIndex) + "Entry " + index + ": " + faker.lorem.words(2),
-      text: faker.lorem.paragraphs(
-        { min: 1, max: 100 },
-        faker.datatype.boolean() ? "<br/>\n" : "\n"
-      ),
-      feedId: feed.id,
-      createdAt: dayjs()
-        .subtract(numberOfEntriesPerFeed - index, "day")
-        .toDate(),
-    }))
-  })
-  await db.feedentry.createMany({ data: entriesData })
+  const urls = [
+    { url: "https://www.heise.de/security/rss/news.rdf", name: "Heise Security" },
+    { url: "https://netzpolitik.org/feed", name: "Netzpolitik.org" },
+  ]
+
+  const feedData = urls.map((feed, index) => ({
+    name: feed.name,
+    position: index,
+    loadIntervall: 360, // 6 hours
+    url: feed.url,
+    lastLoad: faker.date.past(),
+  }))
+  await db.feed.createManyAndReturn({ data: feedData })
+
+  const readListLinks = [
+    "https://news.ycombinator.com/",
+    "https://y-lang.eu/",
+    "https://github.com/layaxx/dashboard",
+    "https://github.com/layaxx/",
+  ]
 
   await db.readlistentry.createMany({
-    data: Array.from({ length: numberOfFeeds }, () => ({ url: faker.internet.url() })),
+    data: readListLinks.map((url) => ({ url })),
   })
 
   await db.statusClean.createMany({
@@ -71,8 +67,9 @@ const seed = async () => {
       updateCount: faker.datatype.boolean() ? faker.number.int({ min: 0, max: 5 }) : 0,
       errors: faker.datatype.boolean({ probability: 0.75 })
         ? []
-        : Array.from({ length: faker.number.int({ min: 1, max: 3 }) }, () =>
-            faker.lorem.sentence()
+        : Array.from(
+            { length: faker.number.int({ min: 1, max: 3 }) },
+            () => "[Seed Data]: " + faker.lorem.sentence()
           ),
     })),
   })

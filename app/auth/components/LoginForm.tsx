@@ -1,6 +1,7 @@
 import { AuthenticationError, PromiseReturnType } from "blitz"
 import { Routes } from "@blitzjs/next"
 import { useMutation } from "@blitzjs/rpc"
+import clsx from "clsx"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { getRedirectionPath } from "../redirection"
@@ -26,10 +27,21 @@ export const LoginForm = (props: LoginFormProps) => {
 
   return (
     <div>
+      {process.env.NEXT_PUBLIC_IS_DEMO_MODE === "true" && (
+        <div>
+          <p className={clsx("font-bold", "mt-4")}>Demo Mode Active</p>
+          <p>You can log in with the demo account (demo@example.com, demo).</p>
+        </div>
+      )}
+
       <Form
         submitText="Login"
         schema={Login}
-        initialValues={{ email: "", password: "" }}
+        initialValues={
+          process.env.NEXT_PUBLIC_IS_DEMO_MODE === "true"
+            ? { email: "demo@example.com", password: "demo" }
+            : { email: "", password: "" }
+        }
         onSubmit={async (values) => {
           try {
             const user = await loginMutation(values)
