@@ -6,7 +6,7 @@ services:
     build:
       context: ../../
       dockerfile: docker/demo/Dockerfile
-    image: dashboard-demo
+    container_name: dashboard-demo-app
     env_file: ../../.env.production.local
     restart: unless-stopped
     healthcheck:
