@@ -2,7 +2,7 @@ import { BlitzLogger } from "blitz"
 import { getSession } from "@blitzjs/auth"
 import { NextApiRequest, NextApiResponse } from "next"
 import { api } from "app/blitz-server"
-import seed from "db/seeds"
+import seed from "lib/serverOnly/demo-seed"
 
 const logger = BlitzLogger({ name: "/api/demo/seed" })
 
