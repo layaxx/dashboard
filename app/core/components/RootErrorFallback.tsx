@@ -3,14 +3,11 @@ import React from "react"
 import { ErrorComponent, ErrorFallbackProps } from "@blitzjs/next"
 import clsx from "clsx"
 import LoginForm from "app/auth/components/LoginForm"
-import { reportErrorWebhook } from "lib/reportErrorWebhook"
 
 interface ICustomErrorFallbackProps extends ErrorFallbackProps {
   getLayout: (component: JSX.Element) => JSX.Element
 }
 function RootErrorFallback({ error, resetErrorBoundary, getLayout }: ICustomErrorFallbackProps) {
-  reportErrorWebhook({ error, boundary: "RootErrorBoundary" })
-
   if (error instanceof AuthenticationError) {
     return getLayout(
       <div className={clsx(["w-full", "max-w-96"])}>

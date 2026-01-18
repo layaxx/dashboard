@@ -4,6 +4,7 @@ import { ToastContainer } from "react-toastify"
 import { withBlitz } from "app/blitz-client"
 import RootErrorFallback from "app/core/components/RootErrorFallback"
 import { SharedStateProvider } from "app/core/hooks/store"
+import { reportErrorWebhook } from "lib/reportErrorWebhook"
 
 import "react-toastify/dist/ReactToastify.css"
 import "app/core/styles/index.css"
@@ -14,6 +15,9 @@ export default withBlitz(({ Component, pageProps }: AppProps) => {
 
   return (
     <ErrorBoundary
+      onError={(error) => {
+        reportErrorWebhook({ error, boundary: "RootErrorBoundary" })
+      }}
       fallbackRender={({ error, resetErrorBoundary }) => (
         <RootErrorFallback
           error={error}

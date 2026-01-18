@@ -1,4 +1,5 @@
 "use client"
+import { AuthenticationError } from "blitz"
 import { useRef } from "react"
 import { ErrorComponent } from "@blitzjs/next"
 import { useQuery, useInfiniteQuery } from "@blitzjs/rpc"
@@ -54,8 +55,13 @@ export const ItemsList = () => {
         skipOffset.current = 0
       },
       onError(error) {
-        console.error(error)
-        notify("Error fetching items", { status: "error" })
+        if (
+          !(typeof error === "object" && error && "revert" in error && error.revert) &&
+          !(error instanceof AuthenticationError)
+        ) {
+          console.error(error, "Error fetching items")
+          notify("Error fetching items", { status: "error" })
+        }
       },
     }
   )

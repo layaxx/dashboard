@@ -1,10 +1,8 @@
 import { BlitzLogger } from "blitz"
-import { getSession } from "@blitzjs/auth"
 import dayjs from "dayjs"
 import { NextApiHandler } from "next"
 import { api } from "app/blitz-server"
 import {
-  HTTP_FORBIDDEN,
   HTTP_INTERNAL_SERVER_ERROR,
   HTTP_OK,
   HTTP_SERVICE_UNAVAILABLE,
@@ -13,13 +11,6 @@ import {
 const logger = BlitzLogger({ name: "/api/reportError" })
 
 const handler: NextApiHandler = async (request, response) => {
-  const session = await getSession(request, response)
-
-  if (!session.userId) {
-    logger.warn("denied Access to /api/loadRSS")
-    return response.status(HTTP_FORBIDDEN).send("Please log in to use this API route")
-  }
-
   if (!process.env.ERROR_REPORT_WEBHOOK) {
     logger.error("No error reporting webhook configured")
     return response.status(HTTP_SERVICE_UNAVAILABLE).send("No error reporting webhook configured")

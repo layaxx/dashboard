@@ -1,5 +1,6 @@
 import { AuthenticationError, NotFoundError } from "blitz"
 import { HTMLAttributes, PropsWithChildren } from "react"
+import { useSession } from "@blitzjs/auth"
 import { ErrorBoundary } from "@blitzjs/next"
 import { QueryErrorResetBoundary } from "@tanstack/react-query"
 import Button, { ButtonProps } from "./Button"
@@ -18,17 +19,27 @@ const QueryErrorBoundary: React.FC<PropsWithChildren<Props>> = ({
   paragraphProps,
   containerProps,
 }) => {
+  const session = useSession({ suspense: false })
   return (
     <QueryErrorResetBoundary>
       {({ reset }) => (
         <ErrorBoundary
+          onError={(error) => {
+            const canSkip =
+              error instanceof AuthenticationError && (session.isLoading || !session.userId)
+            if (!canSkip) {
+              console.warn(error instanceof AuthenticationError, session)
+              reportErrorWebhook({ error, boundary: "QueryErrorBoundary" })
+            }
+          }}
           fallbackRender={({ error, resetErrorBoundary }) => {
             let content = `Something went wrong (${error.name})`
 
-            reportErrorWebhook({ error, boundary: "QueryErrorBoundary" })
-
             if (error instanceof AuthenticationError) {
               content = "You may not access this."
+              if (session.userId) {
+                resetErrorBoundary()
+              }
             }
 
             if (
