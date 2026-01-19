@@ -3,11 +3,11 @@ import db from "db"
 
 export default resolver.pipe(resolver.authorize(), async () => {
   const statusLoad = await db.statusLoad.findMany({
-    take: 20,
+    take: 18,
     orderBy: { createdAt: "desc" },
   })
   const statusClean = await db.statusClean.findMany({
-    take: 20,
+    take: 18,
     orderBy: { createdAt: "desc" },
   })
 

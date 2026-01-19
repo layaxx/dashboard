@@ -4,7 +4,7 @@ import { useQuery } from "@blitzjs/rpc"
 import { ExclamationCircleIcon } from "@heroicons/react/24/solid"
 import clsx from "clsx"
 import StatusChart from "./StatusChart"
-import StatusCleanItem from "./StatusLoadClean"
+import StatusCleanItem from "./StatusCleanItem"
 import StatusLoadItem from "./StatusLoadItem"
 import StatusTable from "./Table"
 import Loader from "app/core/components/Loader"
@@ -64,10 +64,20 @@ const StatusOverview: FC = () => {
       <div
         className={clsx("flex", "flex-row", "flex-wrap", "justify-around", "max-w-7xl", "mx-auto")}
       >
+        <h2
+          className={clsx("font-bold", "mt-4", "text-2xl", "md:text-3xl", "text-center", "w-full")}
+        >
+          Recent Feed Loading Events
+        </h2>
         {statusWithWarnings.map((status) => (
           <StatusLoadItem {...status} key={status.id} />
         ))}
-        <hr />
+
+        <h2
+          className={clsx("font-bold", "mt-4", "text-2xl", "md:text-3xl", "text-center", "w-full")}
+        >
+          Recent Cleaning Events
+        </h2>
         {result.statusClean.map((status) => (
           <StatusCleanItem {...status} key={status.id} />
         ))}
