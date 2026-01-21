@@ -1,18 +1,13 @@
 # 1. Install dependencies only when needed
 FROM node:20-slim AS deps
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY .yarn .yarn
+RUN corepack enable && yarn --immutable
 
 
 # 2. Rebuild the source code only when needed
@@ -26,7 +21,8 @@ COPY .env.production.local .env.production
 
 ENV NEXT_PUBLIC_IS_DEMO_MODE=true
 
-RUN yarn blitz prisma generate && yarn build
+RUN corepack enable && yarn prisma generate
+RUN yarn build
 
 # 3. Production image, copy all the files and run next
 FROM node:20-slim AS runner

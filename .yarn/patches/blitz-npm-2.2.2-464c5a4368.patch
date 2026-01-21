@@ -1,0 +1,26 @@
+diff --git a/dist/chunks/run-prisma.cjs b/dist/chunks/run-prisma.cjs
+index d1cce761b6a4a50d2f9fdc7199f972f91f3fa7ca..77d918bc63666cb170b0d1c19be3063c3f8744b9 100644
+--- a/dist/chunks/run-prisma.cjs
++++ b/dist/chunks/run-prisma.cjs
+@@ -31,7 +31,7 @@ var __async = (__this, __arguments, generator) => {
+ };
+ const runPrisma = (args, silent = false) => __async(void 0, null, function* () {
+   var _a;
+-  const prismaBin = resolveFrom__default.silent(process.cwd(), "prisma");
++  const prismaBin = "node_modules/.bin/prisma";
+   if (prismaBin) {
+     const cp = spawn.spawn(prismaBin, args, {
+       stdio: silent ? "pipe" : "inherit",
+diff --git a/dist/chunks/run-prisma.mjs b/dist/chunks/run-prisma.mjs
+index fed9286dfaff80080054e7acb30c23952d3f0109..ff843b052c65f5be40bbc4df6ba2f7581898a633 100644
+--- a/dist/chunks/run-prisma.mjs
++++ b/dist/chunks/run-prisma.mjs
+@@ -24,7 +24,7 @@ var __async = (__this, __arguments, generator) => {
+ };
+ const runPrisma = (args, silent = false) => __async(void 0, null, function* () {
+   var _a;
+-  const prismaBin = resolveFrom.silent(process.cwd(), "prisma");
++  const prismaBin = "node_modules/.bin/prisma";
+   if (prismaBin) {
+     const cp = spawn(prismaBin, args, {
+       stdio: silent ? "pipe" : "inherit",

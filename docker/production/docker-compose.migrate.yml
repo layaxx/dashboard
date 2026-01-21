@@ -18,4 +18,4 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    entrypoint: ["yarn", "blitz", "prisma", "migrate", "deploy"]
+    entrypoint: ["yarn", "prisma", "migrate", "deploy"]
