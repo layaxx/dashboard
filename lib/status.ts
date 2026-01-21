@@ -1,5 +1,5 @@
 import dayjs from "dayjs"
-import { StatusLoad } from "db"
+import type { StatusLoad } from "db"
 import {
   maxAcceptableAverageLoadTime,
   targetTimeBetweenLoads,

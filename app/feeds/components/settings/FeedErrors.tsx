@@ -1,6 +1,6 @@
 import React from "react"
 import dayjs from "dayjs"
-import { FeedLoadEvent } from "db"
+import type { FeedLoadEvent } from "db"
 
 const FeedErrors: React.FC<{ errors: FeedLoadEvent[] }> = ({ errors }) => {
   if (errors.length === 0) {

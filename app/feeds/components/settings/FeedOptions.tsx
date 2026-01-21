@@ -10,7 +10,7 @@ import { notifyPromise } from "app/core/hooks/notify"
 import createFeedoptionMutation from "app/feeds/feedoptions/mutations/createFeedoption"
 import updateFeedoptionMutation from "app/feeds/feedoptions/mutations/updateFeedoption"
 import getFeed from "app/feeds/queries/getFeed"
-import { FeedEntryOrdering, ImageHandling } from "db"
+import { FeedEntryOrdering, ImageHandling } from "db/generated/prisma"
 import { FeedWithEventsAndCount } from "lib/feeds/types"
 
 const imageHandlingDescription: Record<ImageHandling, string> = {

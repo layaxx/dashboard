@@ -3,7 +3,7 @@ import { Ctx } from "@blitzjs/next"
 import { faker } from "@faker-js/faker"
 import dayjs from "dayjs"
 import { fetchFromURL, getTitleAndTTLFromFeed, loadFeed } from "./loadRSSHelpers"
-import { Feed } from "db"
+import type { Feed } from "db"
 import { LoadFeedStatus } from "lib/feeds/types"
 
 const mockFetch = jest.fn()

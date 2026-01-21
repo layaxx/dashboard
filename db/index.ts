@@ -1,12 +1,13 @@
 import { enhancePrisma } from "blitz"
-import { PrismaClient, Prisma } from "@prisma/client"
+import { PrismaPg } from "@prisma/adapter-pg"
+import { PrismaClient } from "db/generated/prisma/client"
 
 const EnhancedPrisma = enhancePrisma(PrismaClient)
 
-export function isKnownRequestError(error: Error): error is Prisma.PrismaClientKnownRequestError {
-  return error.name === "PrismaClientKnownRequestError" && "code" in error && "meta" in error
-}
+export * from "db/generated/prisma/client"
 
-export * from "@prisma/client"
-const enhancedPrismaInstance = new EnhancedPrisma()
+const adapter = new PrismaPg({
+  connectionString: process.env.DATABASE_URL,
+})
+const enhancedPrismaInstance = new EnhancedPrisma({ adapter })
 export default enhancedPrismaInstance

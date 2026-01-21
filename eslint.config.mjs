@@ -128,6 +128,7 @@ const eslintConfig = [
         },
       ],
       "no-duplicate-imports": "error",
+      "no-restricted-imports": ["error", "@prisma/client"],
 
       "tailwindcss/no-custom-classname": ["warn"],
       "tailwindcss/no-contradicting-classname": "error",

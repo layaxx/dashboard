@@ -6,8 +6,8 @@ import FeedErrors from "./FeedErrors"
 import FeedHistory from "./FeedHistory"
 import FeedOptions from "./FeedOptions"
 import Heading from "./Heading"
-import { FeedLoadEvent } from "db"
-import { FeedWithEventsAndCount } from "lib/feeds/types"
+import type { FeedLoadEvent } from "db"
+import type { FeedWithEventsAndCount } from "lib/feeds/types"
 
 const FeedsSettingsPageContent: React.FC<{ feed: FeedWithEventsAndCount }> = ({ feed }) => {
   const errors: FeedLoadEvent[] = feed.loadEvents.filter((event) =>

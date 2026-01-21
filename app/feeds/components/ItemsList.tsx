@@ -13,7 +13,7 @@ import { useSharedState } from "app/core/hooks/store"
 import { defaultOptions } from "app/feeds/feedoptions"
 import getFeedoption from "app/feeds/feedoptions/queries/getFeedoption"
 import getFeedentries from "app/feeds/queries/getFeedentries"
-import { FeedEntryOrdering } from "db"
+import { FeedEntryOrdering } from "db/generated/prisma"
 import { ALL_FEEDS_ID, RECENTLY_READ_ID } from "lib/config/feeds/feedIDs"
 
 export const ItemsList = () => {

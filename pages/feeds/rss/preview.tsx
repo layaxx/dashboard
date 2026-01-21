@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { getAntiCSRFToken } from "@blitzjs/auth"
 import { BlitzPage } from "@blitzjs/next"
-import { Feedentry } from "@prisma/client"
 import clsx from "clsx"
 import Head from "next/head"
 import { z } from "zod"
@@ -11,6 +10,7 @@ import Loader from "app/core/components/Loader"
 import { notifyPromiseAdvanced } from "app/core/hooks/notify"
 import Layout from "app/core/layouts/Layout"
 import PreviewItem from "app/feeds/components/items/PreviewItem"
+import type { Feedentry } from "db"
 
 const RSSPreviewPage: BlitzPage = () => {
   const [feedEntries, setFeedEntries] = useState<Feedentry[] | undefined>()

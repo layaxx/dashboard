@@ -1,10 +1,10 @@
 import { useState } from "react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid"
-import { Feedentry, Feedoption } from "@prisma/client"
 import clsx from "clsx"
 import parse, { HTMLReactParserOptions, Element } from "html-react-parser"
 import ItemInformation from "./ItemInformation"
+import type { Feedentry, Feedoption } from "db"
 
 type ItemProps = { item: Feedentry; settings: Pick<Feedoption, "expand">; removeEntry: () => void }
 

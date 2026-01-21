@@ -7,7 +7,7 @@ import { ReactSortable } from "react-sortablejs"
 import Button from "app/core/components/Button"
 import notify from "app/core/hooks/notify"
 import updateFeedMutation from "app/feeds/mutations/updateFeed"
-import { Feed } from "db"
+import type { Feed } from "db"
 
 type Props = {
   feeds: Feed[]

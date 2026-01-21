@@ -7,17 +7,14 @@
     "prebuild": "echo \"export default '$(git rev-parse --short HEAD)'\" > lib/config/version.ts",
     "build": "blitz build",
     "start": "blitz start",
-    "studio": "blitz prisma studio",
-    "lint": "tsc && eslint . && prettier . --check && blitz prisma format --check",
+    "studio": "blitz studio",
+    "lint": "tsc && eslint . && prettier . --check && prisma format --check",
     "test": "jest",
     "test:watch": "jest --watch",
     "prepare": "husky",
     "docker:build": "docker build . -t locally_built_dashboard_app",
     "docker:run:db": "docker compose --env-file ./.env.local -f docker-compose-db-only.yml up",
     "docker:run:all": "docker compose --env-file ./.env.local up -d --build"
-  },
-  "prisma": {
-    "schema": "db/schema.prisma"
   },
   "prettier": {
     "semi": false,
@@ -35,7 +32,8 @@
     "@blitzjs/next": "2.2.2",
     "@blitzjs/rpc": "2.2.2",
     "@heroicons/react": "2.0.12",
-    "@prisma/client": "6.4.0",
+    "@prisma/adapter-pg": "7.2.0",
+    "@prisma/client": "7.2.0",
     "@tailwindcss/typography": "0.5.16",
     "blitz": "2.2.2",
     "chart.js": "^4.4.0",
@@ -93,9 +91,9 @@
     "prettier": "3.3.0",
     "prettier-plugin-prisma": "5.0.0",
     "pretty-quick": "^4.0.0",
-    "prisma": "6.4.0",
+    "prisma": "7.2.0",
     "ts-jest": "28.0.8",
-    "typescript": "^4.8.4"
+    "typescript": "5.9"
   },
   "private": true,
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",

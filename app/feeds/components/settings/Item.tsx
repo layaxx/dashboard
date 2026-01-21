@@ -1,10 +1,10 @@
 import { FC } from "react"
 import { Routes } from "@blitzjs/next"
-import { Feed } from "@prisma/client"
 import clsx from "clsx"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 import Link from "next/link"
+import type { Feed } from "db"
 
 dayjs.extend(relativeTime)
 

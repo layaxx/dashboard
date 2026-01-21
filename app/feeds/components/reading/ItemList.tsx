@@ -1,12 +1,12 @@
 "use client"
 import { useState } from "react"
 import { useInfiniteQuery } from "@blitzjs/rpc"
-import { Readlistentry } from "@prisma/client"
 import clsx from "clsx"
 import ReadlistItem from "./ReadlistItem"
 import Button from "app/core/components/Button"
 import Loader from "app/core/components/Loader"
 import getReadlistentries from "app/feeds/readlistentries/queries/getReadlistentries"
+import type { Readlistentry } from "db"
 
 export const ItemList = () => {
   const pageSize = 20

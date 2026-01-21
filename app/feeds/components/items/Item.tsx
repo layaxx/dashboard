@@ -1,6 +1,5 @@
 import { useState } from "react"
 import { setQueryData, useMutation } from "@blitzjs/rpc"
-import { Feedentry, Feedoption, ImageHandling } from "@prisma/client"
 import clsx from "clsx"
 import parse, { HTMLReactParserOptions, Element } from "html-react-parser"
 import ItemControls from "./ItemControls"
@@ -8,6 +7,7 @@ import ItemInformation from "./ItemInformation"
 import { feedListOmit } from "../FeedList"
 import readItem from "app/feeds/mutations/readItem"
 import getFeeds from "app/feeds/queries/getFeeds"
+import { Feedentry, Feedoption, ImageHandling } from "db/generated/prisma"
 
 type ItemProps = {
   item: Feedentry

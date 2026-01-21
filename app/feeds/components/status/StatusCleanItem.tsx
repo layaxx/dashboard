@@ -1,8 +1,8 @@
 import { FC } from "react"
-import { StatusClean } from "@prisma/client"
 import clsx from "clsx"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
+import type { StatusClean } from "db"
 
 const formatter = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 0,

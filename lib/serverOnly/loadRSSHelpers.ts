@@ -1,7 +1,6 @@
 /* eslint-disable max-lines */
 import { Ctx } from "@blitzjs/next"
 import { invokeWithCtx } from "@blitzjs/rpc"
-import { Prisma } from "@prisma/client"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import { parseString, setReaderOptions, setParserOptions, FeedData } from "feed-reader"
@@ -10,7 +9,7 @@ import { createHash } from "crypto"
 import { LoadFeedResult, LoadFeedStatus } from "../feeds/types"
 import createManyFeedEntries from "app/feeds/mutations/createManyFeedEntries"
 import updateFeedentry from "app/feeds/mutations/updateFeedentry"
-import db, { Feed } from "db"
+import db, { Feed, Prisma } from "db"
 import summaryLength from "lib/config/feeds/summaryLength"
 import { convertItem } from "lib/feeds/feedHelpers"
 

@@ -1,7 +1,7 @@
-import { Feedentry } from "@prisma/client"
 import clsx from "clsx"
 import dayjs from "dayjs"
 import { useReadTime } from "use-read-time"
+import type { Feedentry } from "db"
 
 type Props = { item: Feedentry }
 

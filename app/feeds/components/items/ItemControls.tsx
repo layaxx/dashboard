@@ -1,6 +1,6 @@
 import { EyeIcon, EyeSlashIcon, ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid"
-import { Feedentry } from "@prisma/client"
 import clsx from "clsx"
+import type { Feedentry } from "db"
 
 type ItemControlProps = {
   item: Feedentry

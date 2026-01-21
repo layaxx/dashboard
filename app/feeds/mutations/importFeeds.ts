@@ -5,7 +5,7 @@ import createFeed from "./createFeed"
 import createFeedEntry from "./createFeedEntry"
 import deleteAllFeedEntries from "./deleteAllFeedEntries"
 import deleteAllFeeds from "./deleteAllFeeds"
-import { Feed, Feedentry } from "db"
+import type { Feed, Feedentry } from "db"
 
 const Options = z.object({
   fileContent: z.string().min(2),

@@ -4,7 +4,7 @@ import { useSession } from "@blitzjs/auth"
 import { ErrorBoundary } from "@blitzjs/next"
 import { QueryErrorResetBoundary } from "@tanstack/react-query"
 import Button, { ButtonProps } from "./Button"
-import { isKnownRequestError } from "db"
+import { isKnownRequestError } from "lib/prisma-helpers"
 import { reportErrorWebhook } from "lib/reportErrorWebhook"
 
 type Props = {

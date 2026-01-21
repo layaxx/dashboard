@@ -1,5 +1,5 @@
 import dayjs from "dayjs"
-import { FeedLoadEvent } from "db"
+import type { FeedLoadEvent } from "db"
 
 const getUpdateMessage = (event: FeedLoadEvent) => {
   const highlightedText = "font-bold"

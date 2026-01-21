@@ -1,4 +1,4 @@
-import { Feed, FeedLoadEvent, Feedoption } from "@prisma/client"
+import type { Feed, FeedLoadEvent, Feedoption } from "db"
 
 export enum LoadFeedStatus {
   SKIPPED = "skipped",
