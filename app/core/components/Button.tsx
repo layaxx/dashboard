@@ -2,7 +2,6 @@ import {
   ButtonHTMLAttributes,
   MouseEventHandler,
   PropsWithChildren,
-  ReactChild,
   ReactNode,
   useContext,
 } from "react"
@@ -20,7 +19,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode
   variant?: ButtonVariant
   onClick?: MouseEventHandler<HTMLButtonElement>
-  icon?: ReactChild
+  icon?: ReactNode
   submit?: boolean
   href?: Url
   rounded?: ButtonRoundedValue

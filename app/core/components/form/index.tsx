@@ -1,5 +1,5 @@
 import { validateZodSchema } from "blitz"
-import { ReactNode, PropsWithoutRef, ReactChild, MouseEventHandler, FormEvent } from "react"
+import { ReactNode, MouseEventHandler, FormEvent, ComponentPropsWithoutRef } from "react"
 import { Form as FinalForm, FormProps as FinalFormProps } from "react-final-form"
 import { z } from "zod"
 import Button from "../Button"
@@ -8,7 +8,7 @@ import ButtonGroup from "../ButtonGroup"
 export { FORM_ERROR } from "final-form"
 
 export interface FormProps<S extends z.ZodType<unknown, z.ZodTypeDef>>
-  extends Omit<PropsWithoutRef<JSX.IntrinsicElements["form"]>, "onSubmit"> {
+  extends Omit<ComponentPropsWithoutRef<"form">, "onSubmit"> {
   /** All your form fields */
   children?: ReactNode
   /** Text to display in the submit button */
@@ -19,7 +19,7 @@ export interface FormProps<S extends z.ZodType<unknown, z.ZodTypeDef>>
   schema?: S
   onSubmit: FinalFormProps<z.infer<S>>["onSubmit"]
   initialValues?: FinalFormProps<z.infer<S>>["initialValues"]
-  submitIcon?: ReactChild
+  submitIcon?: ReactNode
   keepDirtyOnReinitialize?: boolean
 }
 

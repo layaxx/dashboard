@@ -5,7 +5,7 @@ import clsx from "clsx"
 import LoginForm from "app/auth/components/LoginForm"
 
 interface ICustomErrorFallbackProps extends ErrorFallbackProps {
-  getLayout: (component: JSX.Element) => JSX.Element
+  getLayout: (component: React.JSX.Element) => React.JSX.Element
 }
 function RootErrorFallback({ error, resetErrorBoundary, getLayout }: ICustomErrorFallbackProps) {
   if (error instanceof AuthenticationError) {

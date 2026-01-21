@@ -1,0 +1,50 @@
+diff --git a/dist/chunks/codegen-tasks.cjs b/dist/chunks/codegen-tasks.cjs
+index 3f973daa8faae4c8eff0b56e0bd3f6a709fd2206..f0d5fa56775da992585490f575e4818e56cad543 100644
+--- a/dist/chunks/codegen-tasks.cjs
++++ b/dist/chunks/codegen-tasks.cjs
+@@ -89,6 +89,7 @@ const codegenTasks = () => __async(void 0, null, function* () {
+       nextDir,
+       "../..",
+       "client",
++      "react-client-callbacks",
+       "on-recoverable-error.js"
+     );
+     const readFile = yield fs__default.readFile(nextClientIndex);
+diff --git a/dist/chunks/codegen-tasks.mjs b/dist/chunks/codegen-tasks.mjs
+index 72681c4c5dd3c2fc6fb0aa086b3518d4c17b949e..3e9576a36f3aa7e67eeb90012a7b2d4a8839fef7 100644
+--- a/dist/chunks/codegen-tasks.mjs
++++ b/dist/chunks/codegen-tasks.mjs
+@@ -80,6 +80,7 @@ const codegenTasks = () => __async(void 0, null, function* () {
+       nextDir,
+       "../..",
+       "client",
++      "react-client-callbacks",
+       "on-recoverable-error.js"
+     );
+     const readFile = yield fs__default.readFile(nextClientIndex);
+diff --git a/dist/chunks/run-prisma.cjs b/dist/chunks/run-prisma.cjs
+index d1cce761b6a4a50d2f9fdc7199f972f91f3fa7ca..77d918bc63666cb170b0d1c19be3063c3f8744b9 100644
+--- a/dist/chunks/run-prisma.cjs
++++ b/dist/chunks/run-prisma.cjs
+@@ -31,7 +31,7 @@ var __async = (__this, __arguments, generator) => {
+ };
+ const runPrisma = (args, silent = false) => __async(void 0, null, function* () {
+   var _a;
+-  const prismaBin = resolveFrom__default.silent(process.cwd(), "prisma");
++  const prismaBin = "node_modules/.bin/prisma";
+   if (prismaBin) {
+     const cp = spawn.spawn(prismaBin, args, {
+       stdio: silent ? "pipe" : "inherit",
+diff --git a/dist/chunks/run-prisma.mjs b/dist/chunks/run-prisma.mjs
+index fed9286dfaff80080054e7acb30c23952d3f0109..ff843b052c65f5be40bbc4df6ba2f7581898a633 100644
+--- a/dist/chunks/run-prisma.mjs
++++ b/dist/chunks/run-prisma.mjs
+@@ -24,7 +24,7 @@ var __async = (__this, __arguments, generator) => {
+ };
+ const runPrisma = (args, silent = false) => __async(void 0, null, function* () {
+   var _a;
+-  const prismaBin = resolveFrom.silent(process.cwd(), "prisma");
++  const prismaBin = "node_modules/.bin/prisma";
+   if (prismaBin) {
+     const cp = spawn(prismaBin, args, {
+       stdio: silent ? "pipe" : "inherit",

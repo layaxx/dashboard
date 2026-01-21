@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { ReactElement, useState } from "react"
 import { setQueryData, useMutation } from "@blitzjs/rpc"
 import clsx from "clsx"
 import parse, { HTMLReactParserOptions, Element } from "html-react-parser"
@@ -12,7 +12,7 @@ import { Feedentry, Feedoption, ImageHandling } from "db/generated/prisma"
 type ItemProps = {
   item: Feedentry
   settings: Pick<Feedoption, "expand" | "imageHandling">
-  skipOffset?: React.MutableRefObject<number>
+  skipOffset?: React.RefObject<number>
 }
 
 const Item = ({ item, settings, skipOffset }: ItemProps) => {
@@ -83,7 +83,7 @@ const Item = ({ item, settings, skipOffset }: ItemProps) => {
     },
   }
 
-  let content: string | JSX.Element | JSX.Element[]
+  let content: string | ReactElement | ReactElement[]
   try {
     content = parse(item.text, options)
   } catch {

@@ -1,10 +1,10 @@
-import React, { ReactChild, useEffect, useState } from "react"
+import React, { ReactNode, useEffect, useState } from "react"
 import clsx from "clsx"
 import Aside from "../components/Dashboard/Aside"
 import Header from "../components/Dashboard/Header"
 import { useSharedState } from "../hooks/store"
 
-type Props = { items: ReactChild; feeds: ReactChild }
+type Props = { items: ReactNode; feeds: ReactNode }
 
 const loadFromLocalStorage = (): boolean =>
   JSON.parse(localStorage.getItem("hideNavbar") ?? "false")

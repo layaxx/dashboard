@@ -1,13 +1,13 @@
-import { forwardRef, ComponentPropsWithoutRef, PropsWithoutRef } from "react"
+import { forwardRef, ComponentPropsWithoutRef } from "react"
 import clsx from "clsx"
 import { Field } from "react-final-form"
 import { makeParseFunction } from "lib/form"
 
-export interface LabeledTextFieldProps extends PropsWithoutRef<JSX.IntrinsicElements["input"]> {
+export interface LabeledTextFieldProps extends ComponentPropsWithoutRef<"input"> {
   name: string
   label: string
   type?: "text" | "password" | "email" | "number"
-  outerProps?: PropsWithoutRef<JSX.IntrinsicElements["div"]>
+  outerProps?: ComponentPropsWithoutRef<"div">
   labelProps?: ComponentPropsWithoutRef<"label">
 }
 

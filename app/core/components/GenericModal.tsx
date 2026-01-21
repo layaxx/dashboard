@@ -1,4 +1,4 @@
-import React, { ReactChild, ReactNode } from "react"
+import React, { ReactNode } from "react"
 import clsx from "clsx"
 import Button from "./Button"
 
@@ -11,8 +11,8 @@ interface IButton {
 interface IProps {
   cancelButton: IButton
   confirmButton?: IButton
-  icon?: ReactChild
-  title: ReactChild
+  icon?: ReactNode
+  title: ReactNode
   drawFocusToCancelButton?: boolean
   children: ReactNode
 }

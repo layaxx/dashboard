@@ -1,4 +1,4 @@
-import { ReactChild } from "react"
+import { ReactNode } from "react"
 import clsx from "clsx"
 import Header from "./Header"
 import Zen from "./zen"
@@ -7,7 +7,7 @@ import Controls from "app/feeds/components/controls"
 type Props = {
   hideNavbar: boolean
   setHideNavbar: React.Dispatch<React.SetStateAction<boolean>>
-  feeds: ReactChild
+  feeds: ReactNode
 }
 const Aside = ({ hideNavbar, setHideNavbar, feeds }: Props) => (
   <aside

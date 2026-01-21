@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { ReactElement, useState } from "react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid"
 import clsx from "clsx"
@@ -25,7 +25,7 @@ const PreviewItem = ({ item, settings, removeEntry }: ItemProps) => {
     },
   }
 
-  let content: string | JSX.Element | JSX.Element[]
+  let content: string | ReactElement | ReactElement[]
   try {
     content = parse(item.text, options)
   } catch {

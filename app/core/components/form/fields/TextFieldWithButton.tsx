@@ -5,11 +5,11 @@ import { twMerge } from "tailwind-merge"
 import Button, { ButtonProps } from "../../Button"
 import { makeParseFunction } from "lib/form"
 
-export interface ITextFieldWithButton extends PropsWithoutRef<JSX.IntrinsicElements["input"]> {
+export interface ITextFieldWithButton extends ComponentPropsWithoutRef<"input"> {
   name: string
   label: string
   type?: "text" | "password" | "email" | "number"
-  outerProps?: PropsWithoutRef<JSX.IntrinsicElements["div"]>
+  outerProps?: ComponentPropsWithoutRef<"div">
   labelProps?: ComponentPropsWithoutRef<"label">
   button: PropsWithoutRef<Omit<ButtonProps, "children">>
 }
