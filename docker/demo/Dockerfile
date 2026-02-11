@@ -32,6 +32,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends openssl
 
 ENV NODE_ENV=production
 ENV NEXT_PUBLIC_IS_DEMO_MODE=true
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
+ENV NEXT_PUBLIC_TARGET_TIME_BETWEEN_LOADS=15
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
@@ -51,8 +54,5 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 USER nextjs
 
 EXPOSE 3000
-
-ENV PORT=3000
-ENV HOSTNAME=0.0.0.0
 
 CMD ["node", "server.js"]
