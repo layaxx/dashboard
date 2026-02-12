@@ -13,9 +13,5 @@ const config = {
     ]
   },
   output: "standalone",
-  env: {
-    NEXT_PUBLIC_TARGET_TIME_BETWEEN_LOADS:
-      process.env.NEXT_PUBLIC_TARGET_TIME_BETWEEN_LOADS || "10",
-  },
 }
 module.exports = withBlitz(config)
