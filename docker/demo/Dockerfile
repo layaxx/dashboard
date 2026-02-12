@@ -20,6 +20,7 @@ COPY . .
 COPY .env.production.local .env.production
 
 ENV NEXT_PUBLIC_IS_DEMO_MODE=true
+ENV NEXT_PUBLIC_TARGET_TIME_BETWEEN_LOADS=15
 
 RUN corepack enable && yarn prisma generate
 RUN yarn build
