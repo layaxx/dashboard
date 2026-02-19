@@ -9,7 +9,12 @@ const GetFeedoption = z.object({
 export default resolver.pipe(resolver.zod(GetFeedoption), resolver.authorize(), async ({ id }) => {
   const feedoption = await db.feedoption.findFirst({ where: { id } })
 
-  if (!feedoption) return await db.feedoption.create({ data: { id } })
+  if (!feedoption) {
+    const feed = await db.feed.findFirst({ where: { id } })
+    if (feed) {
+      return await db.feedoption.create({ data: { id } })
+    }
+  }
 
   return feedoption
 })

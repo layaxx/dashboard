@@ -93,9 +93,9 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
       })),
     })
 
-    const minutesBetweenLoads = 5
+    const minutesBetweenLoads = 15
     await db.statusLoad.createMany({
-      data: Array.from({ length: 15 }, (_, index) => ({
+      data: Array.from({ length: 25 }, (_, index) => ({
         loadTime: dayjs()
           .subtract(index * minutesBetweenLoads, "minutes")
           .toDate(),
