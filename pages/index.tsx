@@ -1,9 +1,22 @@
-import { Suspense } from "react"
 import { BlitzPage, Routes } from "@blitzjs/next"
 import clsx from "clsx"
+import dynamic from "next/dynamic"
 import Button from "app/core/components/Button"
-import UserInfo from "app/core/components/UserInfo"
 import Layout from "app/core/layouts/Layout"
+
+const UserInfo = dynamic(() => import("app/core/components/UserInfo"), {
+  loading: () => (
+    <div className={clsx("max-w-sm", "mx-auto", "w-full")}>
+      <div className={clsx("animate-pulse", "flex", "space-x-4")}>
+        <div
+          className={clsx("bg-slate-200", "dark:bg-slate-700", "h-4", "mt-1", "rounded", "w-6/12")}
+        />
+        <div className={clsx("bg-slate-200", "dark:bg-slate-700", "h-10", "rounded", "w-6/12")} />
+      </div>
+    </div>
+  ),
+  ssr: false,
+})
 
 const Home: BlitzPage = () => {
   return (
@@ -22,29 +35,7 @@ const Home: BlitzPage = () => {
       >
         Login status:
       </div>
-      <Suspense
-        fallback={
-          <div className={clsx("max-w-sm", "mx-auto", "w-full")}>
-            <div className={clsx("animate-pulse", "flex", "space-x-4")}>
-              <div
-                className={clsx(
-                  "bg-slate-200",
-                  "dark:bg-slate-700",
-                  "h-4",
-                  "mt-1",
-                  "rounded",
-                  "w-6/12"
-                )}
-              />
-              <div
-                className={clsx("bg-slate-200", "dark:bg-slate-700", "h-10", "rounded", "w-6/12")}
-              />
-            </div>
-          </div>
-        }
-      >
-        <UserInfo />
-      </Suspense>
+      <UserInfo />
 
       {process.env.NEXT_PUBLIC_IS_DEMO_MODE === "true" && (
         <div>

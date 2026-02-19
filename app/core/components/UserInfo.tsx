@@ -1,16 +1,18 @@
+"use client"
+
+import { useSession } from "@blitzjs/auth"
 import { Routes } from "@blitzjs/next"
 import { useMutation } from "@blitzjs/rpc"
 import clsx from "clsx"
 import Button from "./Button"
-import { useCurrentUser } from "../hooks/useCurrentUser"
 import logout from "app/auth/mutations/logout"
 
 const UserInfo = () => {
-  const currentUser = useCurrentUser()
+  const session = useSession()
   const [logoutMutation] = useMutation(logout)
 
-  const message = currentUser ? "You are logged in!" : "You are not logged in."
-  const buttons = currentUser ? (
+  const message = session.userId ? "You are logged in!" : "You are not logged in."
+  const buttons = session.userId ? (
     <Button
       onClick={async () => {
         await logoutMutation()
