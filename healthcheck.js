@@ -8,13 +8,19 @@ const url = process.env.URL
 const TIMEOUT = 10_000 // 10 seconds
 const SUCCESS_STATUS_CODE = 200
 
+const getTimeStampForLog = () => new Date().toISOString()
+const getLogPrefix = () => `[${getTimeStampForLog()}] [HEALTHCHECK]:`
+
 const performHealthCheck = (url) => {
   return new Promise((resolve, reject) => {
     if (!url) {
       return reject(new Error("Missing URL environment variable for healthcheck."))
     }
 
-    const request = https.request(url, (response) => {
+    const finalUrl = new URL("/api/status", url).toString()
+    console.log(`${getLogPrefix()} Checking ${finalUrl}...`)
+
+    const request = https.request(finalUrl, (response) => {
       // Drain the response stream to allow the request to complete
       response.on("data", () => {})
       response.on("end", () => {
@@ -33,7 +39,7 @@ const performHealthCheck = (url) => {
     // Set a timeout to avoid hanging indefinitely
     request.setTimeout(TIMEOUT, () => {
       request.destroy()
-      reject(new Error("Healthcheck request timed out after 10 seconds"))
+      reject(new Error("request timed out after 10 seconds"))
     })
 
     request.end()
@@ -42,10 +48,10 @@ const performHealthCheck = (url) => {
 
 performHealthCheck(url)
   .then(() => {
-    console.log("[HEALTHCHECK]: SUCCESS.")
+    console.log(`${getLogPrefix()} SUCCESS.`)
     process.exit(0)
   })
   .catch((error) => {
-    console.error("[HEALTHCHECK]: FAILED.", error.message)
+    console.error(`${getLogPrefix()} FAILED.`, error.message)
     process.exit(1)
   })
