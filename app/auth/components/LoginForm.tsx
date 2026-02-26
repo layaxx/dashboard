@@ -10,6 +10,8 @@ import { Login } from "app/auth/validations"
 import { Form, FORM_ERROR } from "app/core/components/form"
 import LabeledTextField from "app/core/components/form/fields/LabeledTextField"
 
+const isDemoMode = process.env.NEXT_PUBLIC_IS_DEMO_MODE === "true"
+
 type LoginFormProps = {
   onSuccess?: (user: PromiseReturnType<typeof login>) => void
 }
@@ -38,9 +40,7 @@ export const LoginForm = (props: LoginFormProps) => {
         submitText="Login"
         schema={Login}
         initialValues={
-          process.env.NEXT_PUBLIC_IS_DEMO_MODE === "true"
-            ? { email: "demo@example.com", password: "demo" }
-            : { email: "", password: "" }
+          isDemoMode ? { email: "demo@example.com", password: "demo" } : { email: "", password: "" }
         }
         onSubmit={async (values) => {
           try {
@@ -68,9 +68,11 @@ export const LoginForm = (props: LoginFormProps) => {
         />
       </Form>
 
-      <div className="mt-4">
-        Or <Link href={Routes.SignupPage(redirect)}>Sign Up</Link>
-      </div>
+      {!isDemoMode && (
+        <div className="mt-4">
+          Or <Link href={Routes.SignupPage(redirect)}>Sign Up</Link>
+        </div>
+      )}
     </div>
   )
 }
