@@ -23,7 +23,7 @@ This project is mainly a (RSS) feed catcher/reader. It uses Next.js/Blitz for th
 
 ## Demo
 
-A demo deployment is available under <https://demo.dash.y-lang.eu>.
+A demo deployment is available under <https://dash-demo.yl1.eu/>.
 You can log in with (`demo@example.com`, `demo`). The deployment is reset at regular intervals.
 
 ## Prerequisites
